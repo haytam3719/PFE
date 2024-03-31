@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="deploymentTargetDropDown">
+    <value>
+      <entry key="GetLayout">
+        <State />
+      </entry>
+      <entry key="See">
+        <State />
+      </entry>
+      <entry key="app">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Haytam\.android\avd\Pixel_XL_API_24.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-03-31T17:18:59.700045700Z" />
+        </State>
+      </entry>
+      <entry key="layout">
+        <State />
+      </entry>
+      <entry key="showLayout">
+        <State />
+      </entry>
+    </value>
+  </component>
+</project>

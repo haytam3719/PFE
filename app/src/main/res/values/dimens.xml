@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Définition de la marge pour la carte -->
+    <dimen name="card_margin">8dp</dimen>
+
+    <!-- Définition du padding pour l'icône -->
+    <dimen name="start_icon_padding">16dp</dimen>
+
+    <!-- Définition de la taille de l'icône -->
+    <dimen name="start_icon_size">24dp</dimen>
+
+    <!-- Définition de la marge pour l'icône -->
+    <dimen name="start_icon_margin">16dp</dimen>
+
+    <dimen name="drawable_width">24dp</dimen>
+    <dimen name="drawable_height">24dp</dimen>
+
+</resources>

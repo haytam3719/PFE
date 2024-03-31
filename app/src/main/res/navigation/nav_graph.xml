@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/main_actpalceholderFragment">
+
+    <fragment
+        android:id="@+id/main_actpalceholderFragment"
+        android:name="com.example.project.MainActPlaceHolder"
+        android:label="First Fragment"
+        tools:layout="@layout/main_actpalceholder">
+        <action
+            android:id="@+id/mainactplace_to_collectinfos"
+            app:destination="@id/activity_collection_infosFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/activity_collection_infosFragment"
+        android:name="com.example.project.CollectionInfosFragment"
+        android:label="Second Fragment"
+        tools:layout="@layout/activity_collection_infos">
+        <action
+            android:id="@+id/collectinfos_to_otp"
+            app:destination="@id/activity_collection_otp" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/activity_collection_otp"
+        android:name="com.example.project.OTPHandler"
+        android:label="Third Fragment"
+        tools:layout="@layout/fragment_otp" >
+
+        <action
+            android:id="@+id/otp_to_print"
+            app:destination="@id/activity_print" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/activity_print"
+        android:name="com.example.project.CheckFingerPrint"
+        android:label="Fourth Fragment"
+        tools:layout="@layout/fragment_finger_print">
+        <action
+            android:id="@+id/print_to_sacncin"
+            app:destination="@id/activity_scan_cin"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/activity_scan_cin"
+        android:name="com.example.project.ScanCin"
+        android:label="Fifth Fragment"
+        tools:layout="@layout/fragment_cin_scan">
+        <action
+            android:id="@+id/sacncin_to_cameracin"
+            app:destination="@id/activity_camera_cin"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/activity_camera_cin"
+        android:name="com.example.project.CameraCin"
+        android:label="Sixth Fragment"
+        tools:layout="@layout/camera_cin">
+        <action
+            android:id="@+id/cameracin_to_scanface"
+            app:destination="@id/activity_scan_face"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/activity_scan_face"
+        android:name="com.example.project.ScanFace"
+        android:label="Seventh Fragment"
+        tools:layout="@layout/fragment_face_scan">
+        <action
+            android:id="@+id/scanface_to_cameraface"
+            app:destination="@id/activity_camera_face"/>
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/activity_camera_face"
+        android:name="com.example.project.CameraFace"
+        android:label="Eighth Fragment"
+        tools:layout="@layout/camera_face">
+
+
+    </fragment>
+
+
+</navigation>
