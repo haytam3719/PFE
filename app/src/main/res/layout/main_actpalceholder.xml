@@ -13,9 +13,10 @@
         <variable
             name="viewModel"
             type="com.example.project.viewmodels.AuthViewModel" />
+
         <variable
             name="fingerPrintViewModel"
-            type="com.example.project.viewmodels.AuthViewModel" />
+            type="com.example.project.viewmodels.BiometricViewModel" />
     </data>
 
 
@@ -147,7 +148,7 @@
             android:layout_centerInParent="true"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:onClick="@{view->fingerPrintViewModel.onButtonClickAuth(view)}"
+            android:onClick="@{view->fingerPrintViewModel.onButtonClick(view)}"
             android:padding="20dp"
             android:text="Connexion avec Empreinte" />
 

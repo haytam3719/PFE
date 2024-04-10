@@ -43,6 +43,14 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string-array name="type_compte_array">
+        <item>COURANT</item>
+        <item>EPARGNE</item>
+        <item>CHEQUES</item>
+        <!-- Add more account types as needed -->
+    </string-array>
+    <string name="prompt_select_type_compte">Select Type Compte</string>
+
     <string name="lightdark">"Light Mode / Dark Mode</string>
     <string name="title_activity_parametres">Parametres</string>
     <string name="langue">Choisissez la langue de l\'application</string>

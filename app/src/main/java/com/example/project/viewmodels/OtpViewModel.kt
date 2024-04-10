@@ -2,7 +2,6 @@ package com.example.project.viewmodels
 
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.telephony.SmsManager
 import android.util.Log
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
@@ -23,18 +22,8 @@ class OtpViewModel @Inject constructor():ViewModel(){
         get() = _navigateToPrint
 
 
-    fun sendSMS(phoneNumber: String, message: String) {
-        try {
-            val smsManager: SmsManager = SmsManager.getDefault()
-            smsManager.sendTextMessage(phoneNumber, null, message, null, null)
-            // SMS sent successfully
-        } catch (e: Exception) {
-            // Failed to send SMS
-            e.printStackTrace()
-        }
-    }
 
-    fun onButtonClickProvisoire(context: Activity, enteredText: String) {
+    fun onButtonClickProvisoire(context: Activity, enteredText: String, actualText: String) {
         viewModelScope.launch {
             Log.e("Coroutine", "Inside coroutine")
             if (ContextCompat.checkSelfPermission(
@@ -43,10 +32,9 @@ class OtpViewModel @Inject constructor():ViewModel(){
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 Log.e("Debug","debugProvisoireFunction")
-                sendSMS("1234567890", "Your OTP is: 123456")
-                // Check if the entered text is "1234567890"
-                if (enteredText == "1234567890") {
-                    Log.e("Debug","It enterred")
+
+                if (enteredText == actualText) {
+                    Log.e("Debug","It entered")
                     _navigateToPrint.value = true // Trigger navigation
                 }
             } else {
@@ -58,6 +46,20 @@ class OtpViewModel @Inject constructor():ViewModel(){
                 )
             }
         }
+
+
+    }
+
+    fun generateOTP(): String {
+        val otpLength = 6
+        val otp = StringBuilder()
+
+        repeat(otpLength) {
+            val digit = (0..9).random() // Generate a random digit (0-9)
+            otp.append(digit)
+        }
+
+        return otp.toString()
     }
 /*
     fun onButtonClick(view: View) {

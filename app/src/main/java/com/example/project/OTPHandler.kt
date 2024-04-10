@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -25,12 +26,15 @@ class OTPHandler : Fragment() {
     private val otpViewModel: OtpViewModel by viewModels()
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
     private lateinit var deviceInfo: DeviceInfo
+    private lateinit var actualText:String
     //val initialClientValue = clientViewModel.client.value
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("VM_VALUE", "CollectInfosViewModel: ${collectInfoViewModel.clientViewModel}")
+        checkAndRequestPermission()
 
 
         otpViewModel.navigateToPrint.observe(viewLifecycleOwner, Observer { shouldNavigate ->
@@ -69,13 +73,35 @@ class OTPHandler : Fragment() {
 
         binding.verifyButton.setOnClickListener {
             val enteredText = binding.editTextOTP.text.toString()
-            otpViewModel.onButtonClickProvisoire(requireActivity(), enteredText)
-            Log.e("Debug", enteredText) // Log the entered text
+            otpViewModel.onButtonClickProvisoire(requireActivity(), enteredText,actualText)
+            Log.e("Debug", actualText) // Log the entered text
         }
+
+        actualText=otpViewModel.generateOTP()
 
 
         return binding.root
     }
+
+
+
+    private fun checkAndRequestPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.SEND_SMS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(android.Manifest.permission.SEND_SMS),
+                SEND_SMS_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            // Permission already granted, proceed with sending SMS
+            sendSMS("+2125223697854", "Code de vérification : Veuillez saisir ce code pour pouvoir continuer $actualText")
+        }
+    }
+
+
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -86,7 +112,7 @@ class OTPHandler : Fragment() {
         if (requestCode == SEND_SMS_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                sendSMS("1234567890", "Your OTP is: 123456")
+                sendSMS("+2125223697854", "Code de vérification : Veuillez saisir ce code pour pouvoir continuer $actualText")
             } else {
                 //
             }
@@ -103,6 +129,9 @@ class OTPHandler : Fragment() {
             e.printStackTrace()
         }
     }
+
+
+
 }
 
 

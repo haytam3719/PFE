@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.MainActpalceholderBinding
 import com.example.project.models.AuthState
 import com.example.project.viewmodels.AuthViewModel
-import com.example.project.viewmodels.ClientViewModel
+import com.example.project.viewmodels.BiometricViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,11 +28,11 @@ import javax.crypto.KeyGenerator
 
 @AndroidEntryPoint
 class MainActPlaceHolder : Fragment() {
-    private val clientViewModel: ClientViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
-
+    private val fingerPrintViewModel: BiometricViewModel by viewModels()
     private val mainThreadExecutor: MainThreadExecutor = MainThreadExecutor()
     private val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+
     // Generate a key alias
     val keyAlias = "my_key_alias"
 
@@ -67,6 +67,39 @@ class MainActPlaceHolder : Fragment() {
             })
 
 
+        authViewModel.navigateToDashboard.observe(
+            viewLifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    // Navigate when event is triggered
+                    findNavController().navigate(com.example.project.R.id.mainactplace_to_dashboard)
+
+                    // Reset the navigation event after navigation
+                    authViewModel.onNavigationCompleteDash()
+                }
+            })
+
+        fingerPrintViewModel.navigateToDashboard.observe(
+            viewLifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    // Navigate when event is triggered
+                    findNavController().navigate(com.example.project.R.id.mainactplace_to_dashboard)
+
+                    // Reset the navigation event after navigation
+                    fingerPrintViewModel.onNavigationCompleteDash()
+                }
+            })
+
+
+
+        fingerPrintViewModel.showBiometricPrompt.observe(viewLifecycleOwner) { showBiometric ->
+            if (showBiometric) {
+                showBiometricPrompt()
+                fingerPrintViewModel.onBiometricPromptShown()
+            }
+        }
+
         keyGenerator.init(keySpec)
         keyGenerator.generateKey()
 
@@ -77,14 +110,17 @@ class MainActPlaceHolder : Fragment() {
         val secretKey = secretKeyEntry.secretKey
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
 
+
     }
+
+
 
 
     private fun showBiometricPrompt() {
         val biometricPrompt = BiometricPrompt(
             this,
             mainThreadExecutor,
-            authViewModel.getBiometricCallback()
+            fingerPrintViewModel.getBiometricCallback()
         )
         biometricPrompt.authenticate(
             BiometricPrompt.PromptInfo.Builder()
@@ -100,6 +136,7 @@ class MainActPlaceHolder : Fragment() {
     }
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -108,19 +145,29 @@ class MainActPlaceHolder : Fragment() {
         val binding = MainActpalceholderBinding.inflate(inflater, container, false)
         binding.viewModel = authViewModel
         binding.clientPartial = authViewModel.clientPartial
-        binding.fingerPrintViewModel=authViewModel
-
+        binding.fingerPrintViewModel=fingerPrintViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         connectToFirebase(authViewModel)
 
-        authViewModel.showBiometricPrompt.observe(viewLifecycleOwner) { showBiometric ->
-            if (showBiometric) {
-                showBiometricPrompt()
-                authViewModel.onBiometricPromptShown()
-            }
-        }
 
+        fingerPrintViewModel.biometricEvent.observe(viewLifecycleOwner, Observer { event ->
+            when (event) {
+                is BiometricViewModel.BiometricEvent.Success -> {
+                    // Handle successful authentication
+                    Log.d("Biometric", "Authentication succeeded")
+
+                }
+                is BiometricViewModel.BiometricEvent.Error -> {
+                    // Handle authentication error
+                    Log.e("Biometric", "Authentication error: ${event.errorMessage}")
+                }
+                is BiometricViewModel.BiometricEvent.Failure -> {
+                    // Handle authentication failure
+                    Log.e("Biometric", "Authentication failed: ${event.errorMessage}")
+                }
+            }
+        })
 
         return binding.root
 

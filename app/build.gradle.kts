@@ -107,6 +107,11 @@ dependencies {
     kapt ("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.5.0")
     implementation ("androidx.fragment:fragment-ktx:1.4.0")
 
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+
     kapt ("androidx.hilt:hilt-compiler:1.0.0")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")

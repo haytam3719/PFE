@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="com.example.project.viewmodels.CreateBankAccountViewModel" />
+        <import type="com.example.project.models.CreateAccountPartial" />
+
+        <variable
+            name="createBankAcountViewModel"
+            type="com.example.project.viewmodels.CreateBankAccountViewModel" />
+        <variable
+            name="createAccountPartial"
+            type="com.example.project.models.CreateAccountPartial"/>
+    </data>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    >
+
+    <Spinner
+        android:id="@+id/spinnerTypeCompte"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:prompt="@string/prompt_select_type_compte"
+        android:entries="@array/type_compte_array"
+        android:onItemSelectedListener="@{createBankAcountViewModel}" />
+
+
+    <EditText
+        android:id="@+id/editTextSolde"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Solde"
+        android:text="@={createAccountPartial.solde}"/>
+
+    <Button
+        android:id="@+id/buttonCreateAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:onClick="@{view->createBankAcountViewModel.onButtonClick(view)}"
+        />
+
+</LinearLayout>
+</layout>

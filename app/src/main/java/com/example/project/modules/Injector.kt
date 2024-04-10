@@ -6,6 +6,8 @@ import androidx.camera.core.CameraXConfig
 import com.example.project.CollectionInfosFragment
 import com.example.project.MainActPlaceHolder
 import com.example.project.MainActivity
+import com.example.project.Virement
+import com.example.project.models.CompteImpl
 import com.google.firebase.FirebaseApp
 import com.google.firebase.functions.dagger.Component
 import dagger.hilt.android.HiltAndroidApp
@@ -28,5 +30,8 @@ class AppComponent:Application(),  CameraXConfig.Provider{
     fun inject(activity: MainActivity) {}
     fun inject(fragment: MainActPlaceHolder) {}
     fun inject(fragment: CollectionInfosFragment){}
+
+    fun inject(compteImpl: CompteImpl){}
+    fun inject(virement: Virement){}
 
 }

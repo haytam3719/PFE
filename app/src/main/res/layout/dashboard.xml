@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="com.example.project.viewmodels.DashboardViewModel" />
+
+        <variable
+            name="dashboardViewModel"
+            type="com.example.project.viewmodels.DashboardViewModel" />
+    </data>
+
+
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Header Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+
+            <!-- User Profile -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Bienvenue, John Doe"
+                android:textSize="18sp"
+                android:gravity="end"
+                android:layout_gravity="center_vertical"/>
+
+            <!-- Navigation Menu -->
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher_background"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="16dp"
+                android:contentDescription="im"/>
+
+        </LinearLayout>
+
+        <!-- Account Summary -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Balance -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Solde"
+                android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/text_balance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Balance: $5000"
+                android:textSize="16sp"/>
+
+
+            <Button
+                android:id="@+id/btn_create"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Créer un compte"
+                android:layout_marginTop="16dp"
+                android:onClick="@{view->dashboardViewModel.onButtonClickCreate(view)}"
+
+
+                />
+
+
+            <Button
+                android:id="@+id/btn_transfer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Transférer de l'argent"
+                android:layout_marginTop="16dp"
+                android:onClick="@{view->dashboardViewModel.onButtonClick(view)}"
+
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

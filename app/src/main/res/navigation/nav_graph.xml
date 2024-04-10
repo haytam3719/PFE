@@ -13,7 +13,14 @@
         <action
             android:id="@+id/mainactplace_to_collectinfos"
             app:destination="@id/activity_collection_infosFragment" />
+        <action
+            android:id="@+id/mainactplace_to_dashboard"
+            app:destination="@id/fragment_dashboard"/>
+
     </fragment>
+
+
+
 
     <fragment
         android:id="@+id/activity_collection_infosFragment"
@@ -91,6 +98,41 @@
 
 
     </fragment>
+
+
+    <fragment
+        android:id="@+id/fragment_dashboard"
+        android:name="com.example.project.Dashboard"
+        android:label="Connected First Fragment"
+        tools:layout="@layout/dashboard">
+        <action
+            android:id="@+id/dashboard_to_virement"
+            app:destination="@id/fragment_virement"
+            />
+
+        <action
+            android:id="@+id/dashboard_to_createaccount"
+            app:destination="@id/frament_createaccount"
+            />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_virement"
+        android:name="com.example.project.Virement"
+        android:label="Connected Second Fragment"
+        tools:layout="@layout/virement">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/frament_createaccount"
+        android:name="com.example.project.CreateBankAccount"
+        android:label="Connected Third Fragment"
+        tools:layout="@layout/create_account">
+
+    </fragment>
+
 
 
 </navigation>

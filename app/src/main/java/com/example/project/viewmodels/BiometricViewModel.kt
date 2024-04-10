@@ -17,7 +17,17 @@ class BiometricViewModel @Inject constructor() : ViewModel() {
 
     private val _navigateToSacnCin = MutableLiveData<Boolean>()
     val navigateToScanCin: LiveData<Boolean>
+
         get() = _navigateToSacnCin
+
+
+    private val _navigateToDashboard = MutableLiveData<Boolean>()
+    val navigateToDashboard: LiveData<Boolean>
+        get() = _navigateToDashboard
+
+
+
+
 
     private val _biometricEvent = MutableLiveData<BiometricEvent>()
     val biometricEvent: LiveData<BiometricEvent>
@@ -70,14 +80,18 @@ class BiometricViewModel @Inject constructor() : ViewModel() {
                     val fingerprintDataString: String = fingerprintData?.let { Base64.encodeToString(it, Base64.DEFAULT) } ?: "No fingerprint data"
                     if (fingerprintData != null) {
                         temp=fingerprintData
+                        Log.e("Finger Print",fingerprintDataString)
+                        Log.e("Actual Hash",generateHash(fingerprintData))
+
                     }
-                    Log.e("Finger Print",fingerprintDataString)
+
                 } else {
                     // Handle the case where the crypto object is null
                     Log.e("Biometric", "Crypto object is null")
                 }
 
                 _navigateToSacnCin.value = true
+                _navigateToDashboard.value = true
             }
 
             override fun onAuthenticationFailed() {
@@ -94,6 +108,11 @@ class BiometricViewModel @Inject constructor() : ViewModel() {
     // Function to reset navigation event after navigation
     fun onNavigationComplete() {
         _navigateToSacnCin.value = false
+    }
+
+
+    fun onNavigationCompleteDash(){
+        _navigateToDashboard.value = false
     }
 
 

@@ -1,9 +1,6 @@
 package com.example.project.viewmodels
 
-import android.util.Base64
-import android.util.Log
 import android.view.View
-import androidx.biometric.BiometricPrompt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,13 +9,14 @@ import androidx.navigation.NavController
 import com.example.project.models.AuthState
 import com.example.project.models.LogInUserPartial
 import com.example.project.repositories.AuthRepository
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.security.MessageDigest
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,6 +29,10 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
     private val _navigateToCollectInfos = MutableLiveData<Boolean>()
     val navigateToCollectInfos: LiveData<Boolean>
         get() = _navigateToCollectInfos
+
+    private val _navigateToDashboard = MutableLiveData<Boolean>()
+    val navigateToDashboard: LiveData<Boolean>
+        get() = _navigateToDashboard
 
     suspend fun signUp(email: String, password: String) {
         viewModelScope.launch {
@@ -62,21 +64,6 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
     }
 
 
-    private val _fingerprintLiveData = MutableLiveData<String?>()
-    val fingerprintLiveData: LiveData<String?>
-        get() = _fingerprintLiveData
-
-
-
-    fun getFingerprintHashForUser(email: String, callback: (String?) -> Unit) {
-        authRepository.getClientById(email)
-        val fingerprint = authRepository.getClientFieldById(email, "fingerPrint")
-        callback(fingerprint)
-    }
-
-
-
-
 
     fun onButtonClickOpen(view: View) {
         _navigateToCollectInfos.value = true
@@ -89,152 +76,27 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
 
     val clientPartial: LogInUserPartial = LogInUserPartial()
     var email = ""
-    var password=""
+    var password = ""
 
     fun onButtonClick(view: View) {
         viewModelScope.launch {
             email = clientPartial.email
-            password=clientPartial.password
-            signIn(email,password)
-        }
-    }
+            password = clientPartial.password
 
-
-//---------------------------------------------------------------------------------
-
-
-
-
-
-
-
-    //---------------------------------- Biometric Authentification ----------------------------------------------------
-
-
-
-    private val _biometricEvent = MutableLiveData<BiometricViewModel.BiometricEvent>()
-    val biometricEvent: LiveData<BiometricViewModel.BiometricEvent>
-        get() = _biometricEvent
-
-    private var temp: ByteArray = ByteArray(0)
-
-    private val _showBiometricPrompt = MutableLiveData<Boolean>()
-    val showBiometricPrompt: LiveData<Boolean>
-        get() = _showBiometricPrompt
-
-
-    fun getBiometricCallback(): BiometricPrompt.AuthenticationCallback {
-        return biometricAuthenticationCallback
-    }
-
-    fun onBiometricPromptShown() {
-        _showBiometricPrompt.value = false
-    }
-
-    private val biometricAuthenticationCallback =
-        object : BiometricPrompt.AuthenticationCallback() {
-            @Suppress("DEPRECATION")
-            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                super.onAuthenticationError(errorCode, errString)
-                _biometricEvent.postValue(
-                    BiometricViewModel.BiometricEvent.Error(
-                        errorCode,
-                        errString.toString()
-                    )
-                )
-            }
-
-            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-
-                // Get the crypto object from the authentication result
-                val cryptoObject = result.cryptoObject
-
-                // Check if the crypto object is not null
-                if (cryptoObject != null) {
-                    // Use the cipher from the crypto object to encrypt your data
-                    val cipher = cryptoObject.cipher
-                    val fingerprintData: ByteArray? =
-                        result.cryptoObject?.cipher?.doFinal("FingerprintData".toByteArray())
-                    val fingerprintDataString: String =
-                        fingerprintData?.let { Base64.encodeToString(it, Base64.DEFAULT) }
-                            ?: "No fingerprint data"
-                    if (fingerprintData != null) {
-                        temp = fingerprintData
-                    }
-                    Log.e("Finger Print", fingerprintDataString)
-                } else {
-                    // Handle the case where the crypto object is null
-                    Log.e("Biometric", "Crypto object is null")
-                }
-
-            }
-
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-                _biometricEvent.postValue(BiometricViewModel.BiometricEvent.Failure("Authentication failed"))
-            }
-        }
-
-
-    fun getBiometricPrint(): ByteArray {
-        return temp
-    }
-
-
-    private fun generateHash(data: ByteArray): String {
-        val messageDigest = MessageDigest.getInstance("SHA-256")
-        val hashBytes = messageDigest.digest(data)
-        return hashBytes.joinToString("") { "%02x".format(it) }
-    }
-
-
-
-
-    fun onButtonClickAuth(view: View) {
-        email = clientPartial.email
-        Log.e("Email", email)
-        _showBiometricPrompt.value = true
-
-        // Wait for biometric authentication before generating fingerprint hash
-        _biometricEvent.observeForever { event ->
-            when (event) {
-                is BiometricViewModel.BiometricEvent.Success -> {
-                    // Biometric authentication succeeded, generate fingerprint hash
-                    val fingerprintHash = generateHash(getBiometricPrint())
-                    Log.e("FP Hash", fingerprintHash)
-
-                    // Retrieve fingerprint hash for the user and compare
-                    getFingerprintHashForUser(email) { fingerprint ->
-                        if (fingerprint == null) {
-                            Log.e("Failure", "Couldn't get the FP hash")
-                        } else {
-                            if (fingerprint == fingerprintHash) {
-                                Log.e("SignIn", "SignedIn Successfully")
-                            } else {
-                                Log.e("SignIn", "Fingerprint mismatch")
-                            }
-                        }
-                    }
-
-                    // Remove observer after successful authentication
-                    _biometricEvent.removeObserver { }
-                }
-                is BiometricViewModel.BiometricEvent.Failure -> {
-                    // Handle biometric authentication failure
-                    Log.e("Biometric", "Authentication failed")
-                }
-                else -> {
-                    // Ignore other events
-                }
+            try{
+                signIn(email, password)
+                _navigateToDashboard.value = true
+            }catch(e:Exception){
+                //Handling Failure ....
             }
         }
     }
 
+    fun onNavigationCompleteDash() {
+        _navigateToDashboard.value = false
+    }
 
-
+    fun getCurrentUserUid(): String? {
+        return Firebase.auth.currentUser?.uid
+    }
 }
-
-
-
-
