@@ -22,6 +22,17 @@ class DashboardViewModel @Inject constructor():ViewModel(){
         get() = _navigateToCreateAccount
 
 
+    private val _navigateToPayment = MutableLiveData<Boolean>()
+    val navigateToPayment: LiveData<Boolean>
+        get() = _navigateToPayment
+
+
+    fun onButtonClickPayment(view:View){
+        viewModelScope.launch{
+            _navigateToPayment.value=true
+        }
+    }
+
 
 
 
@@ -43,6 +54,10 @@ class DashboardViewModel @Inject constructor():ViewModel(){
 
     fun onNavigationCompleteCreateAccount() {
         _navigateToCreateAccount.value = false
+    }
+
+    fun onNavigationCompletePayment(){
+        _navigateToPayment.value = false
     }
 
 }

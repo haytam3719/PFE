@@ -8,6 +8,8 @@ plugins {
 }
 apply(plugin = "com.google.dagger.hilt.android")
 apply(plugin = "com.google.gms.google-services")
+apply(plugin = "androidx.navigation.safeargs.kotlin")
+
 
 android {
     namespace = "com.example.project"
@@ -92,6 +94,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
     implementation("com.google.firebase:firebase-functions-ktx:20.4.0")
+    implementation ("com.google.firebase:firebase-messaging:23.4.1")
 
     // Dagger Hilt dependencies
 
@@ -108,6 +111,7 @@ dependencies {
     implementation ("androidx.fragment:fragment-ktx:1.4.0")
 
 
+
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
@@ -117,6 +121,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
     implementation ("androidx.biometric:biometric:1.1.0")
+
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.4.0")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.4.0")
+
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
 
 
     testImplementation("junit:junit:4.13.2")

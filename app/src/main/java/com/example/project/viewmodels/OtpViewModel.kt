@@ -22,6 +22,11 @@ class OtpViewModel @Inject constructor():ViewModel(){
         get() = _navigateToPrint
 
 
+    val _otpBiometricVerified = MutableLiveData<Boolean>()
+    val otpBiometricVerified: LiveData<Boolean>
+        get() = _otpBiometricVerified
+
+
 
     fun onButtonClickProvisoire(context: Activity, enteredText: String, actualText: String) {
         viewModelScope.launch {
@@ -36,6 +41,7 @@ class OtpViewModel @Inject constructor():ViewModel(){
                 if (enteredText == actualText) {
                     Log.e("Debug","It entered")
                     _navigateToPrint.value = true // Trigger navigation
+                    _otpBiometricVerified.value = true
                 }
             } else {
                 val PERMISSION_REQUEST_SEND_SMS = 123
@@ -82,5 +88,7 @@ class OtpViewModel @Inject constructor():ViewModel(){
     fun onNavigationComplete() {
         _navigateToPrint.value = false
     }
+
+
 
 }

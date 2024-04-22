@@ -2,6 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:id="@+id/nav_graph"
     app:startDestination="@id/main_actpalceholderFragment">
 
@@ -105,6 +106,13 @@
         android:name="com.example.project.Dashboard"
         android:label="Connected First Fragment"
         tools:layout="@layout/dashboard">
+
+        <action
+            android:id="@+id/dashboard_to_payment"
+            app:destination="@id/fragment_payment"
+            />
+
+
         <action
             android:id="@+id/dashboard_to_virement"
             app:destination="@id/fragment_virement"
@@ -118,10 +126,21 @@
     </fragment>
 
     <fragment
+        android:id="@+id/fragment_payment"
+        android:name="com.example.project.Payment"
+        android:label="Connected Third Fragment"
+        tools:layout="@layout/payment"/>
+
+    <fragment
         android:id="@+id/fragment_virement"
         android:name="com.example.project.Virement"
         android:label="Connected Second Fragment"
         tools:layout="@layout/virement">
+
+        <action
+            android:id="@+id/virement_to_otp"
+            app:destination="@id/activity_collection_otp"
+            />
 
     </fragment>
 

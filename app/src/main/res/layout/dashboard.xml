@@ -97,6 +97,15 @@
 
                 />
 
+            <Button
+                android:id="@+id/effectuer_paiement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Effectuer un paiement"
+                android:layout_marginTop="16dp"
+                android:onClick="@{view->dashboardViewModel.onButtonClickPayment(view)}"
+
+                />
         </LinearLayout>
 
     </LinearLayout>

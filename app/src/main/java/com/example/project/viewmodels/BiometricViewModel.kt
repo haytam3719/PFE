@@ -26,7 +26,9 @@ class BiometricViewModel @Inject constructor() : ViewModel() {
         get() = _navigateToDashboard
 
 
-
+    private val _navigateToOtp = MutableLiveData<Boolean>()
+    val navigateToOtp: LiveData<Boolean>
+        get() = _navigateToOtp
 
 
     private val _biometricEvent = MutableLiveData<BiometricEvent>()
@@ -42,7 +44,7 @@ class BiometricViewModel @Inject constructor() : ViewModel() {
         return registeredFingerprintHash
     }
 
-    private val _showBiometricPrompt = MutableLiveData<Boolean>()
+    val _showBiometricPrompt = MutableLiveData<Boolean>()
     val showBiometricPrompt: LiveData<Boolean>
         get() = _showBiometricPrompt
 
@@ -92,6 +94,7 @@ class BiometricViewModel @Inject constructor() : ViewModel() {
 
                 _navigateToSacnCin.value = true
                 _navigateToDashboard.value = true
+                _navigateToOtp.value = true
             }
 
             override fun onAuthenticationFailed() {
@@ -115,6 +118,10 @@ class BiometricViewModel @Inject constructor() : ViewModel() {
         _navigateToDashboard.value = false
     }
 
+
+    fun onNavigationCompleteOtp(){
+        _navigateToOtp.value = false
+    }
 
     private fun generateHash(data: ByteArray): String {
         val messageDigest = MessageDigest.getInstance("SHA-256")

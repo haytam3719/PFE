@@ -3,6 +3,7 @@ package com.example.project.models
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.project.modules.CompteModule
+import java.io.Serializable
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -17,7 +18,8 @@ class Virement @Inject constructor(
     @Named("methodPaiement") methodPaiement: String,
     @Named("fraisTrans") fraisTrans: Double,
     @Named("typeTransaction") typeTransaction: String
-) : TransactionImpl(idTran, montant, date, motif, compteBenef, compteEmet, statut, methodPaiement, fraisTrans, typeTransaction) {
+) : TransactionImpl(idTran, montant, date, motif, compteBenef, compteEmet, statut, methodPaiement, fraisTrans, typeTransaction),
+    Serializable {
 
 
     constructor() : this(

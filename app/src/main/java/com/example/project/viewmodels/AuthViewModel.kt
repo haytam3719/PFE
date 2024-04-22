@@ -1,5 +1,6 @@
 package com.example.project.viewmodels
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.project.models.AuthState
 import com.example.project.models.LogInUserPartial
+import com.example.project.oAuthRessources.SecureManager
 import com.example.project.repositories.AuthRepository
+import com.example.project.repositories.OAuthRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
@@ -18,9 +21,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-
 @HiltViewModel
-class AuthViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
+class AuthViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val oAuthRepository: OAuthRepository,
+    private val secureManager: SecureManager
+) : ViewModel() {
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private var fingerPrint: String = ""
     private val _authState = MutableStateFlow<AuthState>(AuthState.Initial)
@@ -46,17 +52,100 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
         }
     }
 
+
+    fun fetchAccessToken(clientId: String, clientSecret: String) {
+        viewModelScope.launch {
+            val accessToken = secureManager.getAccessToken()
+            if (accessToken == null) {
+                try {
+                    val newAccessToken = oAuthRepository.getAccessToken(clientId, clientSecret)
+                    secureManager.saveAccessToken(newAccessToken)
+                    Log.e("Access Token", "$newAccessToken")
+                } catch (e: Exception) {
+                    e.message
+                }
+            } else {
+                // Access token already exists locally
+                Log.e("Access Token", "Existing token: $accessToken")
+            }
+        }
+    }
+
+     suspend fun signIn(email: String, password: String) {
+            viewModelScope.launch {
+                try {
+                    val storedEmail = secureManager.getEmail()
+                    val storedPassword = secureManager.getPassword()
+                    if (email == storedEmail && password == storedPassword) {
+                        val storedAccessToken = secureManager.getAccessToken()
+                        if (storedAccessToken != null) {
+                            _authState.emit(AuthState.Loading)
+                            //authRepository.signIn(email, password).await()
+                            _authState.emit(AuthState.Success)
+                        } else {
+                            // Access token does not exist, sign out
+                            signOut()
+                        }
+                    } else {
+                        // Email or password do not match, emit error state
+                        _authState.emit(AuthState.Error("Invalid email or password"))
+                    }
+                } catch (e: Exception) {
+                    _authState.emit(AuthState.Error(e.localizedMessage ?: "Sign in failed"))
+                }
+            }
+        }
+
+
+    /*
+    fun fetchAccessToken(clientId: String, clientSecret: String) {
+        viewModelScope.launch {
+            val accessToken = secureManager.getAccessToken()
+            if (accessToken == null) {
+                try {
+                    val newAccessToken = oAuthRepository.getAccessToken(clientId, clientSecret)
+                    secureManager.saveAccessToken(newAccessToken)
+                    Log.e("Access Token", "$newAccessToken")
+                } catch (e: Exception) {
+                    Log.e("Access Token Error", e.message ?: "Failed to fetch access token")
+                }
+            } else {
+                // Access token already exists locally
+                Log.e("Access Token", "Existing token: $accessToken")
+            }
+        }
+    }
+
+
+
     suspend fun signIn(email: String, password: String) {
         viewModelScope.launch {
             try {
-                _authState.emit(AuthState.Loading)
-                authRepository.signIn(email, password).await()
-                _authState.emit(AuthState.Success)
+                val storedEmail = secureManager.getEmail()
+                val storedPassword = secureManager.getPassword()
+                val storedAccessToken = secureManager.getAccessToken()
+
+                if (email == storedEmail && password == storedPassword && storedAccessToken != null) {
+                    _authState.emit(AuthState.Loading)
+                    _authState.emit(AuthState.Success)
+                } else {
+                    _authState.emit(AuthState.Loading)
+
+                    val accessToken = fetchAccessToken(email,password)
+                    secureManager.saveEmail(email)
+                    secureManager.savePassword(password)
+                    secureManager.saveAccessToken(accessToken.toString())
+                    _authState.emit(AuthState.Success)
+                }
             } catch (e: Exception) {
                 _authState.emit(AuthState.Error(e.localizedMessage ?: "Sign in failed"))
             }
         }
     }
+
+*/
+
+
 
     fun signOut() {
         authRepository.signOut()

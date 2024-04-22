@@ -18,6 +18,19 @@ class Dashboard : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        dashboardViewModel.navigateToPayment.observe(
+            viewLifecycleOwner,
+            Observer{shouldnavigate ->
+                if(shouldnavigate){
+                    findNavController().navigate(R.id.dashboard_to_payment)
+
+                    // Reset the navigation event after navigation
+                    dashboardViewModel.onNavigationCompletePayment()
+                }
+            }
+        )
+
         dashboardViewModel.navigateToVirement.observe(
             viewLifecycleOwner,
             Observer { shouldNavigate ->

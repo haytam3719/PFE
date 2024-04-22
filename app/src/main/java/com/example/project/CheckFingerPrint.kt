@@ -24,7 +24,6 @@ import javax.crypto.KeyGenerator
 class CheckFingerPrint : Fragment() {
     private val fingerPrintViewModel: BiometricViewModel by viewModels()
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
-
     private val mainThreadExecutor: MainThreadExecutor = MainThreadExecutor()
     private val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
     // Generate a key alias

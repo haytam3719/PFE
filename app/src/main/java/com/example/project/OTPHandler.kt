@@ -1,21 +1,31 @@
 package com.example.project
 
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.FragmentOtpBinding
+import com.example.project.models.AccountCreationServiceImpl
 import com.example.project.models.DeviceInfo
+import com.example.project.models.VirementViewModelFactory
+import com.example.project.prototype.AccountRepository
+import com.example.project.repositories.AccountRepositoryImpl
 import com.example.project.viewmodels.CollectInfoViewModel
 import com.example.project.viewmodels.OtpViewModel
+import com.example.project.viewmodels.TransportVirementViewModel
+import com.example.project.viewmodels.VirementViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,10 +37,22 @@ class OTPHandler : Fragment() {
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
     private lateinit var deviceInfo: DeviceInfo
     private lateinit var actualText:String
+    private val transportVirementViewModel: TransportVirementViewModel by activityViewModels()
+    private val accountRepository: AccountRepository = AccountRepositoryImpl(
+        AccountCreationServiceImpl()
+    )
+
+    private lateinit var virement: Virement
+    private lateinit var virementViewModelFactory: VirementViewModelFactory
+    private lateinit var virementViewModel: VirementViewModel
+
+
+
     //val initialClientValue = clientViewModel.client.value
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("VM_VALUE", "CollectInfosViewModel: ${collectInfoViewModel.clientViewModel}")
@@ -56,6 +78,30 @@ class OTPHandler : Fragment() {
             // For example, log the client data
             client.deviceInfo=deviceInfo
         })
+
+
+        val fromVirement = arguments?.getBoolean("fromVirement") ?: false
+        Log.e("Navigation DEBUG", "fromVirement: $fromVirement")
+
+
+
+        otpViewModel.otpBiometricVerified.observe(viewLifecycleOwner, Observer { verified ->
+            if(verified){
+                transportVirementViewModel.virement.observe(viewLifecycleOwner, Observer{ virement ->
+                    virementViewModelFactory = VirementViewModelFactory(virement, accountRepository)
+                    Log.e("Virement Details from OTPHandler","Émetteur: ${virement.compteEmet}, Bénéficiaire: ${virement.compteBenef}, Montant: ${virement.montant}")
+                    // Initialize the ViewModel using the factory
+                    virementViewModel = ViewModelProvider(
+                        this,
+                        virementViewModelFactory
+                    )[VirementViewModel::class.java]
+                    virementViewModel.onButtonClick(view)
+                    virementViewModel.handleSuccessfulVirement()
+                })
+            }
+        })
+
+
 
 
     }
