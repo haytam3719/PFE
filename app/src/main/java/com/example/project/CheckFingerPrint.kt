@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.LottieAnimationView
 import com.example.project.databinding.FragmentFingerPrintBinding
 import com.example.project.viewmodels.BiometricViewModel
 import com.example.project.viewmodels.CollectInfoViewModel
@@ -26,6 +27,7 @@ class CheckFingerPrint : Fragment() {
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
     private val mainThreadExecutor: MainThreadExecutor = MainThreadExecutor()
     private val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+    private lateinit var lottieAnimationView: LottieAnimationView
     // Generate a key alias
     val keyAlias = "my_key_alias"
 
@@ -89,6 +91,9 @@ class CheckFingerPrint : Fragment() {
             Log.e("LiveDat", client.toString())
         })
 
+        lottieAnimationView.setAnimation("fingerprintanim.json")
+        lottieAnimationView.playAnimation()
+
     }
 
     private fun showBiometricPrompt() {
@@ -119,7 +124,7 @@ class CheckFingerPrint : Fragment() {
     ): View {
         val binding = FragmentFingerPrintBinding.inflate(inflater, container, false)
         binding.biometricViewModel = fingerPrintViewModel
-
+        lottieAnimationView = binding.lottieAnimationView
         binding.lifecycleOwner = viewLifecycleOwner
 
 

@@ -41,6 +41,13 @@ class ScanCin : Fragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
 
+        val lottieAnimationView = binding.animationView
+        lottieAnimationView.setAnimation("identity_card_scan.json")
+        lottieAnimationView.loop(true)
+        lottieAnimationView.speed = 1f
+
+        lottieAnimationView.playAnimation()
+
         return binding.root
 
 

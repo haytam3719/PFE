@@ -142,6 +142,7 @@ class OTPHandler : Fragment() {
                 SEND_SMS_PERMISSION_REQUEST_CODE
             )
         } else {
+            Log.e("OTP",actualText)
             // Permission already granted, proceed with sending SMS
             sendSMS("+2125223697854", "Code de vérification : Veuillez saisir ce code pour pouvoir continuer $actualText")
         }

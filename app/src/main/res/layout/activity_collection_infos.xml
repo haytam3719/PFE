@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
         <import type="com.example.project.models.CollectClientPartial" />
         <import type="com.example.project.viewmodels.CollectInfoViewModel" />
@@ -16,230 +14,234 @@
             type="com.example.project.viewmodels.CollectInfoViewModel" />
     </data>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-
-    <!-- AppBarLayout with MaterialToolbar -->
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/appBarLayout"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        >
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
+        <!-- AppBarLayout with MaterialToolbar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:title="Collections des infos personnelles"
-            app:menu="@menu/top_app_bar"
-            app:navigationIcon="@drawable/back" />
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- NestedScrollView -->
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <!-- LinearLayout for vertical orientation -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField0"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:placeholderText="Test Placeholder 1"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:hint="Prénom"
-                    android:drawableStart="@drawable/some"
-                    android:background="@drawable/rounded_bg"
-                    android:drawablePadding="8dp"
-                    android:text="@={clientPartial.prenom}"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:placeholderText="Test Placeholder 1"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:hint="Nom"
-                    android:drawableStart="@drawable/some"
-                    android:background="@drawable/rounded_bg"
-                    android:drawablePadding="8dp"
-                    android:text="@={clientPartial.nom}"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:placeholderText="Test Placeholder 1"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:hint="Numéro CIN"
-                    android:drawableStart="@drawable/some"
-                    android:background="@drawable/rounded_bg"
-                    android:drawablePadding="8dp"
-                    android:text="@={clientPartial.cin}"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:placeholderText="Test Placeholder 1"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:hint="Adresse"
-                    android:drawableStart="@drawable/some"
-                    android:background="@drawable/rounded_bg"
-                    android:drawablePadding="8dp"
-                    android:text="@={clientPartial.adresse}"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:placeholderText="Test Placeholder 1"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:hint="Date de Naissance"
-                    android:drawableStart="@drawable/some"
-                    android:background="@drawable/rounded_bg"
-                    android:drawablePadding="8dp"
-                    android:text="@={clientPartial.date_naissance}"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <!-- First TextInputLayout -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textField1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="3dp"
-                    android:layout_marginStart="10dp"
-                    app:placeholderText="Test Placeholder 1"
-                    app:errorEnabled="true">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:hint="Tél Portable"
-                        android:drawableStart="@drawable/some"
-                        android:drawablePadding="8dp"
-                        android:background="@drawable/rounded_bg"
-                        android:text="@={clientPartial.tel_portable}"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Second TextInputLayout -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textField10"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginEnd="10dp"
-                    app:placeholderText="Test Placeholder 2"
-                    app:errorEnabled="true">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:hint="Domicile"
-                        android:drawableStart="@drawable/some"
-                        android:drawablePadding="8dp"
-
-                        android:background="@drawable/rounded_bg"
-                        android:text="@={clientPartial.domicile}"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-
-            <Button
-                android:id="@+id/elevatedButton2"
-                style="@style/Widget.Material3.Button.ElevatedButton"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="40dp"
-                android:gravity="center"
-                android:padding="20dp"
-                android:text="Ouvrir un compte"
-                android:background="@drawable/button_style"
-                android:onClick="@{view->viewModel.onButtonClick(view)}"
+                android:minHeight="?attr/actionBarSize"
+                app:title="Informations personnelles"
+                app:menu="@menu/top_app_bar"
+                app:titleTextColor="@color/white"
+                app:navigationIcon="@drawable/back"
+                android:background="@color/reddish_orange"
                 />
 
-        </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- NestedScrollView -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <!-- Description -->
+                <TextView
+                    android:id="@+id/descriptionTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Veuillez remplir le champ suivant pour poursuivre la création de votre compte"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"/>
+
+                <!-- Prenom TextInputLayout -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/prenomTextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Prénom"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintTop_toBottomOf="@id/descriptionTextView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="20dp"
+                    app:endIconMode="clear_text"
+                    app:cursorColor="#FFC107">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={clientPartial.prenom}"
+                        android:inputType="text"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Nom TextInputLayout -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/nomTextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Nom"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintTop_toBottomOf="@id/prenomTextInputLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="20dp"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={clientPartial.nom}"
+                        android:inputType="text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- CIN TextInputLayout -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/cinTextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Numéro CIN"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintTop_toBottomOf="@id/nomTextInputLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/adresseTextInputLayout"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="8dp"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={clientPartial.cin}"
+                        android:inputType="text"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Adresse TextInputLayout -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/adresseTextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Adresse"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintTop_toBottomOf="@id/nomTextInputLayout"
+                    app:layout_constraintStart_toEndOf="@id/cinTextInputLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="8dp"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={clientPartial.adresse}"
+                        android:inputType="text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Date de Naissance TextInputLayout -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dateNaissanceTextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Date de Naissance"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintTop_toBottomOf="@id/adresseTextInputLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="20dp"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={clientPartial.date_naissance}"
+                        android:inputType="text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Tél Portable TextInputLayout -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/telPortableTextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Tél Portable"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintTop_toBottomOf="@id/dateNaissanceTextInputLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="20dp"
+                    app:endIconMode="clear_text"
+                    app:prefixText="+212 ">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={clientPartial.tel_portable}"
+                        android:inputType="text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Domicile TextInputLayout -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/domicileTextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Domicile"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:layout_constraintTop_toBottomOf="@id/telPortableTextInputLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="20dp"
+                    app:endIconMode="clear_text"
+                    app:prefixText="+212 5 ">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={clientPartial.domicile}"
+                        android:inputType="text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Button -->
+                <Button
+                    android:id="@+id/elevatedButton2"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="25dp"
+                    android:backgroundTint="@color/reddish_orange"
+                    android:onClick="@{view->viewModel.onButtonClick(view)}"
+                    android:text="Continuer"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textAllCaps="false"
+                    app:layout_constraintTop_toBottomOf="@id/domicileTextInputLayout"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner"/>
 
 
-    </androidx.core.widget.NestedScrollView>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

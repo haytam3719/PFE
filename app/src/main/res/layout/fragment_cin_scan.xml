@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -11,80 +9,81 @@
         <variable
             name="scanCinViewModel"
             type="com.example.project.viewmodels.ScanCinViewModel" />
-
     </data>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:layout_width="match_parent"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:title="Scan CIN"
-            app:menu="@menu/top_app_bar"
-            app:navigationIcon="@drawable/back" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingTop="8dp"
-            android:layout_marginTop="100dp"
-            >
-        <!-- Camera Preview -->
-            <TextureView
-                android:id="@+id/cameraPreview"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/scanButton" />
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                app:title="Scan de la CIN"
+                app:menu="@menu/top_app_bar"
+                app:navigationIcon="@drawable/back"
+                android:background="@color/reddish_orange"
+                app:titleTextColor="@color/white"
+                />
 
+        </com.google.android.material.appbar.AppBarLayout>
 
-            <!-- Capture Button -->
+        <TextView
+            android:id="@+id/instructionTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="20sp"
+            android:text="Nous vous prions de bien vouloir scanner votre carte d'identité Nationale recto-verso"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/scanButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/instructionTextView"
+            app:lottie_autoPlay="true"
+
+            app:lottie_fileName="identity_card_scan.json"
+            app:lottie_loop="true" />
+
         <Button
             android:id="@+id/scanButton"
-            android:layout_width="wrap_content"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Scan CIN"
-            android:background="@drawable/rounded_bg"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/cameraPreview"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginHorizontal="32dp"
-            android:padding="16dp"
+            android:layout_margin="16dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="@color/reddish_orange"
             android:onClick="@{view->scanCinViewModel.onButtonClick(view)}"
-            />
+            android:padding="16dp"
+            android:textAllCaps="false"
+            android:text="Ouvrir caméra"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/animationView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner" />
 
-        <!-- Optional: Add any other UI elements as needed -->
 
-        </RelativeLayout>
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

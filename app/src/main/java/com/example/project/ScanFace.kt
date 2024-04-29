@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.FragmentFaceScanBinding
 import com.example.project.viewmodels.ScanFaceViewModel
-
 class ScanFace : Fragment() {
     private val scanFaceViewModel: ScanFaceViewModel by viewModels()
 
@@ -41,11 +40,18 @@ class ScanFace : Fragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
 
+        val lottieAnimationView = binding.faceScanAnim
+        lottieAnimationView.setAnimation("face_scan_anim.json")
+        lottieAnimationView.loop(true)
+        lottieAnimationView.speed = 1f
+
+        lottieAnimationView.playAnimation()
+
+
+
         return binding.root
 
 
-    }}
-
-
-
+    }
+}
 

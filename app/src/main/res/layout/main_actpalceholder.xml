@@ -20,147 +20,173 @@
     </data>
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    >
 
-
-    <!-- Material Card View -->
-    <com.google.android.material.card.MaterialCardView
-        style="?attr/materialCardViewElevatedStyle"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/attijari"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="70dp"
-        android:padding="30dp"
-        android:layout_marginBottom="16dp"
-        android:id="@+id/card"
+        android:padding="16dp"
+        android:src="@drawable/attijari"
+        app:layout_constraintBottom_toTopOf="@id/guideline_log"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo" />
 
-        >
 
-        <!-- RelativeLayout pour centrer les éléments -->
-        <RelativeLayout
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outlinedTextField0"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Identifiant"
+        app:layout_constraintEnd_toEndOf="@id/guideline_log2"
+        app:layout_constraintStart_toStartOf="@id/guideline_log"
+        app:layout_constraintTop_toBottomOf="@id/bottom_im"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner">
+
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="20dp"
+            android:layout_height="70dp"
+            android:drawableStart="@drawable/user"
+            android:drawablePadding="10dp"
 
-            >
+            android:hint=""
 
-            <!-- TextInputLayout 1 -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="12dp"
-                app:placeholderText="Test Placeholder 1"
+            android:text="@={clientPartial.email}" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-                app:errorEnabled="true">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outlinedTextField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Mot de passe"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline_log2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/guideline_log"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedTextField0"
+        app:layout_constraintVertical_bias="0.100"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner"
+        app:endIconMode="password_toggle">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:hint="Identifiant"
-                    android:drawableStart="@drawable/some"
-                    android:background="@drawable/rounded_bg"
-                    android:drawablePadding="8dp"
-                    android:text="@={clientPartial.email}"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- TextInputLayout 2 -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textField1"
-                android:layout_centerHorizontal="true"
-                android:paddingBottom="10dp"
-                app:placeholderText="Test Placeholder 2"
-                app:endIconMode="password_toggle"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:hint="Mot de passe"
-                    android:drawableStart="@drawable/motpasse"
-                    android:drawablePadding="8dp"
-                    android:inputType="textPassword"
-                    android:background="@drawable/rounded_bg"
-                    android:text="@={clientPartial.password}"
-                    />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/elevatedButton"
-                style="@style/Widget.Material3.Button.ElevatedButton"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textField2"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:padding="15dp"
-                android:onClick="@{view->viewModel.onButtonClick(view)}"
-                android:text="Connexion" />
-
-            <TextView
-                android:id="@+id/clickableTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Identifiant ou mot de passe oublié ?"
-                android:layout_centerHorizontal="true"
-                android:textSize="16sp"
-                android:clickable="true"
-                android:padding="25dp"
-                android:layout_below="@id/elevatedButton"
-                android:onClick="onTextViewClicked" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:drawableStart="@drawable/pass"
+            android:drawablePadding="7dp"
+            android:hint=""
+            android:inputType="textPassword"
+            android:text="@={clientPartial.password}"
+           />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-        </RelativeLayout>
+    <Button
+        android:id="@+id/outlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/golden_yellow"
+        android:onClick="@{view->viewModel.onButtonClick(view)}"
+        android:text="SE CONNECTER"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="@id/guideline_log2"
+        app:layout_constraintHorizontal_bias="0.0"
 
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_constraintStart_toStartOf="@id/guideline_log"
+        app:layout_constraintTop_toTopOf="@+id/guidelineSeConnect"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner" />
 
-        <Button
-            android:id="@+id/elevatedButton2"
-            style="@style/Widget.Material3.Button.ElevatedButton"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/card"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:onClick="@{view->viewModel.onButtonClickOpen(view)}"
-            android:padding="20dp"
-            android:text="Ouvrir un compte" />
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Identifiant ou mot de passe oublié ?"
+        android:textColor="@color/reddish_orange"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedTextField" />
 
-        <Button
-            android:id="@+id/elevatedButton3"
-            style="@style/Widget.Material3.Button.ElevatedButton"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/elevatedButton2"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:onClick="@{view->fingerPrintViewModel.onButtonClick(view)}"
-            android:padding="20dp"
-            android:text="Connexion avec Empreinte" />
+    <ImageView
+        android:id="@+id/elevatedButton3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:onClick="@{view->fingerPrintViewModel.onButtonClick(view)}"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clickableTextView"
+        android:src="@drawable/fingerprint"/>
 
-    <!-- Bottom Navigation View -->
+
+    <TextView
+        android:id="@+id/clickableTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{view->viewModel.onButtonClickOpen(view)}"
+        android:text="C'est votre première fois? | Ouvrir un compte"
+        android:textColor="@color/reddish_orange"
+        android:textSize="19sp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="@id/guideline_log2"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedButton"
+        app:layout_constraintVertical_bias="0.117" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_log"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_log2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.98" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineSeConnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.61" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.04" />
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
 
-
-        app:menu="@menu/bottom_navigation_menu"
-        android:layout_alignParentBottom="true"/>
-
-</RelativeLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_im"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.26" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

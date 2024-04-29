@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ShapeAppearanceOverlay.NoCorner" parent="">
+
+        <!-- Specify corner size to remove corners -->
+        <item name="cornerSize">7dp</item>
+
+    </style>
+
+    <!-- Define AppTheme with Light.NoActionBar parent -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+    </style>
+
+    <style name="MaterialAppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+
+    </style>
+
+
+</resources>

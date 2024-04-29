@@ -7,42 +7,51 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
-        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
-        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
-        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
-        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
-        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
-        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
-        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
-        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
-        bibendum, vel congue leo egestas.\n\n
-        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
-        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
-        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
-        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
-        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
-        est.\n\n
-        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
-        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
-        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
-        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
-        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
-        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
-        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
-        convallis.\n\n
-        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
-        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
-        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
-        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
-        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
-        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
-        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
-    </string>
+    <string name="api_key">AIzaSyAS3VOEoRq3TZUywZYld06gQC_3FAF15WI</string>
+
+
+
+
+
+    <string name="conditions_generales">Conditions Générales :\n\n 1.1 Ces Conditions Générales d\'Utilisation (ci-après dénommées les "CGU") régissent l\'utilisation du service fourni par la société ABC Solutions, accessible sur le site web www.abcsolutions.com (ci-après dénommé le "Service").\n\n
+1.2 En accédant ou en utilisant le Service, vous acceptez d\'être lié par ces CGU. Si vous n\'acceptez pas ces CGU, veuillez ne pas utiliser le Service.\n\n
+2. Description du Service\n\n
+2.1 Le Service fournit une plateforme en ligne pour la gestion de projets et la collaboration d\'équipes.\n\n
+2.2 Le Service peut être mis à jour, modifié ou suspendu à tout moment, avec ou sans préavis.\n\n
+3. Comptes Utilisateurs\n\n
+3.1 Pour accéder à certaines fonctionnalités du Service, vous devrez créer un compte utilisateur.\n\n
+3.2 Vous êtes responsable de maintenir la confidentialité de votre compte et de votre mot de passe, et vous acceptez de ne pas partager vos informations d\'identification avec des tiers.\n\n
+4. Utilisation du Service\n\n
+4.1 Vous acceptez d\'utiliser le Service conformément à toutes les lois applicables et ces CGU.\n\n
+4.2 Vous vous engagez à ne pas utiliser le Service à des fins illégales, frauduleuses ou offensantes.\n\n
+5. Propriété Intellectuelle\n\n
+5.1 Tout le contenu du Service, y compris les textes, les images, les marques de commerce et les logos, est la propriété d\'ABC Solutions ou de ses concédants de licence.\n\n
+6. Responsabilité\n\n
+6.1 ABC Solutions décline toute responsabilité en cas de dommages ou de pertes découlant de l\'utilisation du Service.\n\n
+7. Modification des CGU\n\n
+7.1 ABC Solutions se réserve le droit de modifier ces CGU à tout moment. Les modifications prendront effet dès leur publication sur le Service.\n\n
+8. Résiliation\n\n
+8.1 ABC Solutions se réserve le droit de résilier votre accès au Service à tout moment, pour quelque raison que ce soit.\n\n
+9. Loi Applicable et Juridiction Compétente\n\n
+9.1 Ces CGU sont régies par les lois de la République de Ruritania, et tout litige découlant de ces CGU sera soumis à la juridiction exclusive des tribunaux de la ville de Nouvelle-Ville.</string>
+
+
+    <string name="contrat">Entre [Nom de la Banque], désignée ci-après comme "la Banque", et [Nom du Client], ci-après désigné comme "le Client".\n\n
+1. Objet\n\n
+La Banque ouvre un compte bancaire au nom du Client, sous les conditions suivantes.\n\n
+2. Conditions d\'ouverture de compte\n\n
+2.1 Le Client fournira à la Banque les informations et documents nécessaires à l\'ouverture du compte, y compris une pièce d\'identité valide, un justificatif de domicile et toute autre information requise par la Banque.\n\n
+2.2 Le Client reconnaît avoir lu et accepté les conditions générales de la Banque, ainsi que les tarifs et frais applicables à l\'utilisation du compte bancaire.\n\n
+3. Utilisation du compte\n\n
+Le Client pourra utiliser le compte bancaire ouvert auprès de la Banque pour effectuer des dépôts, des retraits, des virements, des paiements par carte bancaire, et toutes autres opérations autorisées par la Banque.\n\n
+4. Confidentialité et sécurité\n\n
+La Banque s\'engage à protéger les informations personnelles du Client conformément à sa politique de confidentialité.\n\n
+Le Client s\'engage à protéger ses identifiants de compte et à ne pas les divulguer à des tiers.\n\n
+5. Durée du contrat\n\n
+Ce contrat entre en vigueur à compter de la date d\'ouverture du compte et reste en vigueur jusqu\'à sa résiliation par l\'une ou l\'autre des parties.\n\n
+Fait en deux exemplaires, à [lieu], le [date].</string>
+
+
     <string-array name="type_compte_array">
         <item>COURANT</item>
         <item>EPARGNE</item>

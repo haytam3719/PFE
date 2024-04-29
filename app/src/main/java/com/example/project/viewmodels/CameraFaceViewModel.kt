@@ -1,7 +1,10 @@
 package com.example.project.viewmodels
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.TextureView
 import android.view.View
@@ -27,14 +30,17 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
     @SuppressLint("StaticFieldLeak")
     private lateinit var previewView: TextureView // Define previewView
 
-    private lateinit var numCin:String
+    private val _navigateToViewPager = MutableLiveData<Boolean>()
+    val navigateToViewPager: LiveData<Boolean>
+        get() = _navigateToViewPager
+
+    private lateinit var numCin: String
     private val _data = MutableLiveData<String>()
     val dataFromFragment: LiveData<String> = _data
 
     fun setData(newData: String) {
         _data.value = newData
     }
-
 
     init {
         // Observe changes to the LiveData object
@@ -46,9 +52,6 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
             Log.d("CameraFaceViewModel", "numCin initialized: $numCin")
         }
     }
-
-
-
 
     // Setter method to initialize previewView
     fun setPreviewView(view: TextureView) {
@@ -67,12 +70,9 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
         this.imageCapture = imageCapture
     }
 
-
-
     fun takePhoto(identityCardNumber: String) {
         val imageCapture = imageCapture ?: return
         val photoFile = File(context.externalMediaDirs.firstOrNull(), "${System.currentTimeMillis()}.jpg")
-
         val photoOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
         imageCapture.takePicture(
@@ -91,7 +91,6 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
                 }
             }
         )
-
     }
 
     private fun uploadImageToStorage(photoUri: Uri, identityCardNumber: String) {
@@ -106,6 +105,12 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
             .addOnSuccessListener { _ ->
                 // Handle successful upload
                 _imageSavedEvent.postValue(File(photoUri.path ?: ""))
+
+                // Post navigation event with delay
+                val delayMillis = 2000
+                Handler(Looper.getMainLooper()).postDelayed({
+                    _navigateToViewPager.postValue(true)
+                }, delayMillis.toLong())
             }
             .addOnFailureListener { exception ->
                 // Handle unsuccessful upload
@@ -114,21 +119,15 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
             }
     }
 
-
-
     fun setSurfaceProvider(surfaceProvider: Preview.SurfaceProvider) {
         this.surfaceProvider = surfaceProvider
     }
 
-
-    fun onButtonClick(view: View){
+    fun onButtonClick(view: View) {
         numCin.let { this.takePhoto(it) }
-
     }
 
     fun onNavigationComplete() {
-        //_navigateToScanFace.value = false
+        _navigateToViewPager.value = false
     }
-
 }
-

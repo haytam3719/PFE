@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/page_1"
-        android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="text"/>
+        android:id="@+id/navigation_accueil"
+        android:title="Accueil" />
     <item
-        android:id="@+id/page_2"
-        android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="text"/>
+        android:id="@+id/navigation_agences"
+        android:title="Agences" />
     <item
-        android:id="@+id/page_3"
-        android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="text"/>
-    <item
-        android:id="@+id/page_4"
-        android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="text"/>
+        android:id="@+id/navigation_menu"
+        android:title="Menu" />
 </menu>

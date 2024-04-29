@@ -6,7 +6,7 @@
     <!-- Slightly darker border color -->
     <stroke
         android:width="2dp"
-        android:color="#AAAAAA"/> <!-- Adjusted border color to be slightly darker -->
+        android:color="@color/lighter_grey"/> <!-- Adjusted border color to be slightly darker -->
     <!-- Increased radius for rounded corners -->
     <corners android:radius="20dp"/> <!-- Adjusted radius to make it more rounded -->
 </shape>

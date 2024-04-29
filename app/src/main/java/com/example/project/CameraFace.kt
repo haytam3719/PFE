@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.CameraFaceBinding
 import com.example.project.viewmodels.CameraFaceViewModel
 import com.example.project.viewmodels.CollectInfoViewModel
@@ -85,6 +86,12 @@ class CameraFace : Fragment() {
             }
         }
         startCamera()
+
+        cameraFaceViewModel.navigateToViewPager.observe(viewLifecycleOwner, Observer { shouldNavigate->
+            if(shouldNavigate){
+                findNavController().navigate(R.id.cameraface_to_viewpager)
+            }
+        })
 
     }
 

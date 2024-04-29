@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -11,91 +9,120 @@
         <variable
             name="biometricViewModel"
             type="com.example.project.viewmodels.BiometricViewModel" />
-
     </data>
 
-
-
-<androidx.constraintlayout.widget.ConstraintLayout
-
-    android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <!-- AppBarLayout with MaterialToolbar -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:layout_width="match_parent"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:title="Vérification OTP"
-            app:menu="@menu/top_app_bar"
-            app:navigationIcon="@drawable/back" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                app:title="Scan de l'empreinte digitale"
+                app:menu="@menu/top_app_bar"
+                app:navigationIcon="@drawable/back"
+                android:background="@color/reddish_orange"
+                app:titleTextColor="@color/white"
+                />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingTop="8dp"
-        android:layout_marginTop="100dp"
-        tools:ignore="MissingConstraints"> <!-- Adjusted margin top to provide space for app bar -->
-
-        <ImageView
-            android:id="@+id/biometricImageView"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/ic_launcher_background"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="32dp"/>
-
-        <TextView
-            android:id="@+id/biometricDescriptionTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Place your finger on the fingerprint sensor"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:layout_below="@id/biometricImageView"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:id="@+id/biometricButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Scan Biometric"
-            android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@+id/biometricDescriptionTextView"
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="32dp"
-            android:onClick="@{view->biometricViewModel.onButtonClick(view)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </RelativeLayout>
+                <!-- Center horizontally -->
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_horizontal_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.5" />
 
-    </androidx.core.widget.NestedScrollView>
+                <!-- Center vertically -->
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_vertical_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottieAnimationView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toTopOf="@id/biometricDescriptionTextView"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_goneMarginTop="20dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_fileName="fingerprintanim.json"
+                    app:lottie_loop="true" />
+
+
+                <TextView
+                    android:id="@+id/biometricDescriptionTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Placez votre doigt sur le capteur"
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    android:textAlignment="center"
+                    app:layout_constraintTop_toBottomOf="@id/lottieAnimationView"
+                    app:layout_constraintBottom_toTopOf="@id/biometricButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintVertical_bias="0.5"
+                    android:layout_marginTop="16dp" />
+
+
+                <Button
+                    android:id="@+id/biometricButton"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="32dp"
+                    android:backgroundTint="@color/reddish_orange"
+                    android:onClick="@{view->biometricViewModel.onButtonClick(view)}"
+                    android:text="Appuyer ici"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textAllCaps="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
+                    app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
+                    app:layout_constraintTop_toBottomOf="@id/biometricDescriptionTextView"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

@@ -7,8 +7,19 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF0000</color>
+    <color name="blue">#0000FF</color>
 
-    <color name="primaryColor">#FF6200EE</color> <!-- Example primary color -->
+    <color name="orange">#FFA500</color>
+
+    <color name="primaryColor">#FF6200EE</color>
+    <color name="lighter_grey">#C0C0C0</color>
+    <color name="orange_red">#FFA040</color>
+    <color name="reddish_orange">#FF7F00</color>
+    <color name="deep_blue">#0047AB</color>
+    <color name="dark_gray">#333333</color>
+    <color name="forest_green">#228B22</color>
+    <color name="golden_yellow">#FFD700</color>
 
 
 </resources>

@@ -4,7 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
 
     android:id="@+id/nav_graph"
-    app:startDestination="@id/main_actpalceholderFragment">
+    app:startDestination="@id/splash_screen">
+
+
+
+    <fragment
+        android:id="@+id/splash_screen"
+        android:name="com.example.project.SplashScreenFragment"
+        android:label="Zero Fragment"
+        tools:layout="@layout/splash_screen">
+        <action
+            android:id="@+id/splashscreen_to_mainactplace"
+            app:destination="@id/main_actpalceholderFragment"
+            app:enterAnim="@anim/fade_in"
+
+            />
+
+
+    </fragment>
+
+
+
 
     <fragment
         android:id="@+id/main_actpalceholderFragment"
@@ -13,10 +33,17 @@
         tools:layout="@layout/main_actpalceholder">
         <action
             android:id="@+id/mainactplace_to_collectinfos"
-            app:destination="@id/activity_collection_infosFragment" />
+            app:destination="@id/activity_collection_infosFragment"
+            app:enterAnim="@anim/slide_in_right"
+            />
         <action
             android:id="@+id/mainactplace_to_dashboard"
             app:destination="@id/fragment_dashboard"/>
+
+        <action
+            android:id="@+id/mainactplace_to_agences"
+            app:destination="@id/agences"
+            app:enterAnim="@anim/slide_in_right"/>
 
     </fragment>
 
@@ -30,7 +57,9 @@
         tools:layout="@layout/activity_collection_infos">
         <action
             android:id="@+id/collectinfos_to_otp"
-            app:destination="@id/activity_collection_otp" />
+            app:destination="@id/activity_collection_otp"
+            app:enterAnim="@anim/slide_in_right"
+            />
     </fragment>
 
     <fragment
@@ -41,7 +70,9 @@
 
         <action
             android:id="@+id/otp_to_print"
-            app:destination="@id/activity_print" />
+            app:destination="@id/activity_print"
+            app:enterAnim="@anim/slide_in_right"
+            />
 
     </fragment>
 
@@ -53,7 +84,9 @@
         tools:layout="@layout/fragment_finger_print">
         <action
             android:id="@+id/print_to_sacncin"
-            app:destination="@id/activity_scan_cin"/>
+            app:destination="@id/activity_scan_cin"
+            app:enterAnim="@anim/slide_in_right"
+            />
 
     </fragment>
 
@@ -64,7 +97,9 @@
         tools:layout="@layout/fragment_cin_scan">
         <action
             android:id="@+id/sacncin_to_cameracin"
-            app:destination="@id/activity_camera_cin"/>
+            app:destination="@id/activity_camera_cin"
+            app:enterAnim="@anim/bas_en_haut"
+            />
     </fragment>
 
 
@@ -75,7 +110,9 @@
         tools:layout="@layout/camera_cin">
         <action
             android:id="@+id/cameracin_to_scanface"
-            app:destination="@id/activity_scan_face"/>
+            app:destination="@id/activity_scan_face"
+            app:enterAnim="@anim/slide_in_right"
+            />
     </fragment>
 
 
@@ -86,19 +123,100 @@
         tools:layout="@layout/fragment_face_scan">
         <action
             android:id="@+id/scanface_to_cameraface"
-            app:destination="@id/activity_camera_face"/>
+            app:destination="@id/cameraface"
+            app:enterAnim="@anim/bas_en_haut"
+
+            />
 
     </fragment>
 
 
     <fragment
-        android:id="@+id/activity_camera_face"
+        android:id="@+id/cameraface"
         android:name="com.example.project.CameraFace"
-        android:label="Eighth Fragment"
+        android:label="EI Fragment"
         tools:layout="@layout/camera_face">
+        <action
+            android:id="@+id/cameraface_to_viewpager"
+            app:destination="@+id/viewPager"
+            app:enterAnim="@anim/slide_in_left"/>
 
 
     </fragment>
+
+    <fragment
+        android:id="@+id/viewPager"
+        android:name="com.example.project.Questionnaire"
+        android:label="Seventh Fragment"
+        tools:layout="@layout/fragment_step_container">
+
+        <action
+            android:id="@+id/viewPager_to_conditiongene"
+            app:destination="@id/conditions_generales"
+            app:enterAnim="@anim/slide_in_right"/>
+
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/conditions_generales"
+        android:name="com.example.project.ConditionsGenerales"
+        android:label="Seventh Fragment"
+        tools:layout="@layout/conditions_generales">
+
+        <action
+            android:id="@+id/conditions_generales_to_contrat"
+            app:destination="@id/contrat"
+            app:enterAnim="@anim/slide_in_right"/>
+
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/contrat"
+        android:name="com.example.project.Contrat"
+        android:label="Seventh Fragment"
+        tools:layout="@layout/contrat">
+        <action
+            android:id="@+id/contrat_to_mail"
+            app:destination="@id/mail"
+            app:enterAnim="@anim/slide_in_right"/>
+
+
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/mail"
+        android:name="com.example.project.Mail"
+        android:label="Seventh Fragment"
+        tools:layout="@layout/mail">
+
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/agences"
+        android:name="com.example.project.Agences"
+        android:label="agences"
+        tools:layout="@layout/agences">
+
+
+    </fragment>
+
+
+
+
+
+
+
+
+
+
 
 
     <fragment

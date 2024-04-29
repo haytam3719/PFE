@@ -74,13 +74,14 @@ class AuthViewModel @Inject constructor(
      suspend fun signIn(email: String, password: String) {
             viewModelScope.launch {
                 try {
+                    authRepository.signIn(email,password).await()
                     val storedEmail = secureManager.getEmail()
                     val storedPassword = secureManager.getPassword()
                     if (email == storedEmail && password == storedPassword) {
                         val storedAccessToken = secureManager.getAccessToken()
                         if (storedAccessToken != null) {
                             _authState.emit(AuthState.Loading)
-                            //authRepository.signIn(email, password).await()
+                            authRepository.signIn(email, password).await()
                             _authState.emit(AuthState.Success)
                         } else {
                             // Access token does not exist, sign out
