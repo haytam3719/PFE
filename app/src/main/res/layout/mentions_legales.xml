@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:title="Mentions légales"
+            app:titleTextColor="@color/white"
+            app:navigationIcon="@drawable/back"
+            android:background="@color/reddish_orange" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/scrollViewContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Attijariwafa Bank, société anonyme au capital de 2.151.408.390 dirhams, ayant son siège social au 02 Boulevard Moulay Youssef, Casablanca, immatriculée au registre du Commerce et des Sociétés de Casablanca sous le numéro 333, agréée en qualité d'établissement de crédit par arrêté du Ministre des Finances et de la Privatisation n°2269-03 du 22/12/2003 tel que modifié et complété, dûment représentée à l'effet des présentes par son Président Directeur Général Monsieur Mohamed EL KETTANI agissant es-qualité."
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/editorInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Ce service est édité par: Attijariwafa Bank\nResponsable de la rédaction: M. Noureddine BOUSTANI et M. Mohamed Issam MAGHNIOUJ."
+                android:textSize="18sp"
+                android:layout_marginTop="18dp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/hostingInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="L'application mobile d'Attijariwafa Bank est hébergée par: Attijariwafa Bank sise au 2 avenue Moulay Youssef, Casablanca, Maroc."
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/editorInfo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/bankLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/attijari"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/hostingInfo" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -73,6 +73,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation ("com.google.android.material:material:1.11.0")
 
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
@@ -88,8 +89,7 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth-ktx:22.3.1")
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")
-    implementation ("com.google.firebase:firebase-database:20.3.1")
-    implementation ("com.google.firebase:firebase-firestore-ktx")
+    implementation ("com.google.firebase:firebase-database:21.0.0")
 
 
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
@@ -99,6 +99,7 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
     implementation("com.google.firebase:firebase-functions-ktx:20.4.0")
     implementation ("com.google.firebase:firebase-messaging:23.4.1")
+
 
     // Dagger Hilt dependencies
 
@@ -111,6 +112,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation("androidx.compose.material3:material3-android:1.2.1")
     implementation("androidx.fragment:fragment:1.6.2")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.firebase:firebase-appcheck-debug:18.0.0")
     kapt ("com.google.dagger:hilt-android-compiler:2.48")
     kapt ("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.5.0")
     implementation ("androidx.fragment:fragment-ktx:1.4.0")

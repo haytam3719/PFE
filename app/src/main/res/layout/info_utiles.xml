@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.example.project.InfosUtiles" />
+        <variable name="infosUtiles" type="com.example.project.InfosUtiles" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                app:title="Informations utiles"
+                app:titleTextColor="@color/white"
+                app:navigationIcon="@drawable/back"
+                android:background="@color/reddish_orange" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="15dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuItemsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- Protection des données personnelles -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/protection_donnees"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardBackgroundColor="#FFEEE2"
+                    android:textSize="18sp"
+
+                    android:layout_marginTop="20dp"
+                    android:onClick="@{view->infosUtiles.onClickProtectionDonnees(view)}">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+                        <ImageView
+                            android:id="@+id/protectionIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/user_menu"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+                        <TextView
+                            android:id="@+id/protectionText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Protection des données personnelles"
+                            android:textColor="#FF5722"
+
+                            android:textSize="18sp"
+                            app:layout_constraintStart_toEndOf="@id/protectionIcon"
+                            app:layout_constraintEnd_toStartOf="@id/protectionChevron"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginStart="16dp" />
+                        <ImageView
+                            android:id="@+id/protectionChevron"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/forward_icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Guide de Sécurité -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/guide_securite"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/protection_donnees"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardBackgroundColor="#FFEEE2"
+                    android:layout_marginTop="20dp"
+                    android:onClick="@{view->infosUtiles.onClickGuideSecurite(view)}">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+                        <ImageView
+                            android:id="@+id/guideIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/pass"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+                        <TextView
+                            android:id="@+id/guideText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Guide de Sécurité"
+                            android:textColor="#FF5722"
+                            android:textSize="18sp"
+                            app:layout_constraintStart_toEndOf="@id/guideIcon"
+                            app:layout_constraintEnd_toStartOf="@id/guideChevron"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginStart="16dp" />
+                        <ImageView
+                            android:id="@+id/guideChevron"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/forward_icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <!-- Mentions légales button -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/mentionleg"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/guide_securite"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardBackgroundColor="#FFEEE2"
+                    android:layout_marginTop="20dp"
+                    android:onClick="@{view -> infosUtiles.onClickMentionsLegales(view)}">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+                        <ImageView
+                            android:id="@+id/mentionLegIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/legal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+                        <TextView
+                            android:id="@+id/mentionLegText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Mentions légales"
+                            android:textColor="#FF5722"
+                            android:textSize="18sp"
+                            app:layout_constraintStart_toEndOf="@id/mentionLegIcon"
+                            app:layout_constraintEnd_toStartOf="@id/mentionLegChevron"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginStart="16dp" />
+                        <ImageView
+                            android:id="@+id/mentionLegChevron"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/forward_icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Agences button -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/agences"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/mentionleg"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardBackgroundColor="#FFEEE2"
+                    android:layout_marginTop="20dp"
+                    android:onClick="@{view -> infosUtiles.onClickAgences(view)}">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+                        <ImageView
+                            android:id="@+id/agenceIcon"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/agency"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+                        <TextView
+                            android:id="@+id/agenceText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Agences"
+                            android:textColor="#FF5722"
+                            android:textSize="18sp"
+                            app:layout_constraintStart_toEndOf="@id/agenceIcon"
+                            app:layout_constraintEnd_toStartOf="@id/agenceChevron"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginStart="16dp" />
+                        <ImageView
+                            android:id="@+id/agenceChevron"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/forward_icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:title="Guide de sécurité"
+            app:titleTextColor="@color/white"
+            app:navigationIcon="@drawable/back"
+            android:background="@color/reddish_orange" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/scrollViewContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/introText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/reddish_orange"
+                android:padding="16dp"
+                android:text="Le Groupe Attijariwafa bank met à votre disposition ce guide de bonnes pratiques à adopter pour un usage sécurisé des services bancaires en ligne"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="25dp"/>
+
+            <TextView
+                android:id="@+id/sectionHeader"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/golden_yellow"
+                android:padding="16dp"
+                android:text="Bonnes pratiques Sécurités à adopter"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/introText" />
+
+            <TextView
+                android:id="@+id/listHeader1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Protection contre les e-mails, les SMS et appels trompeurs"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@id/sectionHeader"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp" />
+
+            <TextView
+                android:id="@+id/listItem1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="• Être attentif aux tentatives de récupération de ses données personnelles par e-mail, SMS ou appel vocal semblant parvenir de sa banque."
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/listHeader1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/listHeader2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="2. Gestion sécurisée des coordonnées d'authentification"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/listItem1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp" />
+
+            <TextView
+                android:id="@+id/listItem2_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="• Choisir un mot de passe robuste avec une combinaison de lettres (majuscules et minuscules), chiffres et caractères spéciaux."
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/listItem1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listHeader2"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/listItem2_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="• Éviter l'utilisation des informations personnelles évidentes (son nom, sa date de naissance, etc.)"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listItem2_1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

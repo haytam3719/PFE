@@ -10,11 +10,12 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AccountRepositoryImpl @Inject constructor(private val accountService:AccountCreationServiceImpl): AccountRepository {
-    private val database = FirebaseDatabase.getInstance()
+    private val database = FirebaseDatabase.getInstance("https://bank-2fd65-default-rtdb.firebaseio.com/")
     override suspend fun getAccounts(): List<Compte> {
         val accountsRef = database.reference.child("Accounts")
         val dataSnapshot = accountsRef.get().await()
@@ -112,4 +113,25 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
             }
         })
     }
+
+
+
+
+    suspend fun getAccountsForCurrentUser(userId: String): List<CompteImpl> {
+        Log.d("AccountRepo", "Attempting to fetch accounts for user ID: $userId")
+        return try {
+            val dataSnapshot = database.reference.child("accounts")
+                .orderByChild("id_proprietaire").equalTo(userId).get().await()
+
+            Log.d("AccountRepo", "Query successful, dataSnapshot: $dataSnapshot")
+            dataSnapshot.children.mapNotNull { it.getValue<CompteImpl>() }
+        } catch (e: Exception) {
+            Log.e("AccountRepo", "Error fetching user-specific accounts", e)
+            emptyList()
+        }
+    }
+
+
+
+
 }

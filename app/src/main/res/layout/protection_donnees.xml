@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:title="Protection des données"
+            app:titleTextColor="@color/white"
+            app:navigationIcon="@drawable/back"
+            android:background="@color/reddish_orange" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Politique de la protection des données"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/firstParagraph"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Le Groupe Attijariwafa Bank (ci-après « le Groupe ») accorde une grande importance à la protection de vos données à caractère personnel (ou « données personnelles »). C'est la raison pour laquelle le Groupe a adopté des principes forts en matière de protection des données."
+                android:textSize="18sp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@id/header"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/secondParagraph"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="La présente Politique protection des données personnelles a pour objectif de vous fournir des informations claires concernant la manière dont le Groupe traite et protège les données personnelles des personnes concernées, soit toute personne physique (salarié, client, prospect, utilisateur du site internet, actionnaire / mandataire de personnes morales ...) dont les données personnelles sont collectées par le Groupe. Elle informe les personnes concernées sur les raisons pour lesquelles leurs données sont utilisées, éventuellement partagées, ou encore la durée de conservation de ces données. Elle indique également les droits des personnes ainsi que les modalités d'exercice de ces droits."
+                android:textSize="18sp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@id/firstParagraph"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/thirdParagraph"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Le Groupe s’assure que les données personnelles collectées sont traitées de manière loyale et licite, et en toute transparence."
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@id/secondParagraph"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp" />
+
+            <ImageView
+                android:id="@+id/logoImage"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:src="@drawable/attijari"
+                app:layout_constraintTop_toBottomOf="@id/thirdParagraph"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

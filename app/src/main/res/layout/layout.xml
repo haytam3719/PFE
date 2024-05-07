@@ -3,163 +3,177 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:id="@+id/imgMenu"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
         android:src="@drawable/attijari"
-        app:layout_constraintBottom_toTopOf="@id/guideline_log"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField0"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Identifiant"
-        app:layout_constraintEnd_toEndOf="@id/guideline_log2"
-        app:layout_constraintStart_toStartOf="@id/guideline_log"
-        app:layout_constraintTop_toBottomOf="@id/bottom_im"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:drawableStart="@drawable/user"
-            android:drawablePadding="10dp"
-
-            android:hint=""
-            android:inputType="textPassword"
-            android:text="@={clientPartial.email}" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Mot de passe"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guideline_log2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/guideline_log"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextField0"
-        app:layout_constraintVertical_bias="0.100"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:drawableStart="@drawable/pass"
-            android:drawablePadding="7dp"
-            android:hint=""
-            android:inputType="textPassword"
-            android:text="@={clientPartial.password}" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <TextView
-        android:id="@+id/clickableTextView"
+    <ImageView
+        android:id="@+id/imgUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="C'est votre première fois? | Ouvrir un compte"
-        android:textColor="@color/reddish_orange"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        android:contentDescription="user"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.857"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedButton"
-        app:layout_constraintVertical_bias="0.222" />
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"/>
 
-
-    <Button
-        android:id="@+id/outlinedButton"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="4dp"
-        android:backgroundTint="@color/golden_yellow"
-        android:text="SE CONNECTER"
-        android:textColor="@color/black"
+    <TextView
+        android:id="@+id/tvTotalBalanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Solde Actuel (MAD)"
         android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="@id/guideline_log2"
-        app:layout_constraintHorizontal_bias="0.0"
-
-        app:layout_constraintStart_toStartOf="@id/guideline_log"
-        app:layout_constraintTop_toTopOf="@+id/guidelineSeConnect"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner" />
+        android:textColor="#616161"
+        app:layout_constraintTop_toBottomOf="@id/imgMenu"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"/>
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/tvTotalBalance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="Identifiant ou mot de passe oublié ?"
-        android:textColor="@color/reddish_orange"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.914"
+        android:text="$42,000.00"
+        android:textSize="28sp"
+        android:textColor="#FF6D00"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalBalanceLabel"
+        app:layout_constraintStart_toStartOf="@id/tvTotalBalanceLabel"/>
+
+    <View
+        android:id="@+id/graphPlaceholder"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalBalance"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextField" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_log"
+
+    <ImageView
+        android:id="@+id/icon1"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/rounded_icons"
+        android:contentDescription="comptes"
+        app:layout_constraintEnd_toStartOf="@id/icon2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/graphPlaceholder" />
+
+    <TextView
+        android:id="@+id/iconText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.02" />
+        android:text="Mes comptes"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/icon1"
+        app:layout_constraintStart_toStartOf="@id/icon1"
+        app:layout_constraintEnd_toEndOf="@id/icon1" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_log2"
+    <ImageView
+        android:id="@+id/icon2"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="8dp"
+        android:src="@drawable/attijari_secure"
+        android:contentDescription="attijari secure"
+        app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
+        app:layout_constraintStart_toEndOf="@id/icon1"
+        app:layout_constraintEnd_toStartOf="@id/icon3"
+        android:background="@drawable/rounded_icons"
+        />
+
+    <TextView
+        android:id="@+id/iconText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.98" />
+        android:text="AttijariSecure"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/icon2"
+        app:layout_constraintStart_toStartOf="@id/icon2"
+        app:layout_constraintEnd_toEndOf="@id/icon2" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineSeConnect"
+    <ImageView
+        android:id="@+id/icon3"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="8dp"
+        android:contentDescription="param"
+        android:src="@drawable/settings"
+        app:tint="#FF5722"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icon2"
+        app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
+        android:background="@drawable/rounded_icons"
+        />
+
+
+    <TextView
+        android:id="@+id/iconText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.66" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.08" />
+        android:text="Paramètres"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/icon3"
+        app:layout_constraintStart_toStartOf="@id/icon3"
+        app:layout_constraintEnd_toEndOf="@id/icon3" />
 
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/actionLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:layout_constraintTop_toBottomOf="@+id/iconText2"
+        android:layout_marginTop="25dp">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottom_im"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.31" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Transactions Récentes"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecentTransactions"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_top_recycler"
+        app:layout_constraintTop_toBottomOf="@id/actionLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_navigation_menu_connecte" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

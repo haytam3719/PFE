@@ -67,8 +67,6 @@ class Dashboard : Fragment(){
     ): View {
         val binding = DashboardBinding.inflate(inflater, container, false)
         binding.dashboardViewModel=dashboardViewModel
-
-
         binding.lifecycleOwner = viewLifecycleOwner
 
 

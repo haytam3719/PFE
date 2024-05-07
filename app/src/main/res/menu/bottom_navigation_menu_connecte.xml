@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fragment_dashboard"
+        android:icon="@drawable/home_connecte"
+        android:title="Acceuil" />
+    <item
+        android:id="@+id/fragment_virement"
+        android:icon="@drawable/transferr"
+        android:title="Transfers" />
+    <item
+        android:id="@+id/fragment_payment"
+        android:icon="@drawable/billl"
+        android:title="Factures" />
+    <item
+        android:id="@+id/menu_connecte"
+        android:icon="@drawable/menu_in_menudeconnecte"
+        android:title="Menu" />
+</menu>

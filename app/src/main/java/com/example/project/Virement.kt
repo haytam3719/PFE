@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.example.project.databinding.VirementBinding
 import com.example.project.viewmodels.BiometricViewModel
 import com.example.project.viewmodels.TransportVirementViewModel

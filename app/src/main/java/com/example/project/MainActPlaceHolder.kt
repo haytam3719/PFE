@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.biometric.BiometricManager
@@ -124,29 +123,6 @@ class MainActPlaceHolder : Fragment() {
         inflater.inflate(R.menu.bottom_navigation_menu, menu)  // Ensure 'bottom_navigation_menu' is the correct menu resource file.
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("Navigation", "Item selected: ${item.itemId}")
-        return when (item.itemId) {
-            R.id.navigation_accueil -> {
-                findNavController().navigate(R.id.splashscreen_to_mainactplace)
-                true
-            }
-            R.id.navigation_agences -> {
-                try {
-                    findNavController().navigate(R.id.mainactplace_to_agences)
-                } catch (e: Exception) {
-                    Log.e("NavigationError", "Failed to navigate: ${e.message}")
-                }
-                true
-            }
-            R.id.navigation_menu -> {
-                // If you have specific logic for 'navigation_menu', add it here
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
 
 
     private fun showBiometricPrompt() {
@@ -171,7 +147,6 @@ class MainActPlaceHolder : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
 
@@ -187,7 +162,6 @@ class MainActPlaceHolder : Fragment() {
         binding.clientPartial = authViewModel.clientPartial
         binding.fingerPrintViewModel=fingerPrintViewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        setHasOptionsMenu(true)
         connectToFirebase(authViewModel)
 
 

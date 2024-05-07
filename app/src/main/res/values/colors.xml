@@ -21,5 +21,14 @@
     <color name="forest_green">#228B22</color>
     <color name="golden_yellow">#FFD700</color>
 
+    <color name="colorTabSelected">#FFFFFF</color>
+    <color name="colorTabUnselected">#757575</color>
+    <color name="colorTabBackground">#FF6347</color>
+    <color name="usualColor">#FF5722</color>
+    <color name="orange_primary">#FF9800</color>
+    <color name="orange_primary_dark">#F57C00</color>
+    <color name="orange_accent">#FFB74D</color>
+    <color name="orange_text">#FFFFFF</color>
+
 
 </resources>

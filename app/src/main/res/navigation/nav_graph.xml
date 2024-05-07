@@ -272,4 +272,194 @@
 
 
 
+    <!--Menu Deconnecte-->
+    <fragment
+        android:id="@+id/menu_deconnecte"
+        android:name="com.example.project.MenuDeconnecte"
+        android:label="Menu Deconnecte"
+        tools:layout="@layout/menu_non_connecte">
+        <action
+            android:id="@+id/menuDeconnecte_to_reclamation"
+            app:destination="@id/assistanceReclamation"
+            app:enterAnim="@anim/slide_in_right"
+            />
+
+        <action
+            android:id="@+id/menuDeconnecte_to_infoUtiles"
+            app:destination="@id/infoUtiles"
+            app:enterAnim="@anim/slide_in_right"/>
+
+        <action
+            android:id="@+id/menuDeconnecte_to_parametres"
+            app:destination="@id/parametres"
+            app:enterAnim="@anim/slide_in_right"/>
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/assistanceReclamation"
+        android:name="com.example.project.AssistanceReclamation"
+        android:label="AssistanceReclamation"
+        tools:layout="@layout/assistance_reclamation">
+
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/infoUtiles"
+        android:name="com.example.project.InfosUtiles"
+        android:label="Infos Utiles"
+        tools:layout="@layout/info_utiles">
+
+        <action
+            android:id="@+id/infosUtiles_to_protectionDonnes"
+            app:destination="@id/protectionDonnees"
+            app:enterAnim="@anim/slide_in_right"/>
+
+        <action
+            android:id="@+id/infosUtiles_to_guideSecurite"
+            app:destination="@id/guideSecurite"
+            app:enterAnim="@anim/slide_in_right"
+            />
+
+        <action
+            android:id="@+id/infosUtiles_to_mentionsLegales"
+            app:destination="@id/mentionsLegales"
+            app:enterAnim="@anim/slide_in_right"
+            />
+
+        <action
+            android:id="@+id/infosUtiles_to_agences"
+            app:destination="@id/agences"
+            app:enterAnim="@anim/slide_in_right"
+            />
+
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/protectionDonnees"
+        android:name="com.example.project.ProtectionDonnees"
+        android:label="Protection des Donnees"
+        tools:layout="@layout/protection_donnees"/>
+
+
+    <fragment
+        android:id="@+id/guideSecurite"
+        android:name="com.example.project.GuideSecurite"
+        android:label="Guide de Securite"
+        tools:layout="@layout/guide_securite"/>
+
+
+    <fragment
+        android:id="@+id/mentionsLegales"
+        android:name="com.example.project.MentionsLegales"
+        android:label="Mentions Légales"
+        tools:layout="@layout/mentions_legales"/>
+
+
+
+
+
+    <fragment
+        android:id="@+id/parametres"
+        android:name="com.example.project.Parametres"
+        android:label="Parametres"
+        tools:layout="@layout/parametres">
+
+        <action
+            android:id="@+id/parametres_to_apparence"
+            app:destination="@id/apparence"
+            app:enterAnim="@anim/slide_in_right"
+        />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/apparence"
+        android:name="com.example.project.Apparence"
+        android:label="Apparence"
+        tools:layout="@layout/apparence">
+
+    </fragment>
+
+
+
+    <!--Menu Connecte-->
+
+    <fragment
+        android:id="@+id/menu_connecte"
+        android:name="com.example.project.MenuConnecte"
+        android:label="Menu Connecte"
+        tools:layout="@layout/menu_connecte">
+
+        <action
+            android:id="@+id/menuConnecte_to_transfers"
+            app:destination="@id/fragment_virement"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/menuConnecte_to_paiements"
+            app:destination="@id/fragment_payment"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/menuConnecte_to_consultation"
+            app:destination="@id/fragment_consultation"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/menuConnecte_to_attijariSecure"
+            app:destination="@id/fragment_attijariSecure"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/menuConnecte_to_assistanceReclamation"
+            app:destination="@id/assistanceReclamation"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/menuConnecte_to_infosUtiles"
+            app:destination="@id/infoUtiles"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/menuConnecte_to_parametres"
+            app:destination="@id/parametres"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/fragment_consultation"
+        android:name="com.example.project.Consultation"
+        android:label="Consultation"
+        tools:layout="@layout/consultation">
+
+        <action
+            android:id="@+id/consultation_to_createaccount"
+            app:destination="@id/frament_createaccount"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_attijariSecure"
+        android:name="com.example.project.AttijariSecure"
+        android:label="AttijariSecure"
+        tools:layout="@layout/attijari_secure"/>
+
 </navigation>

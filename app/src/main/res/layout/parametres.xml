@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.example.project.Parametres" />
+        <variable name="parametres" type="com.example.project.Parametres" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                app:title="Paramètres"
+                app:titleTextColor="@color/white"
+                app:navigationIcon="@drawable/back"
+                android:background="@color/reddish_orange" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="15dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuItemsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <!-- Apparence button -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/protection_donnees"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardBackgroundColor="#FFEEE2"
+                    android:onClick="@{view -> parametres.onClickApparence(view)}">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/appearanceIcon"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:contentDescription="apparence"
+                            android:src="@drawable/appearence"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+
+                        <TextView
+                            android:id="@+id/appearanceText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Apparence"
+                            android:textColor="#FF5722"                            android:textSize="18sp"
+                            app:layout_constraintStart_toEndOf="@id/appearanceIcon"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/appearanceChevron"
+                            android:layout_marginStart="16dp" />
+
+                        <ImageView
+                            android:id="@+id/appearanceChevron"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/forward_icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Modifier la langue button -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/guide_securite"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/protection_donnees"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardBackgroundColor="#FFEEE2"
+                    android:layout_marginTop="20dp"
+                    >
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/languageIcon"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:contentDescription="langue"
+                            android:src="@drawable/chat"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+
+                        <TextView
+                            android:id="@+id/languageText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Modifier la langue"
+                            android:textColor="#FF5722"                            android:textSize="18sp"
+                            app:layout_constraintStart_toEndOf="@id/languageIcon"
+                            app:layout_constraintEnd_toStartOf="@id/languageChevron"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginStart="16dp" />
+
+                        <ImageView
+                            android:id="@+id/languageChevron"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/forward_icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:tint="#FF5722"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

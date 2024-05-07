@@ -30,6 +30,7 @@ class AppComponent:Application(),  CameraXConfig.Provider{
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this)
+
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val token = task.result

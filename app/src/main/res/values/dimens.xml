@@ -15,4 +15,11 @@
     <dimen name="drawable_width">24dp</dimen>
     <dimen name="drawable_height">24dp</dimen>
 
+    <dimen name="increased_offset">60dp</dimen>
+
+    <dimen name="pageMargin">16dp</dimen>
+    <dimen name="offset">40dp</dimen>
+
+
+
 </resources>

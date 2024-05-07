@@ -74,8 +74,7 @@ class AuthViewModel @Inject constructor(
      suspend fun signIn(email: String, password: String) {
             viewModelScope.launch {
                 try {
-                    authRepository.signIn(email,password).await()
-                    val storedEmail = secureManager.getEmail()
+                    /*val storedEmail = secureManager.getEmail()
                     val storedPassword = secureManager.getPassword()
                     if (email == storedEmail && password == storedPassword) {
                         val storedAccessToken = secureManager.getAccessToken()
@@ -90,7 +89,12 @@ class AuthViewModel @Inject constructor(
                     } else {
                         // Email or password do not match, emit error state
                         _authState.emit(AuthState.Error("Invalid email or password"))
-                    }
+                    }*/
+
+                    _authState.emit(AuthState.Loading)
+                    authRepository.signIn(email, password).await()
+                    _authState.emit(AuthState.Success)
+
                 } catch (e: Exception) {
                     _authState.emit(AuthState.Error(e.localizedMessage ?: "Sign in failed"))
                 }

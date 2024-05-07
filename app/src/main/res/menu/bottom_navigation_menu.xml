@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_accueil"
+        android:id="@+id/main_actpalceholderFragment"
+        android:icon="@drawable/home_connecte"
         android:title="Accueil" />
     <item
-        android:id="@+id/navigation_agences"
+        android:id="@+id/agences"
+        android:icon="@drawable/agence_menuu"
         android:title="Agences" />
     <item
-        android:id="@+id/navigation_menu"
+        android:id="@+id/menu_deconnecte"
+        android:icon="@drawable/menu_in_menudeconnecte"
         android:title="Menu" />
 </menu>

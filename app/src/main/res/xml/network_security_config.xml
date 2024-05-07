@@ -2,10 +2,16 @@
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
-            <certificates src="@raw/certificate" />
+            <certificates src="system" />
         </trust-anchors>
     </base-config>
     <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">192.168.42.191</domain>
+    </domain-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">gsrv.itafrica.mobi</domain>
+    </domain-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">bank-2fd65-default-rtdb.firebaseio.com</domain>
     </domain-config>
 </network-security-config>
