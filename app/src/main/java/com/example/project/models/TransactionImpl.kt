@@ -2,6 +2,7 @@ package com.example.project.models
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.project.modules.CompteModule
 import com.example.project.prototype.Transaction
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -15,14 +16,14 @@ open class TransactionImpl @Inject constructor(
     @Named("montant") override var montant: Double,
     @Named("date") override var date: String,
     @Named("motif") override var motif: String,
-    override var compteBenef: CompteImpl,
-    override var compteEmet: CompteImpl,
+    @CompteModule.CompteBenefQualifier override var compteBenef: CompteImpl,
+    @CompteModule.CompteEmetQualifier override var compteEmet: CompteImpl,
     @Named("statut") override var statut: String,
     @Named("methodPaiement") override var methodPaiement: String,
     @Named("fraisTrans") override var fraisTrans: Double,
     @Named("typeTransaction") override var typeTransaction: String,
 
-) : Transaction{
+    ) : Transaction{
 
     constructor() : this(
         idTran = "",

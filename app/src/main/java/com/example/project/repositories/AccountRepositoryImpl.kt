@@ -3,6 +3,7 @@ package com.example.project.repositories
 import android.util.Log
 import com.example.project.models.AccountCreationServiceImpl
 import com.example.project.models.CompteImpl
+import com.example.project.models.TransactionImpl
 import com.example.project.prototype.AccountRepository
 import com.example.project.prototype.Compte
 import com.google.firebase.database.DataSnapshot
@@ -11,7 +12,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AccountRepositoryImpl @Inject constructor(private val accountService:AccountCreationServiceImpl): AccountRepository {
@@ -44,45 +47,45 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
         accountsRef.child(accountId).setValue(accountData).await()
     }
 
-    override suspend fun deleteAccount(accountId: String) {
-        val accountRef = database.reference.child("Accounts").child(accountId)
-        accountRef.removeValue().await()
+    override suspend fun deleteAccountByNumero(numero: String) {
+        val accountsRef = database.reference.child("accounts")
+        val query = accountsRef.orderByChild("numero").equalTo(numero)
+        val result = query.get().await()
+
+        for (snapshot in result.children) {
+            snapshot.ref.removeValue().await()
+        }
     }
 
-    override fun updateAccount(accountId: String, updatedAccount: Compte) {
+    override fun updateAccount(numero: String, updatedAccount: Compte) {
         val accountsRef = database.reference.child("accounts")
 
-        // Query to find the account with the specified ID
-        val query: Query = accountsRef.orderByChild("numero").equalTo(accountId)
-
+        val query = accountsRef.orderByChild("numero").equalTo(numero)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (snapshot in dataSnapshot.children) {
-                        // Retrieve the key (Firebase push ID) of the existing account object
-                        val accountKey = snapshot.key
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    for (accountSnapshot in snapshot.children) {
+                        val key = accountSnapshot.key ?: return
 
-                        if (accountKey != null) {
-                            // Update the existing account node with the new data
-                            accountsRef.child(accountKey).setValue(updatedAccount)
-                                .addOnSuccessListener {
-                                    Log.d("Update Account", "Account $accountId updated successfully")
-                                }
-                                .addOnFailureListener { exception ->
-                                    Log.e("Update Account ERROR", "Error updating account $accountId", exception)
-                                }
-                        }
+                        accountsRef.child(key).setValue(updatedAccount)
+                            .addOnSuccessListener {
+                                Log.d("Update Account", "Account with numero $numero updated successfully.")
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.e("Update Account ERROR", "Error updating account $numero", exception)
+                            }
                     }
                 } else {
-                    Log.e("Update Account", "Account with ID $accountId not found")
+                    Log.e("Update Account ERROR", "No account found with numero $numero")
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("Update Account ERROR", "Database error: ${databaseError.message}")
+                Log.e("Update Account ERROR", "Database error when querying for numero $numero", databaseError.toException())
             }
         })
     }
+
 
 
 
@@ -132,6 +135,87 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
     }
 
 
+    fun fetchHistoriqueTransactions(idProprietaire: String, callback: (List<TransactionImpl>?) -> Unit) {
+        val database = FirebaseDatabase.getInstance()
+        val accountsRef = database.getReference("accounts")
+
+        // Query to find all accounts where 'id_proprietaire' matches 'idProprietaire'
+        val query = accountsRef.orderByChild("id_proprietaire").equalTo(idProprietaire)
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val transactions = mutableListOf<TransactionImpl>()
+                if (dataSnapshot.exists()) {
+                    dataSnapshot.children.forEach { snapshot ->
+                        val transactionsSnapshot = snapshot.child("historiqueTransactions")
+                        transactionsSnapshot.children.forEach { transactionSnapshot ->
+                            transactionSnapshot.getValue(TransactionImpl::class.java)?.let {
+                                transactions.add(it)
+                            }
+                        }
+                    }
+                    callback(transactions)
+                } else {
+                    callback(emptyList())
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback(null)
+            }
+        })
+    }
+
+
+
+    suspend fun fetchTransactionsByAccountNumber(accountNumber: String): Pair<List<TransactionImpl>?, String?> {
+        val accountsRef = database.getReference("accounts")
+
+        try {
+            val dataSnapshot = accountsRef.orderByChild("numero").equalTo(accountNumber).get().await()
+            if (dataSnapshot.exists()) {
+                val transactions = mutableListOf<TransactionImpl>()
+                dataSnapshot.children.forEach { accountSnapshot ->
+                    val transactionsSnapshot = accountSnapshot.child("historiqueTransactions")
+                    transactionsSnapshot.children.mapNotNullTo(transactions) {
+                        it.getValue(TransactionImpl::class.java)
+                    }
+                }
+                return Pair(transactions, null)
+            } else {
+                return Pair(null, "No account found with the specified account number: $accountNumber")
+            }
+        } catch (e: Exception) {
+            return Pair(null, "Database error: ${e.message}")
+        }
+    }
+
+    suspend fun getHistoriqueTransactionsById(transactionId: String): TransactionImpl? = withContext(Dispatchers.IO) {
+        try {
+            val accountsReference = FirebaseDatabase.getInstance().getReference("accounts")
+            val snapshot = accountsReference.get().await()
+            var transaction: TransactionImpl? = null
+
+            for (accountSnapshot in snapshot.children) {
+                val transactionsSnapshot = accountSnapshot.child("historiqueTransactions")
+                transaction = transactionsSnapshot.children.firstOrNull {
+                    it.child("idTran").getValue(String::class.java) == transactionId
+                }?.getValue(TransactionImpl::class.java)
+
+                if (transaction != null) {
+                    Log.d("TransactionRepository", "Transaction fetched successfully: $transaction")
+                    break
+                }
+            }
+
+            if (transaction == null) {
+                Log.d("TransactionRepository", "No transaction found with ID: $transactionId")
+            }
+            transaction
+        } catch (e: Exception) {
+            Log.e("TransactionRepository", "Error fetching transactions: ", e)
+            null
+        }
+    }
 
 
 }

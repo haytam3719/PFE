@@ -8,11 +8,25 @@ import com.example.project.databinding.CarouselItemBinding
 class CarouselAdapter(
     private var dataList: List<AccountData>,
     var currentPagePosition: Int,
-    private val iconList: List<Int> // List of icon resource IDs
+    private val iconList: List<Int>,
+    private val listener: OnCarouselItemClickListener
+
 ) : RecyclerView.Adapter<CarouselAdapter.CarouselViewHolder>() {
 
-    inner class CarouselViewHolder(val binding: CarouselItemBinding) : RecyclerView.ViewHolder(binding.root)
+    interface OnCarouselItemClickListener {
+        fun onItemClick(accountData: AccountData)
+    }
 
+    inner class CarouselViewHolder(val binding: CarouselItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(dataList[position])
+                }
+            }
+        }
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarouselViewHolder {
         val binding = CarouselItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         binding.root.layoutParams = ViewGroup.LayoutParams(

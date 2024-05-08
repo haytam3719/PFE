@@ -29,6 +29,7 @@
     <color name="orange_primary_dark">#F57C00</color>
     <color name="orange_accent">#FFB74D</color>
     <color name="orange_text">#FFFFFF</color>
+    <color name="green">#39ff14</color>
 
 
 </resources>

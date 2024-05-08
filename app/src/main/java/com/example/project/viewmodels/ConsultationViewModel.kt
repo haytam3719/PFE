@@ -1,5 +1,6 @@
 package com.example.project.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.project.adapters.AccountData
 import com.example.project.models.CompteImpl
 import com.example.project.prototype.Compte
+import com.example.project.prototype.Transaction
 import com.example.project.repositories.AccountRepositoryImpl
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,7 +39,7 @@ class ConsultationViewModel @Inject constructor(private val accountRepositoryImp
 
     fun deleteAccount(accountId: String) {
         viewModelScope.launch {
-            accountRepositoryImpl.deleteAccount(accountId)
+            accountRepositoryImpl.deleteAccountByNumero(accountId)
         }
     }
 
@@ -64,6 +67,27 @@ class ConsultationViewModel @Inject constructor(private val accountRepositoryImp
 
 
 
+    private val _transactions = MutableLiveData<List<Transaction>>()
+    val transactions: LiveData<List<Transaction>> = _transactions
+
+    fun loadTransactions(uid: String) {
+        viewModelScope.launch {
+            val accountId = FirebaseAuth.getInstance().currentUser?.uid
+            if (accountId != null) {
+                accountRepositoryImpl.fetchHistoriqueTransactions(accountId) { transactions ->
+                    transactions?.let {
+                        _transactions.postValue(it)
+                    } ?: run {
+                        Log.e("ViewModel", "No transactions found.")
+                        _transactions.postValue(emptyList())
+                    }
+                }
+            } else {
+                Log.e("ViewModel", "Account ID is null")
+                _transactions.postValue(emptyList())
+            }
+        }
+    }
 
 
 }

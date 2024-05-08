@@ -454,6 +454,17 @@
             app:enterAnim="@anim/slide_in_left"
             />
 
+        <action
+            android:id="@+id/consultation_to_detailCompte"
+            app:destination="@id/fragment_detailCompte"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/consultation_to_detailTransaction"
+            app:destination="@id/fragment_detailTransaction"
+            />
+
     </fragment>
 
     <fragment
@@ -461,5 +472,28 @@
         android:name="com.example.project.AttijariSecure"
         android:label="AttijariSecure"
         tools:layout="@layout/attijari_secure"/>
+
+
+    <fragment
+        android:id="@+id/fragment_detailCompte"
+        android:name="com.example.project.DetailCompte"
+        android:label="Detail Compte"
+        tools:layout="@layout/detail_compte">
+        <action
+            android:id="@+id/detailCompte_to_detailTransaction"
+            app:destination="@id/fragment_detailTransaction"
+            />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/fragment_detailTransaction"
+        android:name="com.example.project.DetailTransaction"
+        tools:layout="@layout/detail_operation">
+
+    </fragment>
+
+
 
 </navigation>
