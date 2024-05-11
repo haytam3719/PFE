@@ -22,6 +22,9 @@ class Dashboard : Fragment(){
     private val dashboardViewModel by viewModels<DashboardViewModel>()
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var deviceInfo: DeviceInfo
+    private var _binding: DashboardBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,10 +78,12 @@ class Dashboard : Fragment(){
 
                 if (isTrustedDevice) {
                     Log.d("Connected Device", "Trusted Device")
-                    showSuspiciousConnectionPopup()
+                    binding.contentLayout.visibility = View.VISIBLE
 
                 } else {
                     Log.e("Connected Device", "Non-trusted Device")
+                    showSuspiciousConnectionPopup()
+                    binding.contentLayout.visibility = View.VISIBLE
                 }
             } else {
                 Log.d("Dashboard", "Device list is null or empty")
@@ -120,13 +125,20 @@ class Dashboard : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = DashboardBinding.inflate(inflater, container, false)
+        _binding = DashboardBinding.inflate(inflater, container, false)
         binding.dashboardViewModel=dashboardViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.contentLayout.visibility = View.GONE
 
 
         return binding.root
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

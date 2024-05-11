@@ -3,7 +3,10 @@ package com.example.project.repositories
 import android.util.Log
 import com.example.project.models.DeviceInfo
 import com.example.project.prototype.ClientRepository
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
 import kotlinx.coroutines.tasks.await
 
@@ -49,4 +52,41 @@ class ClientRepositoryImpl : ClientRepository {
     }
 
 
-        }
+    override fun addDeviceToClient(clientUid: String, newDevice: DeviceInfo, completion: (Boolean) -> Unit) {
+        databaseReference.orderByChild("Client/uid").equalTo(clientUid).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val clientEntry = snapshot.children.firstOrNull()
+                    val clientKey = clientEntry?.key
+
+                    if (clientKey != null) {
+                        val clientDevicesPath = databaseReference.child(clientKey).child("Client").child("deviceInfoList")
+                        clientDevicesPath.push().setValue(newDevice)
+                            .addOnSuccessListener {
+                                Log.d("ClientRepository", "Device added successfully to client with key: $clientKey")
+                                completion(true)
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.e("ClientRepository", "Failed to add device: ${exception.message}")
+                                completion(false)
+                            }
+                    } else {
+                        Log.e("ClientRepository", "Client key not found")
+                        completion(false)
+                    }
+                } else {
+                    Log.e("ClientRepository", "No client found with UID: $clientUid")
+                    completion(false)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ClientRepository", "Error fetching client with UID: $clientUid; ${error.message}")
+                completion(false)
+            }
+        })
+    }
+
+}
+
+
