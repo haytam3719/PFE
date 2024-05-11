@@ -12,10 +12,33 @@ data class Client @Inject constructor(
     val domicile:String,
     val numTele:String,
     var deviceInfo: DeviceInfo?,
+    var deviceInfoList: List<DeviceInfo>?,
     var fingerPrint: String,
     var identityCardFrontUrl: String?,
     var identityCardBackUrl: String?,
     var facePhotoUrl: String?
 ){
+    init {
+        if (deviceInfo == null && !deviceInfoList.isNullOrEmpty()) {
+            deviceInfo = deviceInfoList!!.first()
+        }
+    }
+
+    constructor() : this(
+        null,
+        "",
+        "",
+        "",
+        "",
+        "",
+         "",
+        "",
+        null,
+        mutableListOf(),
+        "",
+        null,
+        null,
+        null
+    )
 
 }

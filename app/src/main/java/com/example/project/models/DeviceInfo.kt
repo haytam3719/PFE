@@ -13,6 +13,7 @@ data class DeviceInfo(
     val androidVersion: String,
     val networkOperatorName: String
 ) {
+    constructor() : this("", "", "", "")
     companion object {
         fun fromContext(context: Context): DeviceInfo {
             val wifiManager = context.applicationContext.getSystemService(WIFI_SERVICE) as WifiManager

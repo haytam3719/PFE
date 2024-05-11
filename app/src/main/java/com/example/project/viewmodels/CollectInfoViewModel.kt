@@ -101,7 +101,7 @@ class CollectInfoViewModel @Inject constructor(private val authRepository: AuthR
             tel_portable=clientPartial.tel_portable
             domicile=clientPartial.domicile
 
-            val client: Client = Client(null,nom, prenom,date_naissance, adresse, cin, domicile, tel_portable,null,"","","","")
+            val client: Client = Client(null,nom, prenom,date_naissance, adresse, cin, domicile, tel_portable,null, emptyList(),"","","","")
             //Log.e("Client Info", "{$nom}, {$prenom},{$date_naissance},{$adresse},{$cin},{$tel_portable},{$domicile}")
             updateClient(client)
             //Log.e("Updated ViewModel",clientViewModel._client.value.toString())

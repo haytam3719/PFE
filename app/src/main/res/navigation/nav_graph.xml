@@ -230,6 +230,11 @@
             app:destination="@id/fragment_payment"
             />
 
+        <action
+            android:id="@+id/dashboard_to_mainactplaceholder"
+            app:destination="@id/main_actpalceholderFragment"
+            />
+
 
         <action
             android:id="@+id/dashboard_to_virement"
@@ -239,6 +244,12 @@
         <action
             android:id="@+id/dashboard_to_createaccount"
             app:destination="@id/frament_createaccount"
+            />
+
+        <action
+            android:id="@+id/dashboard_to_verifyCredentials"
+            app:destination="@id/verifyCredentials"
+            app:enterAnim="@anim/slide_in_left"
             />
 
     </fragment>
@@ -471,7 +482,27 @@
         android:id="@+id/fragment_attijariSecure"
         android:name="com.example.project.AttijariSecure"
         android:label="AttijariSecure"
-        tools:layout="@layout/attijari_secure"/>
+        tools:layout="@layout/attijari_secure">
+
+        <action
+            android:id="@+id/attijariSecure_to_deviceInfo"
+            app:destination="@id/fragment_deviceInfo"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/attijariSecure_to_credentials"
+            app:destination="@id/credentials"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/attijariSecure_to_verifyCredentials"
+            app:destination="@id/verifyCredentials"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+    </fragment>
 
 
     <fragment
@@ -494,6 +525,41 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/fragment_deviceInfo"
+        android:name="com.example.project.DeviceInfoList"
+        android:label="device info frag"
+        tools:layout="@layout/device_info_list">
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/credentials"
+        android:name="com.example.project.Credentials"
+        android:label="credentials frag"
+        tools:layout="@layout/code_attijari_secure">
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/verifyCredentials"
+        android:name="com.example.project.VerifyCredentials"
+        android:label="verify credentials frag"
+        tools:layout="@layout/verifier_code_attijari_secure">
+
+        <action
+            android:id="@+id/verifyCredentials_to_credentials"
+            app:destination="@id/credentials"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/verifyCredentials_to_deviceInfoList"
+            app:destination="@id/fragment_deviceInfo"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+    </fragment>
 
 </navigation>
