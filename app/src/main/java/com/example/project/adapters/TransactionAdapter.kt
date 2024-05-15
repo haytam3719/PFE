@@ -45,9 +45,16 @@ class TransactionAdapter(private var transactions: List<Transaction>,
         if (transaction.compteEmet.id_proprietaire == currentUserAccountId) {
             holder.binding.txtAmount.text = "-${String.format("%.2f DH", transaction.montant)}"
             holder.binding.txtAmount.setTextColor(ContextCompat.getColor(context, com.example.project.R.color.usualColor))
+            holder.binding.imgTransactionType.setImageResource(com.example.project.R.drawable.up_arrow)
+            holder.binding.imgTransactionType.setColorFilter(ContextCompat.getColor(context, com.example.project.R.color.colorPrimary))
+
+
         } else {
             holder.binding.txtAmount.text = "+${String.format("%.2f DH", transaction.montant)}"
             holder.binding.txtAmount.setTextColor(ContextCompat.getColor(context, com.example.project.R.color.green))
+            holder.binding.imgTransactionType.setImageResource(com.example.project.R.drawable.down_arrow)
+            holder.binding.imgTransactionType.setColorFilter(ContextCompat.getColor(context, com.example.project.R.color.green))
+// Set the image for incoming
         }
     }
 

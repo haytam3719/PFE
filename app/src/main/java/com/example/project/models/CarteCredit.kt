@@ -8,7 +8,7 @@ class CarteCredit(
     codeSecurite: String,
     nomTitulaire: String,
     adresseFacturation: String,
-    val limiteCredit: Double
+    override var limiteCredit: Double?
 ) : CarteImpl(idCarte, id_proprietaire, numeroCarte, dateExpiration, codeSecurite, nomTitulaire, adresseFacturation){
     private val virement = Virement()
 

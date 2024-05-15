@@ -1,120 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="com.example.project.viewmodels.DashboardViewModel" />
-
-        <variable
-            name="dashboardViewModel"
-            type="com.example.project.viewmodels.DashboardViewModel" />
+        <import type="com.example.project.Dashboard" />
+        <variable name="dashboard" type="com.example.project.Dashboard" />
     </data>
-
 
 
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/contentLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".MainActivity">
 
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
-        <!-- Header Section -->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/imgMenu"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:src="@drawable/attijari"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="attijari"/>
 
-
-            <!-- User Profile -->
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Bienvenue, John Doe"
-                android:textSize="18sp"
-                android:gravity="end"
-                android:layout_gravity="center_vertical"/>
-
-            <!-- Navigation Menu -->
-            <ImageButton
+            <ImageView
+                android:id="@+id/imgUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher_background"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="16dp"
-                android:contentDescription="im"/>
+                android:contentDescription="user"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"/>
 
-        </LinearLayout>
-
-        <!-- Account Summary -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <!-- Balance -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tvTotalBalanceLabel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Solde"
-                android:textSize="18sp"/>
+                android:text="Solde Actuel (MAD)"
+                android:textSize="15sp"
+                android:textColor="#616161"
+                app:layout_constraintTop_toBottomOf="@id/imgMenu"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="24dp"/>
+
             <TextView
-                android:id="@+id/text_balance"
+                android:id="@+id/tvTotalBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:textColor="#FF6D00"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalBalanceLabel"
+                app:layout_constraintStart_toStartOf="@id/tvTotalBalanceLabel"/>
+
+            <WebView
+                android:id="@+id/graphPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Balance: $5000"
-                android:textSize="16sp"/>
-
-
-            <Button
-                android:id="@+id/btn_create"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Créer un compte"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalBalance"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="16dp"
-                android:onClick="@{view->dashboardViewModel.onButtonClickCreate(view)}"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"/>
 
 
-                />
 
-
-            <Button
-                android:id="@+id/btn_transfer"
-                android:layout_width="match_parent"
+            <!-- Icon 1 with TextView -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutIcon1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Transférer de l'argent"
-                android:layout_marginTop="16dp"
-                android:onClick="@{view->dashboardViewModel.onButtonClick(view)}"
+                android:layout_margin="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{view -> dashboard.onClickMesComptes(view)}">
 
-                />
+                <ImageView
+                    android:id="@+id/icon1"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/rounded_icons"
+                    android:contentDescription="comptes"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
-            <Button
-                android:id="@+id/effectuer_paiement"
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/iconText1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mes comptes"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/icon1"
+                    app:layout_constraintStart_toStartOf="@id/icon1"
+                    app:layout_constraintEnd_toEndOf="@id/icon1"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Icon 2 with TextView -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutIcon2"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Effectuer un paiement"
-                android:layout_marginTop="16dp"
-                android:onClick="@{view->dashboardViewModel.onButtonClickPayment(view)}"
+                android:layout_margin="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintEnd_toStartOf="@+id/layoutIcon3"
+                app:layout_constraintStart_toEndOf="@+id/layoutIcon1"
+                app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
+                android:onClick="@{view -> dashboard.onClickAttijariSecure(view)}">
 
-                />
-        </LinearLayout>
 
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/icon2"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/rounded_icons"
+                    android:contentDescription="attijari secure"
+                    android:src="@drawable/attijari_secure"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/iconText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AttijariSecure"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="@id/icon2"
+                    app:layout_constraintStart_toStartOf="@id/icon2"
+                    app:layout_constraintTop_toBottomOf="@id/icon2" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Icon 3 with TextView -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutIcon3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
+                android:onClick="@{view -> dashboard.onClickSettings(view)}">
+
+
+                <ImageView
+                    android:id="@+id/icon3"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/rounded_icons"
+                    android:contentDescription="param"
+                    android:src="@drawable/settings"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="#FF5722" />
+
+                <TextView
+                    android:id="@+id/iconText3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Paramètres"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="@id/icon3"
+                    app:layout_constraintStart_toStartOf="@id/icon3"
+                    app:layout_constraintTop_toBottomOf="@id/icon3" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/transactionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Transactions récentes"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutIcon1"
+                android:textSize="18sp"
+                android:textColor="@color/colorAccent"/>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecentTransactions"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_top_recycler"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/transactionTextView"
+                android:paddingBottom="50dp"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

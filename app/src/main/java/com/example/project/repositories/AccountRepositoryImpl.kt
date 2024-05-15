@@ -218,4 +218,94 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
     }
 
 
+    fun getTotalBalanceByClientUid(clientUid: String, callback: (Double) -> Unit) {
+        database.getReference("accounts").orderByChild("id_proprietaire").equalTo(clientUid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        var totalBalance = 0.0
+                        snapshot.children.forEach {
+                            val account = it.getValue(CompteImpl::class.java)
+                            totalBalance += account?.solde ?: 0.0
+                        }
+                        callback(totalBalance)
+                    } else {
+                        callback(0.0)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    println("Firebase error: ${error.message}")
+                    callback(0.0)
+                }
+            })
+
+    }
+
+
+    fun fetchAccountBalances(userId: String, callback: (List<Pair<String, Double>>, Boolean) -> Unit) {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("accounts")
+        databaseReference.orderByChild("id_proprietaire").equalTo(userId).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val balances = mutableListOf<Pair<String, Double>>()
+                snapshot.children.forEach { accountSnapshot ->
+                    val account = accountSnapshot.getValue(CompteImpl::class.java)
+                    account?.let {
+                        balances.add(Pair(it.type.toString(), it.solde))
+                    }
+                }
+                callback(balances, true)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                println("Firebase error: ${error.message}")
+                callback(emptyList(), false)
+            }
+        })
+    }
+
+
+    fun fetchAccountBalancesOverTime(userId: String, callback: (List<Pair<String, Double>>) -> Unit) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("accounts")
+        dbRef.orderByChild("id_proprietaire").equalTo(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val balanceChanges = mutableListOf<Pair<String, Double>>()
+                snapshot.children.forEach { accountSnapshot ->
+                    val account = accountSnapshot.getValue(CompteImpl::class.java)
+                    account?.historiqueTransactions?.forEach { transaction ->
+                        val date = transaction.date
+                        val amount = transaction.montant
+                        val isOutgoing = transaction.compteEmet.id_proprietaire == userId
+                        val isIncoming = transaction.compteBenef.id_proprietaire == userId
+
+                        // Determine balance change based on the direction of the transaction
+                        val currentBalanceChange = when {
+                            isIncoming -> amount
+                            isOutgoing -> -amount
+                            else -> 0.0
+                        }
+
+                        val existingEntry = balanceChanges.find { it.first == date }
+                        if (existingEntry != null) {
+                            val index = balanceChanges.indexOf(existingEntry)
+                            balanceChanges[index] = existingEntry.copy(second = existingEntry.second + currentBalanceChange)
+                        } else {
+                            balanceChanges.add(Pair(date, currentBalanceChange))
+                        }
+                    }
+                }
+                val sortedBalances = balanceChanges.sortedBy { it.first }
+                var cumulativeBalance = 0.0
+                val finalBalances = sortedBalances.map { balanceChange ->
+                    cumulativeBalance += balanceChange.second
+                    Pair(balanceChange.first, cumulativeBalance)
+                }
+                callback(finalBalances)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(emptyList())
+            }
+        })
+    }
 }

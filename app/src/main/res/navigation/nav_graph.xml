@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
 
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splash_screen">
+    app:startDestination="@id/main_actpalceholderFragment">
 
 
 
@@ -238,7 +238,7 @@
 
         <action
             android:id="@+id/dashboard_to_virement"
-            app:destination="@id/fragment_virement"
+            app:destination="@id/virement_step_one"
             />
 
         <action
@@ -252,6 +252,27 @@
             app:enterAnim="@anim/slide_in_left"
             />
 
+        <action
+            android:id="@+id/dashboard_to_detailTransaction"
+            app:destination="@id/fragment_detailTransaction"
+            app:enterAnim="@anim/slide_in_right"/>
+
+        <action
+            android:id="@+id/dashboard_to_consultation"
+            app:destination="@id/fragment_consultation"
+            app:enterAnim="@anim/slide_in_right"/>
+
+        <action
+            android:id="@+id/dashboard_to_attijariSecure"
+            app:destination="@id/fragment_attijariSecure"
+            app:enterAnim="@anim/slide_in_right"
+            />
+
+        <action
+            android:id="@+id/dashboard_to_parametres"
+            app:destination="@id/parametres"
+            app:enterAnim="@anim/slide_in_right"
+            />
     </fragment>
 
     <fragment
@@ -410,7 +431,7 @@
 
         <action
             android:id="@+id/menuConnecte_to_transfers"
-            app:destination="@id/fragment_virement"
+            app:destination="@id/virement_step_one"
             app:enterAnim="@anim/slide_in_left"
             />
 
@@ -447,6 +468,12 @@
         <action
             android:id="@+id/menuConnecte_to_parametres"
             app:destination="@id/parametres"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/menuConnecte_to_mesCartes"
+            app:destination="@id/mesCartes"
             app:enterAnim="@anim/slide_in_left"
             />
 
@@ -560,6 +587,82 @@
             app:enterAnim="@anim/slide_in_left"
             />
 
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/mesCartes"
+        android:name="com.example.project.Cards"
+        android:label="Mes Cartes"
+        tools:layout="@layout/mes_cartes"
+        >
+        <action
+            android:id="@+id/mesCartes_to_commanderCarte"
+            app:destination="@id/commander_carte"/>
+
+        <action
+            android:id="@+id/mesCartes_to_detailsCarte"
+            app:destination="@id/detailsCarte"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/commander_carte"
+        android:name="com.example.project.CommanderCarte"
+        android:label="Commander Carte"
+        tools:layout="@layout/commander_carte"
+        />
+
+
+    <fragment
+        android:id="@+id/detailsCarte"
+        android:name="com.example.project.DetailsCarte"
+        android:label="Details Carte"
+        tools:layout="@layout/details_carte"
+        />
+
+
+
+    <fragment
+        android:id="@+id/virement_step_one"
+        android:name="com.example.project.VirementStepOne"
+        android:label="Virement 1"
+        tools:layout="@layout/virement_step_one">
+        <action
+            android:id="@+id/action_virementStepOne_to_virementStepTwo"
+            app:destination="@id/virementStepTwo" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/virementStepTwo"
+        android:name="com.example.project.VirementStepTwo"
+        android:label="Virement Step Two"
+        tools:layout="@layout/virement_step_two">
+
+        <action
+            android:id="@+id/virementStepTwo_to_virementStepThree"
+            app:destination="@id/virementStepThree"
+            />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/virementStepThree"
+        android:name="com.example.project.VirementStepThree"
+        android:label="Virement Step Three"
+        tools:layout="@layout/virement_step_three">
+        <action
+            android:id="@+id/virementStepThree_to_virementStepFour"
+            app:destination="@id/virementStepFour"
+            />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/virementStepFour"
+        android:name="com.example.project.VirementStepFour"
+        android:label="Virement Step Four"
+        tools:layout="@layout/virement_step_four">
     </fragment>
 
 </navigation>

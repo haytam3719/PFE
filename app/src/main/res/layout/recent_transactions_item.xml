@@ -1,56 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="4dp">
+    android:layout_marginTop="3dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/card_transaction_style">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/imgTransactionType"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:contentDescription="transaction_type"
+        app:layout_constraintBottom_toBottomOf="@+id/txtDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/orange" />
+
+    <TextView
+        android:id="@+id/txtTypeTransaction"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:text="Type of Transaction"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#FF6D00"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toStartOf="@id/txtAmount"
+        app:layout_constraintStart_toEndOf="@id/imgTransactionType"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imgTransactionType"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/some"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/txtDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Transaction Date"
+        android:textSize="12sp"
+        android:textColor="@color/lighter_grey"
+        android:layout_marginTop="2dp"
+        app:layout_constraintEnd_toStartOf="@id/txtAmount"
+        app:layout_constraintStart_toStartOf="@id/txtTypeTransaction"
+        app:layout_constraintTop_toBottomOf="@id/txtTypeTransaction" />
 
-        <TextView
-            android:id="@+id/txtTypeTransaction"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Type of Transaction"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/imgTransactionType"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="8dp"/>
+    <TextView
+        android:id="@+id/txtAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-500 DH"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/txtDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txtDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Transaction Date"
-            android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@id/txtTypeTransaction"
-            app:layout_constraintStart_toStartOf="@id/txtTypeTransaction"
-            app:layout_constraintEnd_toEndOf="parent"/>
+    <!-- Separator Line -->
+    <View
+        android:id="@+id/separator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="#FF6D00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtDate" />
 
-        <TextView
-            android:id="@+id/txtAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-500 DH"
-            android:textSize="16sp"
-            android:textColor="@color/usualColor"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

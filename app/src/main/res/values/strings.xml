@@ -60,6 +60,11 @@ Fait en deux exemplaires, à [lieu], le [date].</string>
     </string-array>
     <string name="prompt_select_type_compte">Select Type Compte</string>
 
+    <string-array name="card_types">
+        <item>Carte Crédit</item>
+        <item>Carte Débit</item>
+    </string-array>
+
     <string name="lightdark">"Light Mode / Dark Mode</string>
     <string name="title_activity_parametres">Parametres</string>
     <string name="langue">Choisissez la langue de l\'application</string>

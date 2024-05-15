@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.example.project.databinding.DetailOperationBinding
 import com.example.project.prototype.Transaction
 import com.example.project.viewmodels.DetailTransactionsViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,15 +45,23 @@ class DetailTransaction : Fragment() {
     }
 
     private fun updateTransactionDetails(transaction: Transaction) {
-        binding.tvTransactionId.text = "ID: ${transaction.idTran}"
-        binding.tvTransactionType.text = "Type de la transaction: ${transaction.typeTransaction}"
-        binding.tvMotive.text = "Motif: ${transaction.motif}"
-        binding.tvPaymentMethod.text = "Méthode: ${transaction.methodPaiement}"
-        binding.tvAmount.text = "Montant: ${transaction.montant.toString()}"
-        binding.tvStatus.text = "Statut: ${transaction.statut}"
-        binding.tvFees.text = "Frais: ${transaction.fraisTrans.toString()}"
-        binding.tvRecipientId.text = "ID du bénéficiaire: ${transaction.compteBenef.id_proprietaire}"
-        binding.tvRecipientAccountNumber.text = "Numéro de compte du bénéficiare: ${transaction.compteBenef.numero}"
+        binding.operationDate.text = transaction.date
+        binding.tvTransactionType.text =transaction.typeTransaction
+        binding.tvMotive.text = transaction.motif
+        binding.tvPaymentMethod.text = transaction.methodPaiement
+        binding.tvStatus.text = transaction.statut
+        binding.tvFees.text = "${transaction.fraisTrans.toString()} DH"
+        binding.amount.text = "${transaction.montant.toString()} DH"
+        binding.operationDescription.text = transaction.motif
+        if(transaction.compteBenef.id_proprietaire == FirebaseAuth.getInstance().currentUser!!.uid){
+            binding.tvRecipientAccountNumberLabel.text = "Numéro de compte de l'émetteur"
+            binding.tvRecipientAccountNumber.text = transaction.compteEmet.numero
+            binding.operationAmount.text = "${transaction.montant.toString()} DH"
+        }else{
+            binding.tvRecipientAccountNumberLabel.text = "Numéro de compte du bénéficiaire"
+            binding.tvRecipientAccountNumber.text = transaction.compteBenef.numero
+            binding.operationAmount.text = "-${transaction.montant.toString()} DH"
+        }
     }
 
     override fun onDestroyView() {

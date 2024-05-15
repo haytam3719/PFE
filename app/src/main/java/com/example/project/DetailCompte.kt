@@ -55,10 +55,9 @@ class DetailCompte : Fragment() {
             val balance = bundle.getString("balance")
             accountNumberG = accountNumber
 
-            binding.accountOwner.text = "ID client: ${FirebaseAuth.getInstance().currentUser?.uid}"
-            binding.accountType.text = "Type de compte: $accountType"
-            binding.accountNumber.text = "Numéro de compte: $accountNumber"
-            binding.accountBalance.text = "Solde: $balance DH"
+            binding.accountType.text = accountType
+            binding.accountNumber.text = accountNumber
+            binding.accountBalance.text = "$balance DH"
         }
 
         setupRecyclerView()

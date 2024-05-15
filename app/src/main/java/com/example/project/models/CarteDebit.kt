@@ -8,5 +8,5 @@ class CarteDebit(
     codeSecurite: String,
     nomTitulaire: String,
     adresseFacturation: String,
-    val numeroCompte: String
+    override var numeroCompte: String?
 ) : CarteImpl(idCarte,id_proprietaire_carte, numeroCarte, dateExpiration, codeSecurite, nomTitulaire, adresseFacturation)

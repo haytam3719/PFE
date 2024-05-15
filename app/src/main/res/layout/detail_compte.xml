@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,163 +9,184 @@
         <variable name="detailCompte" type="com.example.project.DetailCompte" />
     </data>
 
-
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        tools:context=".DetailCompteActivity">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
+        <!-- AppBarLayout and Toolbar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:title="Détails du compte"
-            app:titleTextColor="@color/white"
-            app:navigationIcon="@drawable/back"
-            android:background="@color/reddish_orange" />
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                app:title="Détails du compte"
+                app:titleTextColor="@android:color/white"
+                app:navigationIcon="@drawable/back"
+                android:background="@color/reddish_orange" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:padding="16dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/mainContentLayout"
+        <!-- NestedScrollView -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/accountCard"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mainContentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                <!-- Account Details -->
+                <TextView
+                    android:id="@+id/accountTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="16dp">
+                    android:text="Compte chèque"
+                    android:textColor="@color/reddish_orange"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/accountIcon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:contentDescription="desc"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/accountBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="35,410.7 DH"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:textSize="32sp"
+                    app:layout_constraintTop_toBottomOf="@id/accountTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp" />
 
-                    <TextView
-                        android:id="@+id/accountNumber"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/accountIcon"
-                        app:layout_constraintTop_toTopOf="@id/accountIcon"
-                        tools:text="Numéro de Compte: ACC202404082337599536" />
+                <TextView
+                    android:id="@+id/natureLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nature"
+                    android:textColor="@color/reddish_orange"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/accountBalance"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="16dp" />
 
-                    <TextView
-                        android:id="@+id/accountOwner"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/accountNumber"
-                        app:layout_constraintTop_toBottomOf="@id/accountNumber"
-                        tools:text="ID Propriétaire: yNDOirY1kCaw8WzXqu37rCGsBMa2" />
+                <TextView
+                    android:id="@+id/accountType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Compte chèque"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/natureLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="4dp" />
 
-                    <TextView
-                        android:id="@+id/accountType"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/accountOwner"
-                        app:layout_constraintTop_toBottomOf="@id/accountOwner"
-                        tools:text="Type de Compte: COURANT" />
+                <TextView
+                    android:id="@+id/accountNumberLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="N° de compte"
+                    android:textColor="@color/reddish_orange"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/accountType"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="16dp" />
 
-                    <TextView
-                        android:id="@+id/accountBalance"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/accountType"
-                        app:layout_constraintTop_toBottomOf="@id/accountType"
-                        tools:text="Solde: 108.0 €" />
+                <TextView
+                    android:id="@+id/accountNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0000A0000000001"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/accountNumberLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="4dp" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:id="@+id/delete"
-                android:layout_width="40dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/accountCard"
-                android:src="@drawable/remove"
-                app:tint="@color/orange_red"
-                android:onClick="@{view -> detailCompte.onClickDeleteAccount(view)}"
-                />
+                <ImageView
+                    android:id="@+id/editAccount"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:onClick="@{view -> detailCompte.onClickEditAccount(view)}"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintStart_toEndOf="@+id/accountBalance"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/orange" />
 
-            <ImageView
-                android:id="@+id/update"
-                android:layout_width="40dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:contentDescription="update"
-                android:src="@drawable/editing"
-                app:layout_constraintEnd_toStartOf="@+id/delete"
-                app:layout_constraintTop_toBottomOf="@id/accountCard"
-                app:tint="@color/orange_red"
-                android:onClick="@{view -> detailCompte.onClickEditAccount(view)}"
-            />
+                <ImageView
+                    android:id="@+id/deleteAccount"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:onClick="@{view -> detailCompte.onClickDeleteAccount(view)}"
+                    android:src="@drawable/ic_delete"
+                    app:layout_constraintStart_toEndOf="@id/editAccount"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/orange" />
 
-            <TextView
-                android:id="@+id/recentTransactionsLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Transactions Récentes"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                android:textColor="@color/reddish_orange"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/delete" />
+                <TextView
+                    android:id="@+id/balanceLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Solde"
+                    android:textColor="@color/reddish_orange"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/accountNumber"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="16dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recentTransactionsRecyclerView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/recentTransactionsLabel"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                <TextView
+                    android:id="@+id/balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="35,410.7 DH"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/balanceLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="4dp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Recent Transactions Label -->
+                <TextView
+                    android:id="@+id/recentTransactionsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="Transactions Récentes"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textColor="@color/reddish_orange"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/balance" />
+
+                <!-- RecyclerView for Recent Transactions -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recentTransactionsRecyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recentTransactionsLabel"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

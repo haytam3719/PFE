@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
+import android.webkit.WebView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,6 +20,7 @@ import com.example.project.adapters.TransactionAdapter
 import com.example.project.databinding.ConsultationBinding
 import com.example.project.prototype.Transaction
 import com.example.project.viewmodels.ConsultationViewModel
+import com.example.project.viewmodels.DashboardViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,9 +28,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class Consultation : Fragment() {
 
     private val consultationViewModel: ConsultationViewModel by viewModels()
+    private val dashboardViewModel: DashboardViewModel by viewModels()
     private lateinit var binding: ConsultationBinding
     private val iconList = listOf(R.drawable.note, R.drawable.note, R.drawable.note, R.drawable.note)
     private lateinit var adapter: TransactionAdapter
+    private lateinit var webView: WebView
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -48,7 +53,7 @@ class Consultation : Fragment() {
                 val pageMarginPx = resources.getDimensionPixelOffset(R.dimen.pageMargin)
                 val offsetPx = resources.getDimensionPixelOffset(R.dimen.offset)
                 val increasedOffsetPx = resources.getDimensionPixelOffset(R.dimen.increased_offset)
-                setPadding(increasedOffsetPx, 0, increasedOffsetPx, 0)
+                setPadding(50, 10, 50, 20)
                 clipToPadding = false
                 clipChildren = false
                 offscreenPageLimit = 3
@@ -105,6 +110,21 @@ class Consultation : Fragment() {
         })
         binding.rvRecentTransactions.layoutManager = LinearLayoutManager(context)
         binding.rvRecentTransactions.adapter = adapter
+
+        webView = binding.webView
+        webView.settings.javaScriptEnabled = true
+        webView.settings.loadWithOverviewMode = true
+        webView.settings.useWideViewPort = true
+        webView.settings.textSize = WebSettings.TextSize.LARGER
+
+
+        dashboardViewModel.accountBalances.observe(viewLifecycleOwner) { balances ->
+            if (balances.isNotEmpty()) {
+                updateWebView(balances)
+            }
+        }
+
+        dashboardViewModel.loadAccountBalances(FirebaseAuth.getInstance().currentUser!!.uid)
     }
 
 
@@ -120,6 +140,77 @@ class Consultation : Fragment() {
             adapter.updateTransactions(transactions)
         }
     }
+
+
+    private fun updateWebView(balances: List<Pair<String, Double>>) {
+        val dataString = balances.joinToString(",") { "['${it.first}', ${it.second}]" }
+        val htmlContent = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+                font-family: 'Arial', sans-serif;
+            }
+            #piechart {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                    ['Category', 'Amount'],
+                    $dataString
+                ]);
+
+                var options = {
+                    title: 'Account Balances by Category',
+                    pieHole: 0.4,
+                    colors: ['#FF9800', '#FF5722', '#FFC107', '#FFEB3B', '#795548'],
+                    backgroundColor: 'transparent',
+                    chartArea: {left: 0, top: 0, width: '100%', height: '100%'},
+                    titleTextStyle: { fontSize: 20, bold: true },
+                    legend: { 
+                        position: 'bottom',
+                        textStyle: { fontSize: 18 }
+                    },
+                    tooltip: { 
+                        textStyle: { fontSize: 16 },
+                        showColorCode: true
+                    },
+                    animation: {
+                        startup: true,
+                        duration: 5000,
+                        easing: 'linear'
+                    },
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                chart.draw(data, options);
+            }
+        </script>
+    </head>
+    <body>
+        <div id="piechart"></div>
+    </body>
+    </html>
+    """.trimIndent()
+
+        webView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null)
+    }
+
 
 
 

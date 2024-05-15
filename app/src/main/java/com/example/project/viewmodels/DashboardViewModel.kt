@@ -9,13 +9,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.project.models.DeviceInfo
 import com.example.project.prototype.ClientRepository
+import com.example.project.repositories.AccountRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val clientRepository: ClientRepository
+    private val clientRepository: ClientRepository,
+    private val accountRepositoryImpl: AccountRepositoryImpl
 ):ViewModel(){
 
     private val _navigateToVirement = MutableLiveData<Boolean>()
@@ -96,6 +98,40 @@ class DashboardViewModel @Inject constructor(
 
     fun getDeviceInfo(context: Context): DeviceInfo {
         return DeviceInfo.fromContext(context.applicationContext)
+    }
+
+
+    private val _totalBalance = MutableLiveData<Double>()
+    val totalBalance: LiveData<Double> = _totalBalance
+
+    fun loadTotalBalance(clientUid: String) {
+        accountRepositoryImpl.getTotalBalanceByClientUid(clientUid) { totalBalance ->
+            _totalBalance.postValue(totalBalance)
+        }
+    }
+
+
+    private val _accountBalances = MutableLiveData<List<Pair<String, Double>>>()
+    val accountBalances: LiveData<List<Pair<String, Double>>> = _accountBalances
+
+    private val _isDataLoaded = MutableLiveData<Boolean>()
+    val isDataLoaded: LiveData<Boolean> = _isDataLoaded
+
+    fun loadAccountBalances(userId: String) {
+        accountRepositoryImpl.fetchAccountBalances(userId) { balances, isSuccess ->
+            _accountBalances.postValue(balances)
+            _isDataLoaded.postValue(isSuccess)
+        }
+    }
+
+
+    private val _balanceOverTime = MutableLiveData<List<Pair<String, Double>>>()
+    val balanceOverTime: LiveData<List<Pair<String, Double>>> = _balanceOverTime
+
+    fun loadBalanceOverTime(userId: String) {
+        accountRepositoryImpl.fetchAccountBalancesOverTime(userId) { data ->
+            _balanceOverTime.postValue(data)
+        }
     }
 
 }

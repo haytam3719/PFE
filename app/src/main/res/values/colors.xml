@@ -32,4 +32,24 @@
     <color name="green">#39ff14</color>
 
 
+    <color name="cardGradientStart">#FF9800</color>
+    <color name="cardGradientEnd">#FF5722</color>
+
+    <color name="backgroundColor">#F5F5F5</color>
+    <color name="colorPrimary">#FF6D00</color>
+    <color name="colorAccent">#FF5722</color>
+    <color name="colorError">#D32F2F</color>
+
+    <color name="primaryTextColor">#212121</color>
+    <color name="secondaryTextColor">#757575</color>
+    <color name="amountColor">#D32F2F</color>
+
+    <color name="colorPrimaryDark">#F57C00</color>
+    <color name="colorSecondary">#757575</color>
+    <color name="reddish_orange_operation">#FF4500</color>
+
+    <color name="progress_bar_color">#FFA500</color>
+    <color name="progress_text_color">#FFFFFF</color>
+
+    <!--FF9800-->
 </resources>

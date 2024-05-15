@@ -10,7 +10,6 @@ class CarouselAdapter(
     var currentPagePosition: Int,
     private val iconList: List<Int>,
     private val listener: OnCarouselItemClickListener
-
 ) : RecyclerView.Adapter<CarouselAdapter.CarouselViewHolder>() {
 
     interface OnCarouselItemClickListener {
@@ -27,8 +26,10 @@ class CarouselAdapter(
             }
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarouselViewHolder {
         val binding = CarouselItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        // Set item layout params to match_parent
         binding.root.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
@@ -42,19 +43,19 @@ class CarouselAdapter(
 
         val displayAccountType = when (accountData.accountType) {
             "COURANT" -> "Compte courant"
+            "EPARGNE" -> "Compte épargne"
+            "CHEQUES" -> "Compte chèque"
             else -> accountData.accountType
         }
-        val displayAccountNumber = "Numéro de compte\n${accountData.accountNumber}"
+        val displayAccountNumber = "Numéro de compte:\n${accountData.accountNumber}"
 
         holder.binding.apply {
             tvAccountType.text = displayAccountType
             tvAccountNumber.text = displayAccountNumber
-            tvAccountBalance.text = accountData.balance
+            tvAccountBalance.text = "${accountData.balance} DH"
             icon.setImageResource(iconResourceId)
         }
     }
-
-
 
     override fun getItemCount(): Int = dataList.size
 

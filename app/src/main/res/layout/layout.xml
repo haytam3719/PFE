@@ -2,11 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context=".MainActivity">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/imgMenu"
         android:layout_width="150dp"
@@ -15,7 +24,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"/>
+        android:layout_marginStart="16dp"
+        android:clickable="true"
+        android:focusable="true"/>
 
     <ImageView
         android:id="@+id/imgUser"
@@ -25,7 +36,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/tvTotalBalanceLabel"
@@ -61,104 +74,132 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"/>
 
-
-    <ImageView
-        android:id="@+id/icon1"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_margin="8dp"
-        android:background="@drawable/rounded_icons"
-        android:contentDescription="comptes"
-        app:layout_constraintEnd_toStartOf="@id/icon2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/graphPlaceholder" />
-
-    <TextView
-        android:id="@+id/iconText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mes comptes"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/icon1"
-        app:layout_constraintStart_toStartOf="@id/icon1"
-        app:layout_constraintEnd_toEndOf="@id/icon1" />
-
-    <ImageView
-        android:id="@+id/icon2"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_margin="8dp"
-        android:src="@drawable/attijari_secure"
-        android:contentDescription="attijari secure"
-        app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
-        app:layout_constraintStart_toEndOf="@id/icon1"
-        app:layout_constraintEnd_toStartOf="@id/icon3"
-        android:background="@drawable/rounded_icons"
-        />
-
-    <TextView
-        android:id="@+id/iconText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AttijariSecure"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/icon2"
-        app:layout_constraintStart_toStartOf="@id/icon2"
-        app:layout_constraintEnd_toEndOf="@id/icon2" />
-
-    <ImageView
-        android:id="@+id/icon3"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_margin="8dp"
-        android:contentDescription="param"
-        android:src="@drawable/settings"
-        app:tint="#FF5722"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/icon2"
-        app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
-        android:background="@drawable/rounded_icons"
-        />
-
-
-    <TextView
-        android:id="@+id/iconText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Paramètres"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/icon3"
-        app:layout_constraintStart_toStartOf="@id/icon3"
-        app:layout_constraintEnd_toEndOf="@id/icon3" />
-
-
+    <!-- Icon 1 with TextView -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/actionLayout"
-        android:layout_width="0dp"
+        android:id="@+id/layoutIcon1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iconText2"
-        android:layout_marginTop="25dp">
+        app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onIcon1Click">
+
+        <ImageView
+            android:id="@+id/icon1"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/rounded_icons"
+            android:contentDescription="comptes"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
+            android:id="@+id/iconText1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="Transactions Récentes"
-            android:textSize="20sp"
+            android:text="Mes comptes"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/icon1"
+            app:layout_constraintStart_toStartOf="@id/icon1"
+            app:layout_constraintEnd_toEndOf="@id/icon1"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Icon 2 with TextView -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutIcon2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onIcon2Click"
+        app:layout_constraintEnd_toStartOf="@+id/layoutIcon3"
+        app:layout_constraintStart_toEndOf="@+id/layoutIcon1"
+        app:layout_constraintTop_toBottomOf="@id/graphPlaceholder">
+
+        <ImageView
+            android:id="@+id/icon2"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/rounded_icons"
+            android:contentDescription="attijari secure"
+            android:src="@drawable/attijari_secure"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
+        <TextView
+            android:id="@+id/iconText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AttijariSecure"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@id/icon2"
+            app:layout_constraintStart_toStartOf="@id/icon2"
+            app:layout_constraintTop_toBottomOf="@id/icon2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Icon 3 with TextView -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutIcon3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onIcon3Click"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/graphPlaceholder">
+
+        <ImageView
+            android:id="@+id/icon3"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/rounded_icons"
+            android:contentDescription="param"
+            android:src="@drawable/settings"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#FF5722" />
+
+        <TextView
+            android:id="@+id/iconText3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Paramètres"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@id/icon3"
+            app:layout_constraintStart_toStartOf="@id/icon3"
+            app:layout_constraintTop_toBottomOf="@id/icon3" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/transactionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Transactions récentes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutIcon1"
+        android:textSize="18sp"
+        android:textColor="@color/usualColor"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecentTransactions"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/rounded_top_recycler"
-        app:layout_constraintTop_toBottomOf="@id/actionLayout"
+        app:layout_constraintTop_toBottomOf="@id/transactionTextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="20dp"
@@ -174,6 +215,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_navigation_menu_connecte" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
