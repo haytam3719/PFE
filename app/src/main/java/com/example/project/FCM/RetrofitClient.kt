@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object RetrofitClient {
-    private const val BASE_URL = "https://192.168.42.191:5000"
+    private const val BASE_URL = "https://fcm-api.onrender.com"
 
     val instance: FcmApiService by lazy {
         val retrofit = Retrofit.Builder()

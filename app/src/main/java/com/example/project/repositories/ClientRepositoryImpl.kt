@@ -1,11 +1,13 @@
 package com.example.project.repositories
 
 import android.util.Log
+import com.example.project.models.Client
 import com.example.project.models.DeviceInfo
 import com.example.project.prototype.ClientRepository
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
 import kotlinx.coroutines.tasks.await
@@ -83,6 +85,35 @@ class ClientRepositoryImpl : ClientRepository {
             override fun onCancelled(error: DatabaseError) {
                 Log.e("ClientRepository", "Error fetching client with UID: $clientUid; ${error.message}")
                 completion(false)
+            }
+        })
+    }
+
+
+    fun getClientDetailsByUid(uid: String, callback: (Result<Client>) -> Unit) {
+        val query: Query = databaseReference.orderByChild("Client/uid").equalTo(uid)
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var found = false
+                for (autoGenKeySnapshot in snapshot.children) {
+                    val clientSnapshot = autoGenKeySnapshot.child("Client")
+                    if (clientSnapshot.child("uid").value.toString() == uid) {
+                        val client = clientSnapshot.getValue(Client::class.java)
+                        if (client != null) {
+                            callback(Result.success(client))
+                            found = true
+                            break
+                        }
+                    }
+                }
+                if (!found) {
+                    callback(Result.failure(Exception("Client not found")))
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback(Result.failure(databaseError.toException()))
             }
         })
     }

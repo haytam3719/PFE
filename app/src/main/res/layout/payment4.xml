@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+  >
+
+    <!-- AppBarLayout with MaterialToolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/reddish_orange"
+            android:minHeight="?attr/actionBarSize"
+            app:navigationIcon="@drawable/back"
+            app:title="Détails du paiement"
+            app:titleTextColor="@android:color/white" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Payment Account Section -->
+    <TextView
+        android:id="@+id/tv_payment_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Compte de paiement"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_payment_account"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_payment_account"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/iv_account_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_account_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Compte chèque"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/iv_account_icon"
+            app:layout_constraintStart_toEndOf="@id/iv_account_icon"
+            app:layout_constraintEnd_toStartOf="@id/iv_dropdown"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/tv_account_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0000A0000000001"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_account_name"
+            app:layout_constraintStart_toEndOf="@id/iv_account_icon"
+            app:layout_constraintEnd_toStartOf="@id/iv_dropdown"
+            android:layout_marginStart="8dp" />
+
+        <ImageView
+            android:id="@+id/iv_dropdown"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/popupView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_top_recycler"
+        android:backgroundTint="@color/reddish_orange"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Header Text -->
+        <TextView
+            android:id="@+id/popupHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Compte émetteur"
+            android:textColor="@color/white"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <!-- ListView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listViewOptions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/popupHeader"
+            />
+
+        <!-- Close Button -->
+        <ImageView
+            android:id="@+id/closeImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/close"
+            app:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    <!-- Recharge Section -->
+    <TextView
+        android:id="@+id/tv_recharge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A payer"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/cl_payment_account"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_recharge_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_recharge"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/iv_service_provider"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_service_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Demo"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/iv_service_provider"
+            app:layout_constraintStart_toEndOf="@id/iv_service_provider"
+            app:layout_constraintEnd_toStartOf="@id/iv_info"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/tv_invoice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Facture 3"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_service_name"
+            app:layout_constraintStart_toEndOf="@id/iv_service_provider"
+            app:layout_constraintEnd_toStartOf="@id/tv_amount"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/tv_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1.400 DH"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp" />
+
+        <ImageView
+            android:id="@+id/iv_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_amount"
+            android:layout_marginEnd="16dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Total to Pay Section -->
+    <TextView
+        android:id="@+id/tv_total_to_pay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/lighter_grey"
+        android:padding="8dp"
+        android:text="Total à payer\nFrais de service inclus"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/cl_recharge_info"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_total_amount"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/tv_total_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/lighter_grey"
+        android:padding="8dp"
+        android:text="1.405,496 DH"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_total_to_pay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_recharge_info" />
+
+    <!-- Buttons for Cancel and Pay -->
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/orange"
+        android:text="Annuler"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/button_pay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <Button
+        android:id="@+id/button_pay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/reddish_orange"
+        android:text="Payer"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button_cancel"
+        app:layout_constraintWidth_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

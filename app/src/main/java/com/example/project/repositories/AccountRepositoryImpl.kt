@@ -2,7 +2,10 @@ package com.example.project.repositories
 
 import android.util.Log
 import com.example.project.models.AccountCreationServiceImpl
+import com.example.project.models.Client
+import com.example.project.models.ClientAccountDetails
 import com.example.project.models.CompteImpl
+import com.example.project.models.DeviceInfo
 import com.example.project.models.TransactionImpl
 import com.example.project.prototype.AccountRepository
 import com.example.project.prototype.Compte
@@ -18,7 +21,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AccountRepositoryImpl @Inject constructor(private val accountService:AccountCreationServiceImpl): AccountRepository {
-    private val database = FirebaseDatabase.getInstance("https://bank-2fd65-default-rtdb.firebaseio.com/")
+    private val database =
+        FirebaseDatabase.getInstance("https://bank-2fd65-default-rtdb.firebaseio.com/")
+
     override suspend fun getAccounts(): List<Compte> {
         val accountsRef = database.reference.child("Accounts")
         val dataSnapshot = accountsRef.get().await()
@@ -69,10 +74,17 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
 
                         accountsRef.child(key).setValue(updatedAccount)
                             .addOnSuccessListener {
-                                Log.d("Update Account", "Account with numero $numero updated successfully.")
+                                Log.d(
+                                    "Update Account",
+                                    "Account with numero $numero updated successfully."
+                                )
                             }
                             .addOnFailureListener { exception ->
-                                Log.e("Update Account ERROR", "Error updating account $numero", exception)
+                                Log.e(
+                                    "Update Account ERROR",
+                                    "Error updating account $numero",
+                                    exception
+                                )
                             }
                     }
                 } else {
@@ -81,13 +93,14 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("Update Account ERROR", "Database error when querying for numero $numero", databaseError.toException())
+                Log.e(
+                    "Update Account ERROR",
+                    "Database error when querying for numero $numero",
+                    databaseError.toException()
+                )
             }
         })
     }
-
-
-
 
 
     override fun getAccountByNumero(numero: String, callback: (CompteImpl?) -> Unit) {
@@ -118,8 +131,6 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
     }
 
 
-
-
     suspend fun getAccountsForCurrentUser(userId: String): List<CompteImpl> {
         Log.d("AccountRepo", "Attempting to fetch accounts for user ID: $userId")
         return try {
@@ -135,7 +146,10 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
     }
 
 
-    fun fetchHistoriqueTransactions(idProprietaire: String, callback: (List<TransactionImpl>?) -> Unit) {
+    fun fetchHistoriqueTransactions(
+        idProprietaire: String,
+        callback: (List<TransactionImpl>?) -> Unit
+    ) {
         val database = FirebaseDatabase.getInstance()
         val accountsRef = database.getReference("accounts")
 
@@ -166,12 +180,12 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
     }
 
 
-
     suspend fun fetchTransactionsByAccountNumber(accountNumber: String): Pair<List<TransactionImpl>?, String?> {
         val accountsRef = database.getReference("accounts")
 
         try {
-            val dataSnapshot = accountsRef.orderByChild("numero").equalTo(accountNumber).get().await()
+            val dataSnapshot =
+                accountsRef.orderByChild("numero").equalTo(accountNumber).get().await()
             if (dataSnapshot.exists()) {
                 val transactions = mutableListOf<TransactionImpl>()
                 dataSnapshot.children.forEach { accountSnapshot ->
@@ -182,40 +196,47 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
                 }
                 return Pair(transactions, null)
             } else {
-                return Pair(null, "No account found with the specified account number: $accountNumber")
+                return Pair(
+                    null,
+                    "No account found with the specified account number: $accountNumber"
+                )
             }
         } catch (e: Exception) {
             return Pair(null, "Database error: ${e.message}")
         }
     }
 
-    suspend fun getHistoriqueTransactionsById(transactionId: String): TransactionImpl? = withContext(Dispatchers.IO) {
-        try {
-            val accountsReference = FirebaseDatabase.getInstance().getReference("accounts")
-            val snapshot = accountsReference.get().await()
-            var transaction: TransactionImpl? = null
+    suspend fun getHistoriqueTransactionsById(transactionId: String): TransactionImpl? =
+        withContext(Dispatchers.IO) {
+            try {
+                val accountsReference = FirebaseDatabase.getInstance().getReference("accounts")
+                val snapshot = accountsReference.get().await()
+                var transaction: TransactionImpl? = null
 
-            for (accountSnapshot in snapshot.children) {
-                val transactionsSnapshot = accountSnapshot.child("historiqueTransactions")
-                transaction = transactionsSnapshot.children.firstOrNull {
-                    it.child("idTran").getValue(String::class.java) == transactionId
-                }?.getValue(TransactionImpl::class.java)
+                for (accountSnapshot in snapshot.children) {
+                    val transactionsSnapshot = accountSnapshot.child("historiqueTransactions")
+                    transaction = transactionsSnapshot.children.firstOrNull {
+                        it.child("idTran").getValue(String::class.java) == transactionId
+                    }?.getValue(TransactionImpl::class.java)
 
-                if (transaction != null) {
-                    Log.d("TransactionRepository", "Transaction fetched successfully: $transaction")
-                    break
+                    if (transaction != null) {
+                        Log.d(
+                            "TransactionRepository",
+                            "Transaction fetched successfully: $transaction"
+                        )
+                        break
+                    }
                 }
-            }
 
-            if (transaction == null) {
-                Log.d("TransactionRepository", "No transaction found with ID: $transactionId")
+                if (transaction == null) {
+                    Log.d("TransactionRepository", "No transaction found with ID: $transactionId")
+                }
+                transaction
+            } catch (e: Exception) {
+                Log.e("TransactionRepository", "Error fetching transactions: ", e)
+                null
             }
-            transaction
-        } catch (e: Exception) {
-            Log.e("TransactionRepository", "Error fetching transactions: ", e)
-            null
         }
-    }
 
 
     fun getTotalBalanceByClientUid(clientUid: String, callback: (Double) -> Unit) {
@@ -243,69 +264,213 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
     }
 
 
-    fun fetchAccountBalances(userId: String, callback: (List<Pair<String, Double>>, Boolean) -> Unit) {
+    fun fetchAccountBalances(
+        userId: String,
+        callback: (List<Pair<String, Double>>, Boolean) -> Unit
+    ) {
         val databaseReference = FirebaseDatabase.getInstance().getReference("accounts")
-        databaseReference.orderByChild("id_proprietaire").equalTo(userId).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val balances = mutableListOf<Pair<String, Double>>()
-                snapshot.children.forEach { accountSnapshot ->
-                    val account = accountSnapshot.getValue(CompteImpl::class.java)
-                    account?.let {
-                        balances.add(Pair(it.type.toString(), it.solde))
+        databaseReference.orderByChild("id_proprietaire").equalTo(userId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val balances = mutableListOf<Pair<String, Double>>()
+                    snapshot.children.forEach { accountSnapshot ->
+                        val account = accountSnapshot.getValue(CompteImpl::class.java)
+                        account?.let {
+                            balances.add(Pair(it.type.toString(), it.solde))
+                        }
                     }
+                    callback(balances, true)
                 }
-                callback(balances, true)
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                println("Firebase error: ${error.message}")
-                callback(emptyList(), false)
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    println("Firebase error: ${error.message}")
+                    callback(emptyList(), false)
+                }
+            })
     }
 
 
-    fun fetchAccountBalancesOverTime(userId: String, callback: (List<Pair<String, Double>>) -> Unit) {
+    fun fetchAccountBalancesOverTime(
+        userId: String,
+        callback: (List<Pair<String, Double>>) -> Unit
+    ) {
         val dbRef = FirebaseDatabase.getInstance().getReference("accounts")
-        dbRef.orderByChild("id_proprietaire").equalTo(userId).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val balanceChanges = mutableListOf<Pair<String, Double>>()
-                snapshot.children.forEach { accountSnapshot ->
-                    val account = accountSnapshot.getValue(CompteImpl::class.java)
-                    account?.historiqueTransactions?.forEach { transaction ->
-                        val date = transaction.date
-                        val amount = transaction.montant
-                        val isOutgoing = transaction.compteEmet.id_proprietaire == userId
-                        val isIncoming = transaction.compteBenef.id_proprietaire == userId
+        dbRef.orderByChild("id_proprietaire").equalTo(userId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val balanceChanges = mutableListOf<Pair<String, Double>>()
+                    snapshot.children.forEach { accountSnapshot ->
+                        val account = accountSnapshot.getValue(CompteImpl::class.java)
+                        account?.historiqueTransactions?.forEach { transaction ->
+                            val date = transaction.date
+                            val amount = transaction.montant
+                            val isOutgoing = transaction.compteEmet.id_proprietaire == userId
+                            val isIncoming = transaction.compteBenef.id_proprietaire == userId
 
-                        // Determine balance change based on the direction of the transaction
-                        val currentBalanceChange = when {
-                            isIncoming -> amount
-                            isOutgoing -> -amount
-                            else -> 0.0
+                            // Determine balance change based on the direction of the transaction
+                            val currentBalanceChange = when {
+                                isIncoming -> amount
+                                isOutgoing -> -amount
+                                else -> 0.0
+                            }
+
+                            val existingEntry = balanceChanges.find { it.first == date }
+                            if (existingEntry != null) {
+                                val index = balanceChanges.indexOf(existingEntry)
+                                balanceChanges[index] =
+                                    existingEntry.copy(second = existingEntry.second + currentBalanceChange)
+                            } else {
+                                balanceChanges.add(Pair(date, currentBalanceChange))
+                            }
                         }
+                    }
+                    val sortedBalances = balanceChanges.sortedBy { it.first }
+                    var cumulativeBalance = 0.0
+                    val finalBalances = sortedBalances.map { balanceChange ->
+                        cumulativeBalance += balanceChange.second
+                        Pair(balanceChange.first, cumulativeBalance)
+                    }
+                    callback(finalBalances)
+                }
 
-                        val existingEntry = balanceChanges.find { it.first == date }
-                        if (existingEntry != null) {
-                            val index = balanceChanges.indexOf(existingEntry)
-                            balanceChanges[index] = existingEntry.copy(second = existingEntry.second + currentBalanceChange)
-                        } else {
-                            balanceChanges.add(Pair(date, currentBalanceChange))
+                override fun onCancelled(error: DatabaseError) {
+                    callback(emptyList())
+                }
+            })
+    }
+
+
+    fun getBeneficiariesForUser(userId: String, callback: (Result<List<CompteImpl>>) -> Unit) {
+        database.getReference("accounts")
+            .get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val beneficiaries = mutableListOf<CompteImpl>()
+                    task.result?.children?.forEach { accountSnapshot ->
+                        Log.d("Repository", "Account Snapshot: ${accountSnapshot.key} -> ${accountSnapshot.value}")
+                        accountSnapshot.child("historiqueTransactions").children.forEach { transactionSnapshot ->
+                            Log.d("Repository", "Transaction Snapshot: ${transactionSnapshot.key} -> ${transactionSnapshot.value}")
+                            val compteEmetId = transactionSnapshot.child("compteEmet/id_proprietaire").getValue(String::class.java)
+                            if (compteEmetId == userId) {
+                                val compteBenef = transactionSnapshot.child("compteBenef").getValue(CompteImpl::class.java)
+                                Log.d("Repository", "CompteBenef: ${compteBenef}")
+                                compteBenef?.let {
+                                    // Check if this compteBenef is already in the list to avoid duplicates
+                                    if (!beneficiaries.any { b -> b.numero == it.numero }) {
+                                        beneficiaries.add(it)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Log.d("Repository", "Beneficiaries fetched: ${beneficiaries.size}")
+                    callback(Result.success(beneficiaries))
+                } else {
+                    task.exception?.let {
+                        Log.e("Repository", "Error fetching beneficiaries: ${it.message}")
+                        callback(Result.failure(it))
+                    }
+                }
+            }
+    }
+
+    fun getClientDetailsByUid(uid: String, callback: (Result<Client>) -> Unit) {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("clients")
+
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (autoGenKeySnapshot in snapshot.children) {
+                    val clientSnapshot = autoGenKeySnapshot.child("Client")
+                    if (clientSnapshot.child("uid").value.toString() == uid) {
+                        try {
+                            val client = Client(
+                                uid = clientSnapshot.child("uid").getValue(String::class.java),
+                                nom = clientSnapshot.child("nom").getValue(String::class.java) ?: "",
+                                prenom = clientSnapshot.child("prenom").getValue(String::class.java) ?: "",
+                                date_naissanace = clientSnapshot.child("date_naissanace").getValue(String::class.java) ?: "",
+                                adresse = clientSnapshot.child("adresse").getValue(String::class.java) ?: "",
+                                numCin = clientSnapshot.child("numCin").getValue(String::class.java) ?: "",
+                                domicile = clientSnapshot.child("domicile").getValue(String::class.java) ?: "",
+                                numTele = clientSnapshot.child("numTele").getValue(String::class.java) ?: "",
+                                fingerPrint = clientSnapshot.child("fingerPrint").getValue(String::class.java) ?: "",
+                                identityCardFrontUrl = clientSnapshot.child("identityCardFrontUrl").getValue(String::class.java),
+                                identityCardBackUrl = clientSnapshot.child("identityCardBackUrl").getValue(String::class.java),
+                                facePhotoUrl = clientSnapshot.child("facePhotoUrl").getValue(String::class.java),
+                                deviceInfo = null,
+                                deviceInfoList = convertDeviceInfoList(clientSnapshot.child("deviceInfoList"))
+                            )
+                            callback(Result.success(client))
+                            break
+                        } catch (e: Exception) {
+                            Log.e("getClientDetails", "Error processing data for client UID: $uid, ${e.message}")
                         }
                     }
                 }
-                val sortedBalances = balanceChanges.sortedBy { it.first }
-                var cumulativeBalance = 0.0
-                val finalBalances = sortedBalances.map { balanceChange ->
-                    cumulativeBalance += balanceChange.second
-                    Pair(balanceChange.first, cumulativeBalance)
-                }
-                callback(finalBalances)
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                callback(emptyList())
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback(Result.failure(databaseError.toException()))
             }
         })
     }
+
+    private fun convertDeviceInfoList(deviceInfoSnapshot: DataSnapshot): List<DeviceInfo>? {
+        val devices = mutableListOf<DeviceInfo>()
+        deviceInfoSnapshot.children.forEach { deviceSnapshot ->
+            deviceSnapshot.getValue(DeviceInfo::class.java)?.let {
+                devices.add(it)
+            }
+        }
+        return if (devices.isEmpty()) null else devices
+    }
+
+
+
+
+    fun getCombinedBeneficiaryClientData(userId: String, callback: (Result<List<ClientAccountDetails>>) -> Unit) {
+        getBeneficiariesForUser(userId) { result ->
+            result.onSuccess { beneficiaries ->
+                val combinedData = mutableListOf<ClientAccountDetails>()
+                var remainingClients = beneficiaries.size
+
+                Log.d("Repository", "Beneficiaries fetched: ${beneficiaries.size}")
+
+                if (remainingClients == 0) {
+                    callback(Result.success(combinedData))
+                } else {
+                    beneficiaries.forEach { beneficiary ->
+                        Log.d("Repository", "Fetching client details for id_proprietaire: ${beneficiary.id_proprietaire}")
+                        getClientDetailsByUid(beneficiary.id_proprietaire) { clientResult ->
+                            clientResult.onSuccess { client ->
+                                Log.d("Repository", "Client details fetched: $client")
+                                combinedData.add(
+                                    ClientAccountDetails(
+                                        nom = client.nom,
+                                        prenom = client.prenom,
+                                        profileImageUrl = null,
+                                        accountNumber = beneficiary.numero,
+                                    )
+                                )
+                                remainingClients--
+                                Log.d("Repository", "Remaining clients to process: $remainingClients")
+                                if (remainingClients == 0) {
+                                    Log.d("Repository", "All clients processed, combined data: $combinedData")
+                                    callback(Result.success(combinedData))
+                                }
+                            }
+                            clientResult.onFailure { exception ->
+                                Log.e("Repository", "Error fetching client details: ${exception.message}")
+                                callback(Result.failure(exception))
+                                return@getClientDetailsByUid
+                            }
+                        }
+                    }
+                }
+            }
+            result.onFailure { exception ->
+                Log.e("Repository", "Error fetching beneficiaries: ${exception.message}")
+                callback(Result.failure(exception))
+            }
+        }
+    }
+
 }

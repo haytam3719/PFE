@@ -14,4 +14,7 @@
     <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">bank-2fd65-default-rtdb.firebaseio.com</domain>
     </domain-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">fcm-api.onrender.com</domain>
+    </domain-config>
 </network-security-config>

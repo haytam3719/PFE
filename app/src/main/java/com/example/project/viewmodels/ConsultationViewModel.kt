@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.project.adapters.AccountData
+import com.example.project.models.ClientAccountDetails
 import com.example.project.models.CompteImpl
 import com.example.project.prototype.Compte
 import com.example.project.prototype.Transaction
@@ -89,5 +90,36 @@ class ConsultationViewModel @Inject constructor(private val accountRepositoryImp
         }
     }
 
+
+    private val _selectedAccount = MutableLiveData<AccountData>()
+    val selectedAccount: LiveData<AccountData> = _selectedAccount
+    fun selectAccount(account: AccountData) {
+        _selectedAccount.value = account
+    }
+
+    val combinedDataLiveData = MutableLiveData<Result<List<ClientAccountDetails>>>()
+
+    fun loadCombinedData(userId: String) {
+        Log.d("ViewModel", "Starting loadCombinedData for userId: $userId")
+        viewModelScope.launch {
+            accountRepositoryImpl.getCombinedBeneficiaryClientData(userId) { result ->
+                result.onSuccess { combinedData ->
+                    Log.d("ViewModel", "Combined data loaded successfully: $combinedData")
+                }
+                result.onFailure { exception ->
+                    Log.e("ViewModel", "Error loading combined data: ${exception.message}")
+                }
+                combinedDataLiveData.postValue(result)
+            }
+        }
+    }
+
+
+    private val _selectedClient = MutableLiveData<ClientAccountDetails>()
+    val selectedClient: LiveData<ClientAccountDetails> = _selectedClient
+
+    fun selectClient(client: ClientAccountDetails) {
+        _selectedClient.value = client
+    }
 
 }

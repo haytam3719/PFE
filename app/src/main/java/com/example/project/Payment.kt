@@ -76,7 +76,7 @@ class Payment : Fragment(),OnItemClickListener {
 
                 val intent = Intent(Intent.ACTION_VIEW).apply {
                     data =
-                        Uri.parse("https://b69f-196-64-12-157.ngrok-free.app/initiate_square_oauth?data=$jsonStr")
+                        Uri.parse("https://payment-gatewayapi.onrender.com/initiate_square_oauth?data=$jsonStr")
                 }
 
                 startActivity(intent)

@@ -12,7 +12,8 @@ class SecureManager(context: Context) {
     private val emailKey = "email"
     private val passwordKey = "password"
 
-    private val secretKey = "haytam123"
+    // Use a 16-byte key for AES-128 encryption
+    private val secretKey = "16byte_secretkey"
 
     fun saveAccessToken(accessToken: String) {
         val encryptedToken = encrypt(accessToken)
@@ -23,8 +24,6 @@ class SecureManager(context: Context) {
         val encryptedToken = sharedPreferences.getString(accessTokenKey, null)
         return if (encryptedToken != null) decrypt(encryptedToken) else null
     }
-
-
 
     fun saveEmail(email: String) {
         val encryptedEmail = encrypt(email)
@@ -45,8 +44,6 @@ class SecureManager(context: Context) {
         val encryptedPassword = sharedPreferences.getString(passwordKey, null)
         return if (encryptedPassword != null) decrypt(encryptedPassword) else null
     }
-
-
 
     private fun encrypt(input: String): String {
         val cipher = Cipher.getInstance("AES")

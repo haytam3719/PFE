@@ -16,10 +16,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
@@ -52,7 +54,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-
+    /*
     fun fetchAccessToken(clientId: String, clientSecret: String) {
         viewModelScope.launch {
             val accessToken = secureManager.getAccessToken()
@@ -102,21 +104,27 @@ class AuthViewModel @Inject constructor(
         }
 
 
-    /*
-    fun fetchAccessToken(clientId: String, clientSecret: String) {
-        viewModelScope.launch {
+     */
+
+
+
+
+    suspend fun fetchAccessToken(clientId: String, clientSecret: String): String? {
+        return withContext(Dispatchers.IO) {
             val accessToken = secureManager.getAccessToken()
             if (accessToken == null) {
                 try {
                     val newAccessToken = oAuthRepository.getAccessToken(clientId, clientSecret)
                     secureManager.saveAccessToken(newAccessToken)
                     Log.e("Access Token", "$newAccessToken")
+                    newAccessToken
                 } catch (e: Exception) {
                     Log.e("Access Token Error", e.message ?: "Failed to fetch access token")
+                    null
                 }
             } else {
-                // Access token already exists locally
                 Log.e("Access Token", "Existing token: $accessToken")
+                accessToken
             }
         }
     }
@@ -132,15 +140,23 @@ class AuthViewModel @Inject constructor(
 
                 if (email == storedEmail && password == storedPassword && storedAccessToken != null) {
                     _authState.emit(AuthState.Loading)
+                    authRepository.signIn(email, password).await()
+                    Log.d("Access Token","Client already has an access token")
                     _authState.emit(AuthState.Success)
                 } else {
                     _authState.emit(AuthState.Loading)
 
                     val accessToken = fetchAccessToken(email,password)
-                    secureManager.saveEmail(email)
-                    secureManager.savePassword(password)
-                    secureManager.saveAccessToken(accessToken.toString())
-                    _authState.emit(AuthState.Success)
+                    if (accessToken != null) {
+                        secureManager.saveEmail(email)
+                        secureManager.savePassword(password)
+                        secureManager.saveAccessToken(accessToken)
+                        Log.d("Access Token","Access token newly affected to the client")
+                        authRepository.signIn(email, password).await()
+                        _authState.emit(AuthState.Success)
+                    } else {
+                        _authState.emit(AuthState.Error("Failed to fetch access token"))
+                    }
                 }
             } catch (e: Exception) {
                 _authState.emit(AuthState.Error(e.localizedMessage ?: "Sign in failed"))
@@ -148,7 +164,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-*/
+
 
 
 

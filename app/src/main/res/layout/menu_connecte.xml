@@ -448,13 +448,24 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <Button
+                    android:id="@+id/carte"
                     android:layout_marginTop="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/btnParametres"
                     android:onClick="@{view -> menuConnecte.onClickButtonCards(view)}"
-android:padding="50dp"
                     />
+
+
+                <Button
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/carte"
+                    android:onClick="@{view -> menuConnecte.onClickButtonMesBenef(view)}"
+                    android:padding="50dp"
+                    />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

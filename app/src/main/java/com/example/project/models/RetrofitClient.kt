@@ -7,7 +7,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
 object RetrofitClient {
-    private const val BASE_URL = "https://b69f-196-64-12-157.ngrok-free.app"
+    private const val BASE_URL = "https://payment-gatewayapi.onrender.com"
 
     // Define a custom trust manager that trusts all certificates
     private val trustAllCertificates = arrayOf<X509TrustManager>(object : X509TrustManager {

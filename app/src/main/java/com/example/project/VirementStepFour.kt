@@ -13,12 +13,13 @@ import androidx.fragment.app.activityViewModels
 import com.example.project.databinding.VirementStepFourBinding
 import com.example.project.models.CircularProgressView
 import com.example.project.viewmodels.ProgressBarViewModel
+import com.example.project.viewmodels.VirementUpdatedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class VirementStepFour : Fragment() {
     private val progressViewModel: ProgressBarViewModel by activityViewModels()
-
+    private val sharedViewModel:VirementUpdatedViewModel by activityViewModels()
     private var _binding: VirementStepFourBinding? = null
     private val binding get() = _binding!!
 
@@ -39,6 +40,29 @@ class VirementStepFour : Fragment() {
                 progressViewModel.setProgress(100)
             }
         }, 500)
+
+
+
+        sharedViewModel.selectedAccount.observe(viewLifecycleOwner) { account ->
+            binding.compteEmet.text = "Compte Emetteur\n${account.accountNumber}"
+        }
+
+        sharedViewModel.selectedClient.observe(viewLifecycleOwner) { client ->
+            binding.compteBenef.text = "Compte Bénéficiaire\n${client.accountNumber}"
+        }
+
+        sharedViewModel.amount.observe(viewLifecycleOwner) { amount ->
+            binding.montant.text = "Montant de l'opération: $amount DH"
+        }
+
+        sharedViewModel.motif.observe(viewLifecycleOwner) { motif ->
+            binding.motif.text = "Motif: $motif"
+        }
+
+        sharedViewModel.selectedDate.observe(viewLifecycleOwner) { date ->
+            val dateText = date ?: "Immédiate"
+            binding.dateOperation.text = "Date d'exécution de l'opération\n$dateText"
+        }
     }
 
     private fun animateProgress(progressView: CircularProgressView, toProgress: Int, onEnd: () -> Unit) {

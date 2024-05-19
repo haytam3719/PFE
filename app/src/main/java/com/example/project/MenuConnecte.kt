@@ -54,4 +54,9 @@ class MenuConnecte : Fragment() {
     fun onClickButtonCards(view: View){
         findNavController().navigate(R.id.menuConnecte_to_mesCartes)
     }
+
+
+    fun onClickButtonMesBenef(view:View){
+        findNavController().navigate(R.id.menuConnecte_to_mesBenef)
+    }
 }

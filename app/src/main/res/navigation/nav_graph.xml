@@ -477,6 +477,12 @@
             app:enterAnim="@anim/slide_in_left"
             />
 
+        <action
+            android:id="@+id/menuConnecte_to_mesBenef"
+            app:destination="@id/mes_beneficiaires"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
     </fragment>
 
 
@@ -664,5 +670,70 @@
         android:label="Virement Step Four"
         tools:layout="@layout/virement_step_four">
     </fragment>
+
+
+    <fragment
+        android:id="@+id/paymentStepOne"
+        android:name="com.example.project.PaymentStepOne"
+        android:label="PaymentStepOne"
+        tools:layout="@layout/payment1">
+
+        <action
+            android:id="@+id/paymentStepOne_to_paymentStepTwo"
+            app:destination="@id/paymentStepTwo"
+            />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/paymentStepTwo"
+        android:name="com.example.project.PaymentStepTwo"
+        android:label="PaymentStepTwo"
+        tools:layout="@layout/payment2">
+
+        <action
+            android:id="@+id/paymentStepTwo_to_paymentStepThree"
+            app:destination="@id/paymentStepThree"
+            />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/paymentStepThree"
+        android:name="com.example.project.PaymentStepThree"
+        android:label="PaymentStepThree"
+        tools:layout="@layout/payment3">
+
+        <action
+            android:id="@+id/paymentStepThree_to_paymentStepFour"
+            app:destination="@id/paymentStepFour"
+            />
+
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/paymentStepFour"
+        android:name="com.example.project.PaymentStepFour"
+        android:label="PaymentStepFour"
+        tools:layout="@layout/payment4">
+
+    </fragment>
+
+
+
+
+
+
+
+    <fragment
+        android:id="@+id/mes_beneficiaires"
+        android:name="com.example.project.MesBeneficiaires"
+        android:label="Mes Bénéficiaires"
+        tools:layout="@layout/mes_beneficiaires"/>
+
 
 </navigation>

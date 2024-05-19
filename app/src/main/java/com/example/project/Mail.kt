@@ -1,21 +1,24 @@
 package com.example.project
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.project.databinding.MailBinding
+import com.example.project.models.EmailRequest
+import com.example.project.models.EmailResponse
+import com.example.project.models.MailApiClient
+import com.example.project.models.MailApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.Credentials
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Mail : Fragment() {
 
@@ -34,40 +37,37 @@ class Mail : Fragment() {
         binding.button.setOnClickListener {
             val email = binding.mailTextInputLayout.editText?.text.toString()
             if (email.isNotEmpty()) {
-                sendEmailViaSandbox(email)
+                sendEmail(email)
             } else {
-                Toast.makeText(context, "Please enter a valid email address", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Adresse Email invalide", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun sendEmailViaSandbox(email: String) {
+    private fun sendEmail(toEmail: String) {
+        val apiService = MailApiClient.retrofit.create(MailApiService::class.java)
+        val request = EmailRequest(email = toEmail)
+
         CoroutineScope(Dispatchers.IO).launch {
-            val client = OkHttpClient()
-            val mediaType = MediaType.parse("application/x-www-form-urlencoded")
-            val postData = buildString {
-                append("from=Mailgun Sandbox <postmaster@sandbox4feba5ef38d1408088542a3dd61590da.mailgun.org>")
-                append("&to=$email")
-                append("&subject=Hello from Mailgun Sandbox")
-                append("&text=This is a test email sent from the Mailgun Sandbox!")
-            }
-
-            val body = RequestBody.create(mediaType, postData)
-            val request = Request.Builder()
-                .url("https://api.mailgun.net/v3/sandbox4feba5ef38d1408088542a3dd61590da.mailgun.org/messages")
-                .post(body)
-                .addHeader("Authorization", "Basic " + Credentials.basic("api", "2175ccc2-34dc43b5"))
-                .build()
-
-            client.newCall(request).execute().use { response ->
-                withContext(Dispatchers.Main) {
-                    if (!response.isSuccessful) {
-                        Toast.makeText(context, "Failed to send email: ${response.message()}", Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(context, "Email sent successfully", Toast.LENGTH_LONG).show()
+            apiService.sendEmail(request).enqueue(object : Callback<EmailResponse> {
+                override fun onResponse(call: Call<EmailResponse>, response: Response<EmailResponse>) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        if (response.isSuccessful) {
+                            Toast.makeText(context, "Mail envoyé avec succès", Toast.LENGTH_LONG).show()
+                        } else {
+                            Log.e("MailFragment", "Failed to send email: ${response.message()}")
+                            Toast.makeText(context, "Failed to send email: ${response.message()}", Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
-            }
+
+                override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        Log.e("MailFragment", "Network error: ${t.message}", t)
+                        Toast.makeText(context, "Erreur de connexion: ${t.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
         }
     }
 

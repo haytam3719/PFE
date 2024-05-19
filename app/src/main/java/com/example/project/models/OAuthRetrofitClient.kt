@@ -8,7 +8,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
 object RetrofitClient {
-    private const val BASE_URL = "https://80cb-105-154-161-91.ngrok-free.app"
+    private const val BASE_URL = "https://oauth-56ps.onrender.com"
 
     private val trustAllCertificates = arrayOf<X509TrustManager>(object : X509TrustManager {
         override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>?, authType: String?) {
