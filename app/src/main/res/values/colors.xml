@@ -51,5 +51,36 @@
     <color name="progress_bar_color">#FFA500</color>
     <color name="progress_text_color">#FFFFFF</color>
 
+    <color name="primary_orange">#FF6F00</color>
+    <color name="deep_orange">#E65100</color>
+    <color name="amber">#FFC107</color>
+    <color name="teal">#00897B</color>
+    <color name="navy_blue">#283593</color>
+    <color name="charcoal">#37474F</color>
+    <color name="light_gray">#F5F5F5</color>
+    <color name="medium_gray">#BDBDBD</color>
+    <color name="highlight_yellow">#FFEB3B</color>
+    <color name="lime_green">#CDDC39</color>
+
+
+    <color name="gradient_start">#FF6F00</color>
+    <color name="gradient_end">#FFEB3B</color>
+
+    <color name="tangerine_orange">#F28500</color>
+    <color name="burnt_orange">#D35400</color>
+    <color name="coral">#FF8C42</color>
+    <color name="slate_blue">#6A7FDB</color>
+    <color name="sage_green">#9DBF9E</color>
+    <color name="warm_gray">#A9A9A9</color>
+    <color name="off_white">#FAF3E0</color>
+    <color name="light_graay">#E0E0E0</color>
+    <color name="charcoall">#333333</color>
+    <color name="graphite">#4B4B4B</color>
+    <color name="gold">#FFD700</color>
+    <color name="mint_green">#98FF98</color>
+
+    <color name="selectedColor">#4CAF50</color>
+    <color name="unselectedColor">#BDBDBD</color>
+
     <!--FF9800-->
 </resources>

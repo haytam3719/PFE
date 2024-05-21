@@ -20,6 +20,7 @@ class PaymentStepTwo : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = Payment2Binding.inflate(inflater, container, false)
+        binding.paymentStepTwo = this
         return binding.root
     }
 

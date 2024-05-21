@@ -31,10 +31,32 @@ class PaymentStepOne : Fragment() {
             binding.ivIcon7, binding.ivIcon8, binding.ivIcon9
         )
 
+        val imageViewListRecharge = listOf(
+            binding.ivIcon1,binding.ivIcon2,binding.ivIcon3
+        )
+
         for (imageView in imageViewList) {
             imageView.setOnClickListener {
                 findNavController().navigate(R.id.paymentStepOne_to_paymentStepTwo)
             }
+        }
+
+        for(imageView in imageViewListRecharge){
+            imageView.setOnClickListener{
+                binding.popupView.visibility = View.VISIBLE
+            }
+        }
+
+        binding.closeImageView.setOnClickListener{
+            binding.popupView.visibility = View.GONE
+        }
+
+        binding.rechargeSimpleCardView.setOnClickListener {
+            findNavController().navigate(R.id.paymentStepOne_to_recharge)
+        }
+
+        binding.factureCardView.setOnClickListener {
+            findNavController().navigate(R.id.paymentStepOne_to_paymentStepTwo)
         }
     }
 

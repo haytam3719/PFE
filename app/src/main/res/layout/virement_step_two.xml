@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
-
+    android:background="@color/white"
+>
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -17,13 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
+            android:background="@color/primary_orange"
             app:title="Virement"
             app:titleTextColor="@color/white"
-            app:navigationIcon="@drawable/back"
-            android:background="@color/reddish_orange" />
+            app:navigationIcon="@drawable/back" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <com.example.project.models.CircularProgressView
         android:id="@+id/circularProgressBar"
@@ -39,14 +39,14 @@
         android:id="@+id/stepTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/orange"
         android:textSize="25sp"
         android:text="2/4"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="@id/circularProgressBar"
         app:layout_constraintBottom_toBottomOf="@id/circularProgressBar"
         app:layout_constraintStart_toStartOf="@id/circularProgressBar"
-        app:layout_constraintEnd_toEndOf="@id/circularProgressBar"/>
+        app:layout_constraintEnd_toEndOf="@id/circularProgressBar" />
 
     <Button
         android:id="@+id/nextButton"
@@ -58,10 +58,11 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:textAllCaps="false"
+        android:backgroundTint="@color/primary_orange"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <TextView
         android:id="@+id/uniqueTextOne"
@@ -69,138 +70,137 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:text="Montant"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/charcoal"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="25dp"
         app:layout_constraintStart_toEndOf="@+id/circularProgressBar"
         app:layout_constraintTop_toTopOf="@+id/circularProgressBar" />
 
-
     <TextView
         android:id="@+id/subtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Etape Suivante: Type du virement"
-        android:textColor="@color/colorPrimary"
+        android:text="Étape suivante: Type du virement"
+        android:textColor="@color/slate_blue"
         android:textSize="14sp"
         android:layout_marginStart="30dp"
         app:layout_constraintTop_toBottomOf="@id/uniqueTextOne"
-        app:layout_constraintStart_toEndOf="@+id/circularProgressBar"
-        />
+        app:layout_constraintStart_toEndOf="@+id/circularProgressBar" />
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintBottom_toTopOf="@+id/nextButton"
         app:layout_constraintTop_toTopOf="@+id/uniqueTextOne">
 
-        <TextView
-            android:id="@+id/textViewAmountTitle"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Montant"
-            android:textColor="@color/colorAccent"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/textInputAmount"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:padding="16dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputAmount"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="25dp"
-            app:boxStrokeColor="#FFA500"
-            app:hintTextColor="#FFA500"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewAmountTitle">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextAmount"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textViewAmountTitle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Montant"
+                android:layout_marginTop="15dp"
+                android:text="Montant"
+                android:textColor="@color/charcoal"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/textInputAmount"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputAmount"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="25dp"
+                app:boxStrokeColor="@color/tangerine_orange"
+                app:hintTextColor="@color/tangerine_orange"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewAmountTitle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Montant"
+                    android:textSize="20sp"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/charcoal"
+                    android:textColorHint="@color/graphite" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <SeekBar
+                android:id="@+id/seekBarAmount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:max="100"
+                android:progress="50"
+                android:progressTint="@color/tangerine_orange"
+                android:thumbTint="@color/tangerine_orange"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputAmount" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="DH"
+                android:textColor="@color/charcoal"
                 android:textSize="20sp"
-                android:inputType="numberDecimal"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="#FFFFFF" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textInputAmount"
+                app:layout_constraintEnd_toEndOf="@+id/textInputAmount"
+                app:layout_constraintTop_toTopOf="@+id/textInputAmount" />
 
-
-        <SeekBar
-            android:id="@+id/seekBarAmount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-
-            android:max="100"
-            android:progress="50"
-            android:progressTint="#FFA500"
-            android:thumbTint="#FFA500"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textInputAmount" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:text="DH"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textInputAmount"
-            app:layout_constraintEnd_toEndOf="@+id/textInputAmount"
-            app:layout_constraintTop_toTopOf="@+id/textInputAmount" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputMotif"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="32dp"
-            app:boxStrokeColor="#FFA500"
-            app:hintTextColor="#FFA500"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/seekBarAmount">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextMotif"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputMotif"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Motif"
-                android:inputType="text"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="#FFFFFF" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="32dp"
+                app:boxStrokeColor="@color/tangerine_orange"
+                app:hintTextColor="@color/tangerine_orange"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/seekBarAmount">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextMotif"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Motif"
+                    android:inputType="text"
+                    android:textColor="@color/charcoal"
+                    android:textColorHint="@color/graphite" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Le champs motif est obligatoire"
-            android:textStyle="italic"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/textInputMotif"
-            app:layout_constraintTop_toBottomOf="@id/textInputMotif" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Le champs motif est obligatoire"
+                android:textStyle="italic"
+                android:textColor="@color/slate_blue"
+                app:layout_constraintStart_toStartOf="@+id/textInputMotif"
+                app:layout_constraintTop_toBottomOf="@id/textInputMotif" />
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

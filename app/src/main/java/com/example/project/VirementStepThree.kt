@@ -42,6 +42,16 @@ class VirementStepThree : Fragment() {
                 progressViewModel.setProgress(75)
             }
         }, 500)
+
+
+        binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            binding.datePickerCardView.visibility = if (checkedId == R.id.planifier_virement) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
+
         binding.nextButton.setOnClickListener {
             findNavController().navigate(R.id.virementStepThree_to_virementStepFour)
         }
@@ -62,7 +72,7 @@ class VirementStepThree : Fragment() {
     private fun setupDatePicker() {
         binding.datePickerTextInputLayout.setEndIconOnClickListener {
             val datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Selectionner une date")
+                .setTitleText("Sélectionner une date")
                 .build()
 
             datePicker.show(childFragmentManager, "DATE_PICKER")

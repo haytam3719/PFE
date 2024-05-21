@@ -28,7 +28,7 @@ class MenuConnecte : Fragment() {
     }
 
     fun onClickPaiements(view: View){
-        findNavController().navigate(R.id.menuConnecte_to_paiements)
+        findNavController().navigate(R.id.menuConnecte_to_paymentStepOne)
     }
 
     fun onClickConsultation(view: View){

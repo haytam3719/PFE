@@ -181,7 +181,7 @@ class Dashboard : Fragment(){
 
     private fun setupViewModel() {
         observeTransactions()
-        consultationViewModel.loadTransactions(FirebaseAuth.getInstance().currentUser!!.uid)
+        consultationViewModel.loadTransactions(FirebaseAuth.getInstance().currentUser?.uid ?: "")
     }
 
     private fun observeTransactions() {

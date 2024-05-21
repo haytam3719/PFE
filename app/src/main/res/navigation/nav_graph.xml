@@ -483,6 +483,13 @@
             app:enterAnim="@anim/slide_in_left"
             />
 
+
+        <action
+            android:id="@+id/menuConnecte_to_paymentStepOne"
+            app:destination="@id/paymentStepOne"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
     </fragment>
 
 
@@ -669,6 +676,11 @@
         android:name="com.example.project.VirementStepFour"
         android:label="Virement Step Four"
         tools:layout="@layout/virement_step_four">
+
+        <action
+            android:id="@+id/virementStepFour_to_otp"
+            app:destination="@id/activity_collection_otp"
+            />
     </fragment>
 
 
@@ -681,6 +693,13 @@
         <action
             android:id="@+id/paymentStepOne_to_paymentStepTwo"
             app:destination="@id/paymentStepTwo"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+        <action
+            android:id="@+id/paymentStepOne_to_recharge"
+            app:destination="@id/recharge"
+            app:enterAnim="@anim/slide_in_left"
             />
 
     </fragment>
@@ -695,6 +714,7 @@
         <action
             android:id="@+id/paymentStepTwo_to_paymentStepThree"
             app:destination="@id/paymentStepThree"
+            app:enterAnim="@anim/slide_in_left"
             />
 
     </fragment>
@@ -709,6 +729,8 @@
         <action
             android:id="@+id/paymentStepThree_to_paymentStepFour"
             app:destination="@id/paymentStepFour"
+            app:enterAnim="@anim/slide_in_left"
+
             />
 
     </fragment>
@@ -725,6 +747,41 @@
 
 
 
+    <fragment
+        android:id="@+id/recharge"
+        android:name="com.example.project.Recharge"
+        android:label="recharge"
+        tools:layout="@layout/recharge_simple">
+
+        <action
+            android:id="@+id/recharge_to_recharge2"
+            app:destination="@id/recharge2"
+            app:enterAnim="@anim/slide_in_left"
+        />
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/recharge2"
+        android:name="com.example.project.Recharge2"
+        android:label="recharge2"
+        tools:layout="@layout/recharge_simple2">
+
+        <action
+            android:id="@+id/recharge2_to_recharge3"
+            app:destination="@id/recharge3"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/recharge3"
+        android:name="com.example.project.Recharge3"
+        android:label="recharge2"
+        tools:layout="@layout/recharge_simple3"/>
 
 
 

@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/txtDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/orange" />
+        app:tint="@color/tangerine_orange" />
 
     <TextView
         android:id="@+id/txtTypeTransaction"
@@ -27,7 +27,7 @@
         android:text="Type of Transaction"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:textColor="#FF6D00"
+        android:textColor="@color/primary_orange"
         android:layout_marginStart="8dp"
         app:layout_constraintEnd_toStartOf="@id/txtAmount"
         app:layout_constraintStart_toEndOf="@id/imgTransactionType"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:text="Transaction Date"
         android:textSize="12sp"
-        android:textColor="@color/lighter_grey"
+        android:textColor="@color/graphite"
         android:layout_marginTop="2dp"
         app:layout_constraintEnd_toStartOf="@id/txtAmount"
         app:layout_constraintStart_toStartOf="@id/txtTypeTransaction"
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-500 DH"
-        android:textColor="@color/black"
+        android:textColor="@color/charcoal"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/txtDate"
@@ -64,7 +64,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:background="#FF6D00"
+        android:background="@color/tangerine_orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

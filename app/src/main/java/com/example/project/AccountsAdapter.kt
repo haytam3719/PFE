@@ -14,7 +14,7 @@ class AccountsAdapter(private val onClick: (AccountData) -> Unit) : RecyclerView
             with(binding) {
                 textViewAccountType.text = formatAccountType(account.accountType)
                 textViewAccountNumber.text = "Numero: ${account.accountNumber}"
-                textViewAccountBalance.text = "Solde: ${account.balance}"
+                textViewAccountBalance.text = "Solde: ${account.balance} DH"
                 root.setOnClickListener { onClick(account) }
             }
         }

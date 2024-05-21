@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.MainActpalceholderBinding
 import com.example.project.models.AuthState
+import com.example.project.oAuthRessources.SecureManager
 import com.example.project.viewmodels.AuthViewModel
 import com.example.project.viewmodels.BiometricViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +35,7 @@ class MainActPlaceHolder : Fragment() {
     private val fingerPrintViewModel: BiometricViewModel by viewModels()
     private val mainThreadExecutor: MainThreadExecutor = MainThreadExecutor()
     private val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+    private val secureManager:SecureManager? = null
 
     // Generate a key alias
     val keyAlias = "my_key_alias"
@@ -182,6 +184,13 @@ class MainActPlaceHolder : Fragment() {
                 }
             }
         })
+
+
+        val accessToken = secureManager?.getAccessToken()
+        if (accessToken != null) {
+            Log.e("Access Token", "Existing token: $accessToken")
+            binding.outlinedTextField0.editText?.setText(secureManager?.getEmail())
+        }
 
         return binding.root
 

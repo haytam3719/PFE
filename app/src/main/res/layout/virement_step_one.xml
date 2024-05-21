@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+     android:background="@color/white">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -17,13 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
+            android:background="@color/primary_orange"
             app:title="Virement"
             app:titleTextColor="@color/white"
-            app:navigationIcon="@drawable/back"
-            android:background="@color/reddish_orange" />
+            app:navigationIcon="@drawable/back" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <com.example.project.models.CircularProgressView
         android:id="@+id/circularProgressBar"
@@ -39,14 +39,14 @@
         android:id="@+id/stepTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/orange"
         android:textSize="25sp"
         android:text="1/4"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="@id/circularProgressBar"
         app:layout_constraintBottom_toBottomOf="@id/circularProgressBar"
         app:layout_constraintStart_toStartOf="@id/circularProgressBar"
-        app:layout_constraintEnd_toEndOf="@id/circularProgressBar"/>
+        app:layout_constraintEnd_toEndOf="@id/circularProgressBar" />
 
     <Button
         android:id="@+id/nextButton"
@@ -58,201 +58,214 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:textAllCaps="false"
+        android:backgroundTint="@color/primary_orange"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <TextView
         android:id="@+id/uniqueTextOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:text="Emetteur et bénéficiaire"
-        android:textColor="@color/colorAccent"
+        android:text="Émetteur et bénéficiaire"
+        android:textColor="@color/charcoal"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="25dp"
         app:layout_constraintStart_toEndOf="@+id/circularProgressBar"
         app:layout_constraintTop_toTopOf="@+id/circularProgressBar" />
 
-
     <TextView
         android:id="@+id/subtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Etape Suivante: Montant"
-        android:textColor="@color/colorPrimary"
+        android:text="Étape suivante: Montant"
+        android:textColor="@color/teal"
         android:textSize="14sp"
         android:layout_marginStart="30dp"
         app:layout_constraintTop_toBottomOf="@id/uniqueTextOne"
-        app:layout_constraintStart_toEndOf="@+id/circularProgressBar"
-         />
-
+        app:layout_constraintStart_toEndOf="@+id/circularProgressBar" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Compte"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/charcoal"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/circularProgressBar" />
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/compte"
+    <!-- Account Section -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/compteCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/note"
-            android:backgroundTint="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textViewCompte"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/compte"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Compte"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/colorAccent"
-            android:textSize="17sp"
-            app:layout_constraintEnd_toStartOf="@+id/endImageView"
-            app:layout_constraintStart_toEndOf="@id/imageView"
-            app:layout_constraintTop_toTopOf="@id/imageView" />
+            android:padding="16dp"
+            >
 
-        <TextView
-            android:id="@+id/textViewSubtext"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Choisissez votre compte"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/textViewCompte"
-            app:layout_constraintTop_toBottomOf="@id/textViewCompte" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/note"
+                app:tint="@color/reddish_orange"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/hiddenTv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/textViewCompte"
-            app:layout_constraintTop_toBottomOf="@id/textViewSubtext" />
+            <TextView
+                android:id="@+id/textViewCompte"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Compte"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/charcoal"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toStartOf="@+id/endImageView"
+                app:layout_constraintStart_toEndOf="@id/imageView"
+                app:layout_constraintTop_toTopOf="@id/imageView" />
 
+            <TextView
+                android:id="@+id/textViewSubtext"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Choisissez votre compte"
+                android:textColor="@color/teal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textViewCompte"
+                app:layout_constraintTop_toBottomOf="@id/textViewCompte" />
 
-        <ImageView
-            android:id="@+id/endImageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/down_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/colorAccent"/>
+            <TextView
+                android:id="@+id/hiddenTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/teal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textViewCompte"
+                app:layout_constraintTop_toBottomOf="@id/textViewSubtext" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/endImageView"
+                android:layout_width="20dp"
+                android:layout_height="40dp"
+                android:src="@drawable/down_icon"
+                app:tint="@color/charcoal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                 />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/benef"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bénéficiaire"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/charcoal"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/compte" />
+        app:layout_constraintTop_toBottomOf="@+id/compteCardView" />
 
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/beneficiaire"
+    <!-- Beneficiary Section -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/beneficiaireCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintTop_toBottomOf="@+id/benef">
 
-        <ImageView
-            android:id="@+id/imageBenef"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/user"
-            app:tint="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textViewBenef"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/beneficiaire"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="Choisissez un bénéficiare"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/colorAccent"
-            android:textSize="17sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageBenef"
-            app:layout_constraintEnd_toStartOf="@+id/endImageViewBenef"
-            app:layout_constraintStart_toEndOf="@id/imageBenef"
-            app:layout_constraintTop_toTopOf="@id/imageBenef" />
+            android:padding="16dp"
+            >
 
-        <TextView
-            android:id="@+id/textViewSubtextBenef"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/textViewBenef"
-            app:layout_constraintTop_toBottomOf="@id/textViewBenef" />
+            <ImageView
+                android:id="@+id/imageBenef"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/user"
+                app:tint="@color/reddish_orange"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/textViewBenef"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="Choisissez un bénéficiaire"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/charcoal"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageBenef"
+                app:layout_constraintEnd_toStartOf="@+id/endImageViewBenef"
+                app:layout_constraintStart_toEndOf="@id/imageBenef"
+                app:layout_constraintTop_toTopOf="@id/imageBenef" />
 
-        <ImageView
-            android:id="@+id/endImageViewBenef"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/down_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/colorAccent"/>
+            <TextView
+                android:id="@+id/textViewSubtextBenef"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/teal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textViewBenef"
+                app:layout_constraintTop_toBottomOf="@id/textViewBenef" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/endImageViewBenef"
+                android:layout_width="20dp"
+                android:layout_height="40dp"
+                android:src="@drawable/down_icon"
+                app:tint="@color/charcoal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/popupView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_top_recycler"
-        android:backgroundTint="@color/reddish_orange"
+        android:backgroundTint="@color/deep_orange"
         android:padding="16dp"
         android:visibility="gone"
+        android:elevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Header Text -->
         <TextView
             android:id="@+id/popupHeader"
             android:layout_width="0dp"
@@ -263,10 +276,8 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-         />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ListView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listViewOptions"
             android:layout_width="0dp"
@@ -274,10 +285,8 @@
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/popupHeader"
-            />
+            app:layout_constraintTop_toBottomOf="@id/popupHeader" />
 
-        <!-- Close Button -->
         <ImageView
             android:id="@+id/closeImageView"
             android:layout_width="20dp"
@@ -289,20 +298,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/popupViewBenef"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_top_recycler"
-        android:backgroundTint="@color/reddish_orange"
+        android:backgroundTint="@color/deep_orange"
         android:padding="16dp"
+        android:elevation="6dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Header Text -->
         <TextView
             android:id="@+id/popupHeaderBenef"
             android:layout_width="0dp"
@@ -314,7 +322,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ListView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listViewOptionsBenef"
             android:layout_width="0dp"
@@ -322,10 +329,8 @@
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/popupHeaderBenef"
-            />
+            app:layout_constraintTop_toBottomOf="@id/popupHeaderBenef" />
 
-        <!-- Close Button -->
         <ImageView
             android:id="@+id/closeImageViewBenef"
             android:layout_width="20dp"
@@ -336,6 +341,5 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

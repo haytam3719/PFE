@@ -12,6 +12,7 @@ import com.example.project.models.LogInUserPartial
 import com.example.project.oAuthRessources.SecureManager
 import com.example.project.repositories.AuthRepository
 import com.example.project.repositories.OAuthRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -35,12 +37,10 @@ class AuthViewModel @Inject constructor(
     val authState: StateFlow<AuthState> = _authState
     private lateinit var navController: NavController
     private val _navigateToCollectInfos = MutableLiveData<Boolean>()
-    val navigateToCollectInfos: LiveData<Boolean>
-        get() = _navigateToCollectInfos
+    val navigateToCollectInfos: LiveData<Boolean> get() = _navigateToCollectInfos
 
     private val _navigateToDashboard = MutableLiveData<Boolean>()
-    val navigateToDashboard: LiveData<Boolean>
-        get() = _navigateToDashboard
+    val navigateToDashboard: LiveData<Boolean> get() = _navigateToDashboard
 
     suspend fun signUp(email: String, password: String) {
         viewModelScope.launch {
@@ -53,61 +53,6 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
-
-    /*
-    fun fetchAccessToken(clientId: String, clientSecret: String) {
-        viewModelScope.launch {
-            val accessToken = secureManager.getAccessToken()
-            if (accessToken == null) {
-                try {
-                    val newAccessToken = oAuthRepository.getAccessToken(clientId, clientSecret)
-                    secureManager.saveAccessToken(newAccessToken)
-                    Log.e("Access Token", "$newAccessToken")
-                } catch (e: Exception) {
-                    e.message
-                }
-            } else {
-                // Access token already exists locally
-                Log.e("Access Token", "Existing token: $accessToken")
-            }
-        }
-    }
-
-     suspend fun signIn(email: String, password: String) {
-            viewModelScope.launch {
-                try {
-                    /*val storedEmail = secureManager.getEmail()
-                    val storedPassword = secureManager.getPassword()
-                    if (email == storedEmail && password == storedPassword) {
-                        val storedAccessToken = secureManager.getAccessToken()
-                        if (storedAccessToken != null) {
-                            _authState.emit(AuthState.Loading)
-                            authRepository.signIn(email, password).await()
-                            _authState.emit(AuthState.Success)
-                        } else {
-                            // Access token does not exist, sign out
-                            signOut()
-                        }
-                    } else {
-                        // Email or password do not match, emit error state
-                        _authState.emit(AuthState.Error("Invalid email or password"))
-                    }*/
-
-                    _authState.emit(AuthState.Loading)
-                    authRepository.signIn(email, password).await()
-                    _authState.emit(AuthState.Success)
-
-                } catch (e: Exception) {
-                    _authState.emit(AuthState.Error(e.localizedMessage ?: "Sign in failed"))
-                }
-            }
-        }
-
-
-     */
-
-
-
 
     suspend fun fetchAccessToken(clientId: String, clientSecret: String): String? {
         return withContext(Dispatchers.IO) {
@@ -129,8 +74,6 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-
-
     suspend fun signIn(email: String, password: String) {
         viewModelScope.launch {
             try {
@@ -141,18 +84,20 @@ class AuthViewModel @Inject constructor(
                 if (email == storedEmail && password == storedPassword && storedAccessToken != null) {
                     _authState.emit(AuthState.Loading)
                     authRepository.signIn(email, password).await()
-                    Log.d("Access Token","Client already has an access token")
+                    FirebaseAuth.getInstance().currentUser?.let { Log.d("URGENT", it.uid) }
+                    Log.d("Access Token", "Client already has an access token")
                     _authState.emit(AuthState.Success)
                 } else {
                     _authState.emit(AuthState.Loading)
 
-                    val accessToken = fetchAccessToken(email,password)
+                    val accessToken = fetchAccessToken(email, password)
                     if (accessToken != null) {
                         secureManager.saveEmail(email)
                         secureManager.savePassword(password)
                         secureManager.saveAccessToken(accessToken)
-                        Log.d("Access Token","Access token newly affected to the client")
+                        Log.d("Access Token", "Access token newly affected to the client")
                         authRepository.signIn(email, password).await()
+                        FirebaseAuth.getInstance().currentUser?.let { Log.d("URGENT", it.uid) }
                         _authState.emit(AuthState.Success)
                     } else {
                         _authState.emit(AuthState.Error("Failed to fetch access token"))
@@ -164,22 +109,15 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-
-
-
-
     fun signOut() {
         authRepository.signOut()
         _authState.value = AuthState.Initial
     }
 
-
-
     fun onButtonClickOpen(view: View) {
         _navigateToCollectInfos.value = true
     }
 
-    // Function to reset navigation event after navigation
     fun onNavigationComplete() {
         _navigateToCollectInfos.value = false
     }
@@ -192,12 +130,13 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             email = clientPartial.email
             password = clientPartial.password
-
-            try{
+            Log.d("Email", email)
+            Log.d("Password", password)
+            try {
                 signIn(email, password)
                 _navigateToDashboard.value = true
-            }catch(e:Exception){
-                //Handling Failure ....
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Sign in failed: ${e.message}")
             }
         }
     }

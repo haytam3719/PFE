@@ -20,6 +20,7 @@
     tools:context=".MainActivity">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -209,20 +210,41 @@
                 android:textColor="@color/colorAccent"/>
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvRecentTransactions"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_top_recycler"
-                android:nestedScrollingEnabled="true"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="6dp"
+                android:paddingBottom="60dp"
+                android:padding="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/transactionTextView"
-                android:paddingBottom="50dp"/>
+                >
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRecentTransactions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_top_recycler"
+                    android:nestedScrollingEnabled="true"
+
+                    />
+
+            </androidx.cardview.widget.CardView>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                app:layout_constraintTop_toBottomOf="@id/cardView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     </androidx.core.widget.NestedScrollView>
