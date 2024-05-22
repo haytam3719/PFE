@@ -54,8 +54,8 @@ class PaymentRepositoryImpl @Inject constructor(
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun makePaiement(amount:Double, motif: String){
-        fun getCurrentUserCourantAccount(callback: (CompteImpl?) -> Unit) {
+    override suspend fun makePaiement(amount: Double, motif: String, selectedAccountId: String) {
+        fun getUserSelectedAccount(callback: (CompteImpl?) -> Unit) {
             val auth = FirebaseAuth.getInstance()
             val currentUser = auth.currentUser
 
@@ -69,20 +69,23 @@ class PaymentRepositoryImpl @Inject constructor(
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (accountSnapshot in dataSnapshot.children) {
                             val account = accountSnapshot.getValue(CompteImpl::class.java)
-                            if (account != null && account.type.toString() == "COURANT") {
+                            if (account != null && account.numero == selectedAccountId) {
+                                Log.d("makePaiement", "User selected account found: ${account.numero}")
                                 callback(account)
                                 return
                             }
                         }
+                        Log.d("makePaiement", "User selected account not found")
                         callback(null)
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
-                        println("Error fetching user's Courant account: ${databaseError.message}")
+                        Log.e("makePaiement", "Error fetching user's selected account: ${databaseError.message}")
                         callback(null)
                     }
                 })
             } else {
+                Log.d("makePaiement", "Current user is null")
                 callback(null)
             }
         }
@@ -90,7 +93,6 @@ class PaymentRepositoryImpl @Inject constructor(
         fun getBanqueAccount(callback: (CompteImpl?) -> Unit) {
             val database = FirebaseDatabase.getInstance()
             val accountsRef = database.getReference("accounts")
-
             val query = accountsRef.orderByChild("id_proprietaire").equalTo("Banque")
 
             query.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -99,38 +101,46 @@ class PaymentRepositoryImpl @Inject constructor(
                         for (accountSnapshot in dataSnapshot.children) {
                             val account = accountSnapshot.getValue(CompteImpl::class.java)
                             if (account != null) {
+                                Log.d("makePaiement", "Banque account found: ${account.numero}")
                                 callback(account)
                                 return
                             }
                         }
                     }
+                    Log.d("makePaiement", "Banque account not found")
                     callback(null)
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    println("Error fetching Banque account: ${databaseError.message}")
+                    Log.e("makePaiement", "Error fetching Banque account: ${databaseError.message}")
                     callback(null)
                 }
             })
         }
 
-
-        getCurrentUserCourantAccount { currentUserCourantAccount ->
-            if (currentUserCourantAccount != null) {
+        getUserSelectedAccount { userSelectedAccount ->
+            if (userSelectedAccount != null) {
                 getBanqueAccount { banqueAccount ->
                     if (banqueAccount != null) {
-                        paiement.makePayment(amount, currentUserCourantAccount, banqueAccount, motif)
+                        Log.d("makePaiement", "Making payment from ${userSelectedAccount.numero} to ${banqueAccount.numero}")
+                        try {
+                            paiement.makePayment(amount, userSelectedAccount, banqueAccount, motif)
+                            Log.d("makePaiement", "makePayment method was called")
+                        } catch (e: Exception) {
+                            Log.e("makePaiement", "Exception during makePayment: ${e.message}")
+                        }
                     } else {
-                //Banque account not found
+                        Log.e("makePaiement", "Banque account not found, cannot proceed with payment")
                     }
                 }
             } else {
-                //Compte Courant wasn't found
+                Log.e("makePaiement", "User selected account not found, cannot proceed with payment")
             }
         }
-
-
     }
+
+
+
 
 
 }

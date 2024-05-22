@@ -2,6 +2,7 @@ package com.example.project.models
 
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 
 class Paiement(
@@ -45,15 +46,19 @@ class Paiement(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun makePayment(amount: Double, fromAccount: CompteImpl, toAccount: CompteImpl, motif: String) {
-        this.montant = amount
-        this.compteEmet = fromAccount
-        this.compteBenef = toAccount
-        this.typeTransaction = "Paiement"
-        this.motif = motif
-        virement.effectuerVirement(fromAccount,toAccount,amount,motif)
-        this.enregistrerTransaction(this)
-
-        //val paymentRequest = PaymentRequest(amount, fromAccount.numero, toAccount.numero, method)
-
+        try {
+            Log.d("makePayment", "Starting makePayment with fromAccount: ${fromAccount.numero}, toAccount: ${toAccount.numero}, amount: $amount, motif: $motif")
+            this.montant = amount
+            this.compteEmet = fromAccount
+            this.compteBenef = toAccount
+            this.typeTransaction = "Paiement"
+            this.motif = motif
+            virement.effectuerVirement(fromAccount, toAccount, amount, motif)
+            this.enregistrerTransaction(this)
+            Log.d("makePayment", "Payment made from ${fromAccount.numero} to ${toAccount.numero} for amount $amount with motif $motif")
+        } catch (e: Exception) {
+            Log.e("makePayment", "Exception during makePayment: ${e.message}")
+        }
     }
-    }
+
+}

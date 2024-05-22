@@ -1,7 +1,5 @@
 package com.example.project
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,10 +13,8 @@ import com.example.project.adapters.BillAdapter
 import com.example.project.adapters.OnItemClickListener
 import com.example.project.databinding.PaymentBinding
 import com.example.project.models.Bill
-import com.example.project.models.PaymentRequest
 import com.example.project.viewmodels.PaymentViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONObject
 
 @AndroidEntryPoint
 class Payment : Fragment(),OnItemClickListener {
@@ -51,36 +47,42 @@ class Payment : Fragment(),OnItemClickListener {
 
     }
 
-
     override fun onItemClick(position: Int) {
-        val clickedBill = paymentViewModel.bills.value?.get(position)
-        clickedBill?.let {
-            val paymentRequest = PaymentRequest(
-                clickedBill.id,
-                clickedBill.amount,
-                clickedBill.due_date,
-                clickedBill.number
-            )
-            paymentViewModel.makePaiement(clickedBill.amount, clickedBill.number)
+        //
+    }
 
-            paymentViewModel.requestPayment(paymentRequest)
+    /*
+        override fun onItemClick(position: Int) {
+            val clickedBill = paymentViewModel.bills.value?.get(position)
+            clickedBill?.let {
+                val paymentRequest = PaymentRequest(
+                    clickedBill.id,
+                    clickedBill.amount,
+                    clickedBill.due_date,
+                    clickedBill.number
+                )
+                paymentViewModel.makePaiement(clickedBill.amount, clickedBill.number,)
+
+                paymentViewModel.requestPayment(paymentRequest)
 
 
-            clickedBill.let {
-                val requestData = JSONObject().apply {
-                    put("bill_id", clickedBill.id)
-                    put("amount", clickedBill.amount)
+                clickedBill.let {
+                    val requestData = JSONObject().apply {
+                        put("bill_id", clickedBill.id)
+                        put("amount", clickedBill.amount)
+                    }
+
+                    val jsonStr = Uri.encode(requestData.toString())
+
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data =
+                            Uri.parse("https://payment-gatewayapi.onrender.com/initiate_square_oauth?data=$jsonStr")
+                    }
+
+                    startActivity(intent)
                 }
-
-                val jsonStr = Uri.encode(requestData.toString())
-
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data =
-                        Uri.parse("https://payment-gatewayapi.onrender.com/initiate_square_oauth?data=$jsonStr")
-                }
-
-                startActivity(intent)
             }
-        }
 
-    }}
+        }
+        */
+    }

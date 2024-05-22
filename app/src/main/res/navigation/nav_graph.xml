@@ -743,6 +743,11 @@
         android:label="PaymentStepFour"
         tools:layout="@layout/payment4">
 
+        <action
+            android:id="@+id/paymentStepFour_to_otp"
+            app:destination="@id/activity_collection_otp"
+            />
+
     </fragment>
 
 
@@ -781,7 +786,14 @@
         android:id="@+id/recharge3"
         android:name="com.example.project.Recharge3"
         android:label="recharge2"
-        tools:layout="@layout/recharge_simple3"/>
+        tools:layout="@layout/recharge_simple3">
+
+        <action
+            android:id="@+id/recharge3_to_otp"
+            app:destination="@id/activity_collection_otp"
+            app:enterAnim="@anim/slide_in_left"
+            />
+    </fragment>
 
 
 

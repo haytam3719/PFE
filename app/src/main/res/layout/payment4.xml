@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    >
 
     <data>
-        <import type="com.example.project.PaymentStepThree" />
-        <variable name="paymentStepThree" type="com.example.project.PaymentStepThree" />
+        <import type="com.example.project.models.DoubleToStringConverter" />
+        <import type="com.example.project.viewmodels.VirementViewModel" />
+        <import type="com.example.project.viewmodels.BiometricViewModel" />
+
+
+        <variable
+            name="virementViewModel"
+            type="com.example.project.viewmodels.VirementViewModel" />
+
+
+        <variable
+            name="fingerPrintViewModel"
+            type="com.example.project.viewmodels.BiometricViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -261,7 +273,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/button_cancel"
-            app:layout_constraintWidth_percent="0.5" />
+            app:layout_constraintWidth_percent="0.5"
+            android:onClick="@{view->fingerPrintViewModel.onButtonClick(view)}"
+            />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout

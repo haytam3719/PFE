@@ -7,5 +7,5 @@ import com.example.project.models.PaymentResponse
 interface PaymentRepository {
     suspend fun getBills(): List<Bill>
     suspend fun requestPayment(paymentRequest: PaymentRequest): Result<PaymentResponse>
-    suspend fun makePaiement(amount:Double, motif: String)
+    suspend fun makePaiement(amount: Double, motif: String, selectedAccountId: String)
 }

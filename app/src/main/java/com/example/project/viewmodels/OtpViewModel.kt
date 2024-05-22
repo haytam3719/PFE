@@ -27,8 +27,13 @@ class OtpViewModel @Inject constructor():ViewModel(){
         get() = _otpBiometricVerified
 
 
+    val _otpBiometricVerifiedPayment = MutableLiveData<Boolean>()
+    val otpBiometricVerifiedPayment: LiveData<Boolean>
+        get() = _otpBiometricVerifiedPayment
 
-    fun onButtonClickProvisoire(context: Activity, enteredText: String, actualText: String) {
+
+
+    fun onButtonClickProvisoire(context: Activity, enteredText: String, actualText: String, bundleValue:String) {
         viewModelScope.launch {
             Log.e("Coroutine", "Inside coroutine")
             if (ContextCompat.checkSelfPermission(
@@ -40,9 +45,14 @@ class OtpViewModel @Inject constructor():ViewModel(){
 
                 if (enteredText == actualText) {
                     Log.e("Debug","It entered")
-                    _navigateToPrint.value = true // Trigger navigation
-                    _otpBiometricVerified.value = true
-                }
+
+                    when (bundleValue) {
+                        "fromVirement" -> _otpBiometricVerified.value = true
+                        "fromPayment" -> _otpBiometricVerifiedPayment.value = true
+                        else -> _navigateToPrint.value = true
+                    }
+                    }
+
             } else {
                 val PERMISSION_REQUEST_SEND_SMS = 123
                 requestPermissions(

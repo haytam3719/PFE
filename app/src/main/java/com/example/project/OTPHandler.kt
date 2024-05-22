@@ -1,6 +1,8 @@
 package com.example.project
 
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.telephony.SmsManager
@@ -23,10 +25,14 @@ import com.example.project.models.VirementViewModelFactory
 import com.example.project.prototype.AccountRepository
 import com.example.project.repositories.AccountRepositoryImpl
 import com.example.project.viewmodels.CollectInfoViewModel
+import com.example.project.viewmodels.ConsultationViewModel
 import com.example.project.viewmodels.OtpViewModel
+import com.example.project.viewmodels.PaymentViewModel
+import com.example.project.viewmodels.PaymentViewModelUpdated
 import com.example.project.viewmodels.TransportVirementViewModel
 import com.example.project.viewmodels.VirementViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONObject
 
 @AndroidEntryPoint
 class OTPHandler : Fragment() {
@@ -38,6 +44,9 @@ class OTPHandler : Fragment() {
     private lateinit var deviceInfo: DeviceInfo
     private lateinit var actualText:String
     private val transportVirementViewModel: TransportVirementViewModel by activityViewModels()
+    private val paymentViewModelUpdated: PaymentViewModelUpdated by activityViewModels()
+    private val paymentViewModel:PaymentViewModel by viewModels()
+    private val consultationViewModel : ConsultationViewModel by viewModels()
     private val accountRepository: AccountRepository = AccountRepositoryImpl(
         AccountCreationServiceImpl()
     )
@@ -45,6 +54,9 @@ class OTPHandler : Fragment() {
     private lateinit var virement: Virement
     private lateinit var virementViewModelFactory: VirementViewModelFactory
     private lateinit var virementViewModel: VirementViewModel
+
+    private var bundle:String = "nothing"
+    private var selectedAccountId: String? = null
 
 
 
@@ -84,50 +96,110 @@ class OTPHandler : Fragment() {
         Log.e("Navigation DEBUG", "fromVirement: $fromVirement")
 
 
+        val fromPayment = arguments?.getBoolean("fromPayment") ?: false
+        Log.e("Navigation DEBUG", "fromPayment: $fromPayment")
 
-        otpViewModel.otpBiometricVerified.observe(viewLifecycleOwner, Observer { verified ->
-            if(verified){
-                transportVirementViewModel.virement.observe(viewLifecycleOwner, Observer{ virement ->
-                    virementViewModelFactory = VirementViewModelFactory(virement, accountRepository)
-                    Log.e("Virement Details from OTPHandler","Émetteur: ${virement.compteEmet}, Bénéficiaire: ${virement.compteBenef}, Montant: ${virement.montant}")
-                    // Initialize the ViewModel using the factory
-                    virementViewModel = ViewModelProvider(
-                        this,
-                        virementViewModelFactory
-                    )[VirementViewModel::class.java]
-                    virementViewModel.onButtonClick(view)
-                    virementViewModel.handleSuccessfulVirement()
-                })
+        selectedAccountId = arguments?.getString("selectedAccountId")
+        Log.d("Navigation DEBUG", "selectedAccountId: $selectedAccountId")
+
+
+
+        if(fromVirement) {
+            bundle = "fromVirement"
+            otpViewModel.otpBiometricVerified.observe(viewLifecycleOwner, Observer { verified ->
+                if (verified) {
+                    transportVirementViewModel.virement.observe(
+                        viewLifecycleOwner,
+                        Observer { virement ->
+                            virementViewModelFactory =
+                                VirementViewModelFactory(virement, accountRepository)
+                            Log.e(
+                                "Virement Details from OTPHandler",
+                                "Émetteur: ${virement.compteEmet}, Bénéficiaire: ${virement.compteBenef}, Montant: ${virement.montant}"
+                            )
+                            // Initialize the ViewModel using the factory
+                            virementViewModel = ViewModelProvider(
+                                this,
+                                virementViewModelFactory
+                            )[VirementViewModel::class.java]
+                            virementViewModel.onButtonClick(view)
+                            virementViewModel.handleSuccessfulVirement()
+                        })
+                }
+            })
+        }
+
+
+        if(fromPayment) {
+            bundle = "fromPayment"
+            otpViewModel.otpBiometricVerifiedPayment.observe(viewLifecycleOwner) { verified ->
+                if (verified) {
+                    paySelectedBills()
+
+                }
             }
-        })
-
-
-
+        }
 
     }
+
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun paySelectedBills() {
+        paymentViewModelUpdated.bills.value?.forEach { bill ->
+            val billAmount = bill.amount
+            Log.d("Bill ID",bill.id)
+            Log.d("Bill Amount",billAmount.toString())
+            initiatePayment(bill.id, billAmount+0.25*billAmount)
+
+            if (selectedAccountId != null) {
+                Log.d("paySelectedBills", "Selected account: $selectedAccountId")
+                paymentViewModel.makePaiement(bill.amount, "paiement", selectedAccountId!!)
+            } else {
+                Log.e("paySelectedBills", "No account selected")
+            }
+        }
+    }
+
+    private fun initiatePayment(billId: String, amount: Double) {
+        val requestData = JSONObject().apply {
+            put("bill_id", billId)
+            put("amount", amount)
+        }
+
+        val jsonStr = Uri.encode(requestData.toString())
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://payment-gatewayapi.onrender.com/initiate_square_oauth?data=$jsonStr")
+        }
+
+        startActivity(intent)
+    }
+
+
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentOtpBinding.inflate(inflater, container, false)
-        binding.otp = otpViewModel
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    val binding = FragmentOtpBinding.inflate(inflater, container, false)
+    binding.otp = otpViewModel
 
-        binding.lifecycleOwner = viewLifecycleOwner
+    binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.verifyButton.setOnClickListener {
-            val enteredText = binding.editTextOTP.text.toString()
-            otpViewModel.onButtonClickProvisoire(requireActivity(), enteredText,actualText)
-            Log.e("Debug", actualText) // Log the entered text
-        }
-
-        actualText=otpViewModel.generateOTP()
-
-
-        return binding.root
+    binding.verifyButton.setOnClickListener {
+        val enteredText = binding.editTextOTP.text.toString()
+        otpViewModel.onButtonClickProvisoire(requireActivity(), enteredText,actualText,bundle)
+        Log.e("Debug", actualText) // Log the entered text
     }
+
+    actualText=otpViewModel.generateOTP()
+
+
+    return binding.root
+}
 
 
 
