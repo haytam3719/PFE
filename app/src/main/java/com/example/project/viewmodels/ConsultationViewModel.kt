@@ -103,13 +103,15 @@ class ConsultationViewModel @Inject constructor(private val accountRepositoryImp
         Log.d("ViewModel", "Starting loadCombinedData for userId: $userId")
         viewModelScope.launch {
             accountRepositoryImpl.getCombinedBeneficiaryClientData(userId) { result ->
+                Log.d("ViewModel", "Received result from repository")
                 result.onSuccess { combinedData ->
-                    Log.d("ViewModel", "Combined data loaded successfully: $combinedData")
+                    Log.d("ViewModel", "Combined data loaded successfully: ${combinedData.size}")
                 }
                 result.onFailure { exception ->
                     Log.e("ViewModel", "Error loading combined data: ${exception.message}")
                 }
                 combinedDataLiveData.postValue(result)
+                Log.d("ViewModel", "Posted combined data result")
             }
         }
     }

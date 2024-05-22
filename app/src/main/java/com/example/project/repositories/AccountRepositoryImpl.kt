@@ -430,47 +430,42 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
         getBeneficiariesForUser(userId) { result ->
             result.onSuccess { beneficiaries ->
                 val combinedData = mutableListOf<ClientAccountDetails>()
-                var remainingClients = beneficiaries.size
-
                 Log.d("Repository", "Beneficiaries fetched: ${beneficiaries.size}")
 
-                if (remainingClients == 0) {
+                if (beneficiaries.isEmpty()) {
+                    Log.d("Repository", "No beneficiaries found, returning empty list")
                     callback(Result.success(combinedData))
-                } else {
-                    beneficiaries.forEach { beneficiary ->
-                        Log.d("Repository", "Fetching client details for id_proprietaire: ${beneficiary.id_proprietaire}")
-                        getClientDetailsByUid(beneficiary.id_proprietaire) { clientResult ->
-                            clientResult.onSuccess { client ->
-                                Log.d("Repository", "Client details fetched: $client")
-                                combinedData.add(
-                                    ClientAccountDetails(
-                                        nom = client.nom,
-                                        prenom = client.prenom,
-                                        profileImageUrl = null,
-                                        accountNumber = beneficiary.numero,
-                                    )
+                    return@onSuccess
+                }
+
+                for (beneficiary in beneficiaries) {
+                    Log.d("Repository", "Fetching client details for id_proprietaire: ${beneficiary.id_proprietaire}")
+                    getClientDetailsByUid(beneficiary.id_proprietaire) { clientResult ->
+                        clientResult.onSuccess { client ->
+                            Log.d("Repository", "Client details fetched: $client")
+                            combinedData.add(
+                                ClientAccountDetails(
+                                    nom = client.nom,
+                                    prenom = client.prenom,
+                                    profileImageUrl = null,
+                                    accountNumber = beneficiary.numero,
                                 )
-                                remainingClients--
-                                Log.d("Repository", "Remaining clients to process: $remainingClients")
-                                if (remainingClients == 0) {
-                                    Log.d("Repository", "All clients processed, combined data: $combinedData")
-                                    callback(Result.success(combinedData))
-                                }
-                            }
-                            clientResult.onFailure { exception ->
-                                Log.e("Repository", "Error fetching client details: ${exception.message}")
-                                callback(Result.failure(exception))
-                                return@getClientDetailsByUid
-                            }
+                            )
+                        }.onFailure { exception ->
+                            Log.e("Repository", "Error fetching client details for id_proprietaire: ${beneficiary.id_proprietaire}, error: ${exception.message}")
                         }
                     }
                 }
-            }
-            result.onFailure { exception ->
+
+                callback(Result.success(combinedData))
+            }.onFailure { exception ->
                 Log.e("Repository", "Error fetching beneficiaries: ${exception.message}")
                 callback(Result.failure(exception))
             }
         }
     }
+
+
+
 
 }

@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.core.animation.addListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.adapters.AccountData
@@ -29,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class VirementStepOne : Fragment() {
 
     private val progressViewModel: ProgressBarViewModel by activityViewModels()
-    private val consultationViewModel: ConsultationViewModel by viewModels()
+    private val consultationViewModel: ConsultationViewModel by activityViewModels()
     private val sharedViewModel:VirementUpdatedViewModel  by activityViewModels()
     private var _binding: VirementStepOneBinding? = null
     private lateinit var adapter: AccountsAdapter
