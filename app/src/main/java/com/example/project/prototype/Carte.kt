@@ -1,5 +1,7 @@
 package com.example.project.prototype
 
+import android.content.Context
+
 interface Carte {
     var idCarte: String
     val id_proprietaire_carte: String
@@ -9,9 +11,9 @@ interface Carte {
     val nomTitulaire: String
     val adresseFacturation: String
 
-    fun bloquerCarte()
+    fun bloquerCarte(context: Context)
 
-    fun debloquerCarte()
+    fun debloquerCarte(context:Context)
 
     fun verifierValiditeCarte(): Boolean
 

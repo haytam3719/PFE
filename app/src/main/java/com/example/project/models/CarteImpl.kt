@@ -1,5 +1,6 @@
 package com.example.project.models
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.project.prototype.Carte
@@ -32,15 +33,18 @@ open class CarteImpl(
         numeroCompte = null
     )
 
-
     private var estBloquee: Boolean = false
 
-    override fun bloquerCarte() {
+
+    override fun bloquerCarte(context:Context) {
         this.estBloquee = true
+        saveBlockStatus(context,true)
     }
 
-    override fun debloquerCarte() {
+    override fun debloquerCarte(context:Context) {
         this.estBloquee = false
+        saveBlockStatus(context,false)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -58,4 +62,18 @@ open class CarteImpl(
     override fun modifierCodeSecurite(nouveauCode: String) {
         this.codeSecurite = nouveauCode
     }
+
+
+    private  fun saveBlockStatus(context: Context, isBlocked: Boolean) {
+        val sharedPreferences = context.getSharedPreferences("CardPrefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putBoolean("CardBlocked_${idCarte}", isBlocked).apply()
+    }
+
+
+     fun loadBlockStatus(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences("CardPrefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean("CardBlocked_${idCarte}", false)
+    }
+
+
 }
