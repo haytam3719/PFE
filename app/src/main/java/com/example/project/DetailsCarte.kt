@@ -1,6 +1,7 @@
 package com.example.project
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.project.adapters.TransactionAdapter
 import com.example.project.databinding.DetailsCarteBinding
 import com.example.project.models.CarteImpl
+import com.example.project.models.TransactionImpl
 import com.example.project.viewmodels.CardsViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,12 +30,69 @@ class DetailsCarte : Fragment(),ModifySecurityCodeDialogFragment.OnSecurityCodeM
     private val cardsViewModel:CardsViewModel by viewModels()
     private var currentCard = CarteImpl()
     private var id_carte:String? = null
+    private var accountNumbers = emptyList<String>()
+    private lateinit var transactionAdapter: TransactionAdapter
 
     private var _binding: DetailsCarteBinding? = null
     private val binding get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val id_proprietaire = FirebaseAuth.getInstance().currentUser!!.uid
+
+        transactionAdapter = TransactionAdapter(emptyList(), id_proprietaire, object : TransactionAdapter.OnRecycleViewItemClickListener {
+
+            override fun onItemClick(transactionData: com.example.project.prototype.Transaction) {
+                val bundle = bundleOf(
+                    "transactionId" to transactionData.idTran
+                )
+                findNavController().navigate(R.id.detailsCarte_to_detailTransaction, bundle)
+            }
+        })
+
+
+        val recyclerView: RecyclerView = binding.recyclerView
+        recyclerView.adapter = transactionAdapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+
+        val accountNumber = currentCard.numeroCompte
+
+        accountNumber?.let {
+            Log.d("Cards", it)
+            cardsViewModel.fetchTransactionsByPaymentMethod(it)
+        }
+
+        val allTransactions = mutableListOf<TransactionImpl>()
+
+        cardsViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
+            transactions?.let {
+                val filteredTransactions = it.filter { transaction ->
+                    val regex = Regex("""\d{4} \d{4} \d{4} \d{4}""")
+                    val matchResult = regex.find(transaction.methodPaiement)
+                    val cardNumber = matchResult?.value ?: ""
+                    Log.d("Filtering", "Extracted Card Number: $cardNumber, Current Card: ${currentCard.numeroCarte}")
+                    cardNumber == currentCard.numeroCarte
+                }
+                Log.d("Filtered Transactions", "Count: ${filteredTransactions.size}")
+                transactionAdapter.updateTransactions(filteredTransactions)
+                allTransactions.addAll(filteredTransactions)
+                filteredTransactions.forEach { transaction ->
+                    Log.d("Transaction Details", "Transaction ID: ${transaction.idTran}, Amount: ${transaction.montant}, Date: ${transaction.date}, Method: ${transaction.methodPaiement}")
+                }
+            }
+        }
+
+        cardsViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+        }
+
+
+
+
 
     }
 

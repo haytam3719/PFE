@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.project.models.CarteCredit
 import com.example.project.models.CarteDebit
 import com.example.project.models.CarteImpl
+import com.example.project.models.TransactionImpl
+import com.example.project.repositories.AccountRepositoryImpl
 import com.example.project.repositories.CarteRepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseError
@@ -19,7 +21,7 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
-class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteRepositoryImpl) : ViewModel() {
+class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteRepositoryImpl,private val accountRepositoryImpl: AccountRepositoryImpl) : ViewModel() {
 
     private val _cartes = MutableLiveData<List<CarteImpl>>()
     val cartes: LiveData<List<CarteImpl>> = _cartes
@@ -177,5 +179,30 @@ class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteR
         val year = currentYear + 5
         val month = Calendar.getInstance().get(Calendar.MONTH) + 1
         return "${month.toString().padStart(2, '0')}/$year"
+    }
+
+
+
+    private val _transactions = MutableLiveData<List<TransactionImpl>>()
+    val transactions: LiveData<List<TransactionImpl>> get() = _transactions
+
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> get() = _errorMessage
+
+    fun fetchTransactionsByPaymentMethod(accountNumber: String?) {
+        viewModelScope.launch {
+            if(accountNumber !=null){
+            val (transactions, error) = accountRepositoryImpl.fetchTransactionsByPaymentMethod(accountNumber)
+
+            if (error == null) {
+                _transactions.value = transactions!!
+            } else {
+                _errorMessage.value = error
+            }
+        }
+            else{
+                Log.e("CardsViewModel","It's a credit card")
+            }}
+
     }
 }

@@ -47,6 +47,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -153,7 +154,77 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:tint="@color/tangerine_orange" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                 </androidx.cardview.widget.CardView>
+
+
+                <!-- CardView for Card Selection -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cl_card_selection"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/cl_payment_account"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/iv_card_icon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:contentDescription="Card Icon"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/tangerine_orange" />
+
+                        <TextView
+                            android:id="@+id/tv_card_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Carte de paiement"
+                            android:textColor="@color/charcoal"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@id/iv_card_icon"
+                            app:layout_constraintEnd_toStartOf="@id/iv_card_dropdown"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_marginStart="8dp" />
+
+                        <TextView
+                            android:id="@+id/tv_card_details"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Veuillez sélectionner une carte"
+                            android:textColor="@color/teal"
+                            android:textSize="14sp"
+                            app:layout_constraintTop_toBottomOf="@id/tv_card_label"
+                            app:layout_constraintStart_toEndOf="@id/iv_card_icon"
+                            app:layout_constraintEnd_toStartOf="@id/iv_card_dropdown"
+                            android:layout_marginStart="8dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_card_dropdown"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/down_icon"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/tangerine_orange" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
 
                 <!-- TextView for Recharge Information -->
                 <TextView
@@ -164,7 +235,7 @@
                     android:textColor="@color/charcoal"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@id/cl_payment_account"
+                    app:layout_constraintTop_toBottomOf="@id/cl_card_selection"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="16dp" />
@@ -201,18 +272,18 @@
 
                 <!-- Card for Total to Pay -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="10dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-
                     app:layout_constraintTop_toBottomOf="@id/cl_recharge_info">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -245,18 +316,24 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </androidx.core.widget.NestedScrollView>
+
 
         <!-- Buttons for Cancel and Pay -->
         <Button
             android:id="@+id/button_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:backgroundTint="@color/warm_gray"
             android:text="Annuler"
             android:textColor="@android:color/white"
+            android:layout_marginBottom="8dp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/button_pay"
             app:layout_constraintStart_toStartOf="parent"
@@ -266,18 +343,15 @@
             android:id="@+id/button_pay"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:backgroundTint="@color/primary_orange"
+            android:onClick="@{view->fingerPrintViewModel.onButtonClick(view)}"
             android:text="Payer"
             android:textColor="@android:color/white"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/button_cancel"
-            app:layout_constraintWidth_percent="0.5"
-            android:onClick="@{view->fingerPrintViewModel.onButtonClick(view)}"
-            />
-
-
+            app:layout_constraintWidth_percent="0.5" />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/popupView"
             android:layout_width="match_parent"
@@ -321,6 +395,62 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+        <!--Cards popup Code-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/popupViewCarte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/deep_orange"
+            android:background="@drawable/rounded_bg"
+            android:elevation="6dp"
+            android:padding="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+            <TextView
+                android:id="@+id/popupHeaderCarte"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Veuillez choisir une carte"
+                android:textColor="@color/white"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listViewOptionsCarte"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/popupHeaderCarte" />
+
+            <ImageView
+                android:id="@+id/closeImageViewCarte"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/close"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

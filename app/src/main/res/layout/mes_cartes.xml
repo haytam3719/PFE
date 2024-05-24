@@ -63,7 +63,33 @@
                     android:clipToPadding="false"
                     android:clipChildren="false"/>
 
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="Transactions effectuées"
+                    android:textColor="@color/teal"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/viewPager" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
         </androidx.core.widget.NestedScrollView>
 
         <Button
@@ -81,7 +107,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_top_recycler"
             android:padding="16dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:backgroundTint="@color/reddish_orange"
             app:layout_constraintBottom_toTopOf="@+id/btnShowPopup"
             app:layout_constraintEnd_toEndOf="parent"
@@ -149,4 +175,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

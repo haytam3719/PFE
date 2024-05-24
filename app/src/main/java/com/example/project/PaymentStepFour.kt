@@ -17,10 +17,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.adapters.AccountData
 import com.example.project.adapters.BillAdapter2
+import com.example.project.adapters.CardsAdapter
 import com.example.project.databinding.Payment4Binding
 import com.example.project.models.Bill
 import com.example.project.viewmodels.BiometricViewModel
+import com.example.project.viewmodels.CardsViewModel
 import com.example.project.viewmodels.ConsultationViewModel
+import com.example.project.viewmodels.PaymentFourViewModel
 import com.example.project.viewmodels.PaymentViewModelUpdated
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +35,7 @@ import javax.crypto.KeyGenerator
 class PaymentStepFour : Fragment() {
     private val consultationViewModel: ConsultationViewModel by viewModels()
     private val paymentViewModelUpdated:PaymentViewModelUpdated by activityViewModels()
+    private val paymentFourViewModel: PaymentFourViewModel by activityViewModels()
     private lateinit var adapter: AccountsAdapter
 
     private var _binding: Payment4Binding? = null
@@ -42,14 +46,15 @@ class PaymentStepFour : Fragment() {
     private lateinit var selectedBillDueDates: List<String>
     private lateinit var totalApayer:String
     private lateinit var billAdapter: BillAdapter2
+    private val cardsViewModel: CardsViewModel by viewModels()
+    private lateinit var cardsAdapter: CardsAdapter
 
 
     private val fingerPrintViewModel: BiometricViewModel by viewModels()
     private val mainThreadExecutor: MainThreadExecutor = MainThreadExecutor()
     private val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
-    val bundle = Bundle().apply {
-        putBoolean("fromPayment", true)
-    }
+    private var selectedAccountId: String = ""
+
 
 
     // Generate a key alias
@@ -108,6 +113,10 @@ class PaymentStepFour : Fragment() {
             viewLifecycleOwner,
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
+                    val bundle = Bundle().apply {
+                        putBoolean("fromPayment", true)
+                        putString("selectedAccountId", selectedAccountId)
+                    }
 
                     findNavController().navigate(R.id.paymentStepFour_to_otp, bundle)
 
@@ -139,6 +148,45 @@ class PaymentStepFour : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
 
+        //Cards Code
+        cardsAdapter = CardsAdapter(emptyList()) { selectedCard ->
+            paymentFourViewModel.selectCard(selectedCard)
+        }
+
+        binding.listViewOptionsCarte.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = cardsAdapter
+        }
+
+        // Observe the LiveData from the ViewModel
+        cardsViewModel.cartesByProprietaire.observe(viewLifecycleOwner, Observer { cards ->
+            cardsAdapter.updateCards(cards)
+        })
+
+        cardsViewModel.cartesByProprietaire.observe(viewLifecycleOwner, Observer { cards ->
+            cardsAdapter.updateCards(cards)
+        })
+
+
+        // Observe the selected card LiveData
+        paymentFourViewModel.selectedCard.observe(viewLifecycleOwner, Observer { selectedCard ->
+            binding.popupViewCarte.visibility = View.GONE
+            binding.tvCardDetails.text = "Numéro de la carte:\n **** **** **** ${selectedCard.numeroCarte.takeLast(4)}\nType carte: ${if (selectedCard.numeroCompte != null) "Débit" else "Crédit"}"
+            binding.ivCardDropdown.visibility = View.GONE
+        })
+
+        val proprietorId = FirebaseAuth.getInstance().currentUser!!.uid
+        cardsViewModel.getCartesByIdProprietaire(proprietorId)
+
+
+        binding.clCardSelection.setOnClickListener {
+            binding.popupViewCarte.visibility = View.VISIBLE
+        }
+
+        binding.closeImageViewCarte.setOnClickListener{
+            binding.popupViewCarte.visibility = View.GONE
+        }
+
     }
 
 
@@ -162,6 +210,7 @@ class PaymentStepFour : Fragment() {
             binding.tvAccountName.text = formatAccountType(account.accountType)
             binding.tvAccountNumber.text = "Numéro de compte: ${account.accountNumber}"
             binding.tvBalance.text = "Solde: ${account.balance} DH"
+            selectedAccountId = account.accountNumber
             binding.ivDropdown.visibility = View.GONE
         }
         binding.popupView.visibility = View.GONE

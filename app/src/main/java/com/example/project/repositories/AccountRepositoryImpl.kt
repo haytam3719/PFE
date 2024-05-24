@@ -468,4 +468,44 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
 
 
 
+
+    suspend fun fetchTransactionsByPaymentMethod(accountNumber: String): Pair<List<TransactionImpl>?, String?> {
+        val accountsRef = database.getReference("accounts")
+
+        try {
+            Log.d("fetchTransactions", "Fetching transactions for account number: $accountNumber")
+
+            val dataSnapshot =
+                accountsRef.orderByChild("numero").equalTo(accountNumber).get().await()
+            if (dataSnapshot.exists()) {
+                Log.d("fetchTransactions", "Account found for account number: $accountNumber")
+                val transactions = mutableListOf<TransactionImpl>()
+                dataSnapshot.children.forEach { accountSnapshot ->
+                    val transactionsSnapshot = accountSnapshot.child("historiqueTransactions")
+                    transactionsSnapshot.children.forEach { transactionSnapshot ->
+                        val transaction = transactionSnapshot.getValue(TransactionImpl::class.java)
+                        if (transaction?.methodPaiement?.startsWith("Carte Débit") == true) {
+                            transactions.add(transaction)
+                            Log.d("fetchTransactions", "Transaction added: $transaction")
+                        }
+                    }
+                }
+                Log.d("fetchTransactions", "Total transactions fetched: ${transactions.size}")
+                return Pair(transactions, null)
+            } else {
+                Log.d("fetchTransactions", "No account found with the specified account number: $accountNumber")
+                return Pair(
+                    null,
+                    "No account found with the specified account number: $accountNumber"
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("fetchTransactions", "Database error: ${e.message}", e)
+            return Pair(null, "Database error: ${e.message}")
+        }
+    }
+
+
+
+
 }

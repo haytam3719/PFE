@@ -27,6 +27,7 @@ import com.example.project.repositories.AccountRepositoryImpl
 import com.example.project.viewmodels.CollectInfoViewModel
 import com.example.project.viewmodels.ConsultationViewModel
 import com.example.project.viewmodels.OtpViewModel
+import com.example.project.viewmodels.PaymentFourViewModel
 import com.example.project.viewmodels.PaymentViewModel
 import com.example.project.viewmodels.PaymentViewModelUpdated
 import com.example.project.viewmodels.TransportVirementViewModel
@@ -58,7 +59,7 @@ class OTPHandler : Fragment() {
     private var bundle:String = "nothing"
     private var selectedAccountId: String? = null
 
-
+    private val paymentFourViewModel: PaymentFourViewModel by activityViewModels()
 
     //val initialClientValue = clientViewModel.client.value
 
@@ -132,11 +133,23 @@ class OTPHandler : Fragment() {
 
         if(fromPayment) {
             bundle = "fromPayment"
-            otpViewModel.otpBiometricVerifiedPayment.observe(viewLifecycleOwner) { verified ->
+
+            if(paymentFourViewModel.selectedCard.value != null){
+                Log.d("Card",paymentFourViewModel.selectedCard.value?.numeroCompte.toString())
+                otpViewModel.otpBiometricVerifiedPayment.observe(viewLifecycleOwner) { verified ->
+                    if (verified) {
+                        paySelectedBillsUsingCard()
+                    }
+
+            }}
+
+            else{
+                otpViewModel.otpBiometricVerifiedPayment.observe(viewLifecycleOwner) { verified ->
                 if (verified) {
                     paySelectedBills()
 
                 }
+            }
             }
         }
 
@@ -177,6 +190,23 @@ class OTPHandler : Fragment() {
     }
 
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun paySelectedBillsUsingCard() {
+        paymentViewModelUpdated.bills.value?.forEach { bill ->
+            val billAmount = bill.amount
+            Log.d("Bill ID",bill.id)
+            Log.d("Bill Amount",billAmount.toString())
+            initiatePayment(bill.id, billAmount+0.25*billAmount)
+            val selectedAccountNum = paymentFourViewModel.selectedCard.value?.numeroCompte
+            if (selectedAccountNum != null) {
+                Log.d("paySelectedBills", "Selected account (card): $selectedAccountNum")
+                paymentViewModel.makePaiementUsingCard(bill.amount, "Paiement", selectedAccountNum,paymentFourViewModel.selectedCard.value!!)
+            } else {
+                Log.e("paySelectedBills", "No account selected")
+            }
+        }
+    }
 
 
     override fun onCreateView(

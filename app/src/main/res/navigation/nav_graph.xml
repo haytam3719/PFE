@@ -611,11 +611,20 @@
         >
         <action
             android:id="@+id/mesCartes_to_commanderCarte"
-            app:destination="@id/commander_carte"/>
+            app:destination="@id/commander_carte"
+            app:enterAnim="@anim/slide_in_left"/>
 
         <action
             android:id="@+id/mesCartes_to_detailsCarte"
-            app:destination="@id/detailsCarte"/>
+            app:destination="@id/detailsCarte"
+            app:enterAnim="@anim/slide_in_left"/>
+
+        <action
+            android:id="@+id/mesCartes_to_detailTransaction"
+            app:destination="@id/fragment_detailTransaction"
+            app:enterAnim="@anim/slide_in_left"
+            />
+
     </fragment>
 
     <fragment
@@ -631,7 +640,14 @@
         android:name="com.example.project.DetailsCarte"
         android:label="Details Carte"
         tools:layout="@layout/details_carte"
-        />
+        >
+
+        <action
+            android:id="@+id/detailsCarte_to_detailTransaction"
+            app:destination="@id/fragment_detailTransaction"
+            />
+
+    </fragment>
 
 
 

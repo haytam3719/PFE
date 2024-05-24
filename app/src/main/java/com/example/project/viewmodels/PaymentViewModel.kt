@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.project.models.Bill
+import com.example.project.models.CarteImpl
 import com.example.project.models.PaymentRequest
 import com.example.project.models.PaymentResponse
 import com.example.project.models.Virement
@@ -70,7 +71,7 @@ class PaymentViewModel @Inject constructor(private val paymentRepository: Paymen
 */
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun makePaiement(amount: Double, motif: String, selectedAccountId: String){
+    fun makePaiement(amount: Double, motif: String, selectedAccountId: String) {
         virement.compteBenef.numero = "ACC1"
         virement.montant = amount
         virement.motif = motif
@@ -92,7 +93,12 @@ class PaymentViewModel @Inject constructor(private val paymentRepository: Paymen
 
 
 
-                        virement.effectuerVirement(compteEmet, compteBenef, virement.montant, virement.motif)
+                        virement.effectuerVirement(
+                            compteEmet,
+                            compteBenef,
+                            virement.montant,
+                            virement.motif
+                        )
                         virement.typeTransaction = "Paiement"
                         Log.e("Virement", "{$virement}")
                         accountRepository.updateAccount(compteEmet.numero, compteEmet)
@@ -115,7 +121,69 @@ class PaymentViewModel @Inject constructor(private val paymentRepository: Paymen
                 Log.e("Emet", "Emet null")
             }
         }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun makePaiementUsingCard(amount: Double, motif: String, selectedAccountId: String, carte: CarteImpl) {
+        virement.compteBenef.numero = "ACC1"
+        virement.montant = amount
+        virement.motif = motif
+        virement.typeTransaction = "Paiement par carte bancaire"
+        if(carte.numeroCompte != null) {
+            virement.methodPaiement = "Carte Débit N° ${carte.numeroCarte}"
+        }else{
+            virement.methodPaiement = "Carte Crédit N° ${carte.numeroCarte}"
+        }
+        virement.motif = "Paiement"
+        Log.e(
+            "Before copying",
+            "Emetteur: ${virement.compteEmet}, Bénéficiaire: ${virement.compteBenef}"
+        )
+        // Fetch both compteEmet and compteBenef using callbacks
+        accountRepository.getAccountByNumero(selectedAccountId) { compteEmet ->
+            if (compteEmet != null) {
+                accountRepository.getAccountByNumero("ACC1") { compteBenef ->
+                    if (compteBenef != null) {
+                        Log.e(
+                            "UserInput",
+                            "Emetteur: ${compteEmet}, Bénéficiaire: ${compteBenef}, Montant: ${virement.montant}, Motif: ${virement.motif}"
+                        )
 
 
 
-    }}
+                        virement.effectuerVirement(
+                            compteEmet,
+                            compteBenef,
+                            virement.montant,
+                            virement.motif
+                        )
+                        virement.typeTransaction = "Paiement"
+                        Log.e("Virement", "{$virement}")
+                        accountRepository.updateAccount(compteEmet.numero, compteEmet)
+                        accountRepository.updateAccount(compteBenef.numero, compteBenef)
+
+
+
+
+
+                        Log.e(
+                            "UserInput UPDATED",
+                            "Emetteur: ${compteEmet}, Bénéficiaire: ${compteBenef}, Montant: ${virement.montant}, Motif: ${virement.motif}"
+                        )
+
+                    } else {
+                        Log.e("Benef", "Benef null")
+                    }
+                }
+            } else {
+                Log.e("Emet", "Emet null")
+            }
+        }
+    } }
+
+
+
+
+
+
