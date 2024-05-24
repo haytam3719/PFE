@@ -2,6 +2,7 @@ package com.example.project.repositories
 
 import android.util.Log
 import com.example.project.models.Agence
+import com.example.project.models.GAB
 import com.example.project.models.Type
 import com.example.project.prototype.AgencesRepository
 import com.example.project.prototype.ApiAgencesService
@@ -56,5 +57,24 @@ class AgencesRepositoryImpl @Inject constructor(private val apiService: ApiAgenc
         val a = sin(dLat / 2).pow(2) + cos(lat1.toRadians()) * cos(lat2.toRadians()) * sin(dLon / 2).pow(2)
         val c = 2 * atan2(sqrt(a), sqrt(1-a))
         return earthRadius * c * 1000
+    }
+
+
+    override suspend fun getGABNear(latitude: Double, longitude: Double, action: String): List<GAB> {
+        return try {
+            val response = apiService.getGABNear(latitude, longitude, action)
+            Log.d("API Response", "Action: $action, GABs: ${response.gab.size}")
+            response.gab ?: emptyList()
+        } catch (e: Exception) {
+            Log.e("API Error", "Failed to fetch GABs for action: $action", e)
+            emptyList()
+        }
+    }
+
+    override suspend fun getGABWithinRadius(latitude: Double, longitude: Double, radius: Double, action: String): List<GAB> {
+        val lat = latitude.toDouble()
+        val lon = longitude.toDouble()
+        val allGABs = getGABNear(lat, lon, action)
+        return allGABs.filter { calculateDistance(lat, lon, it.latitude.toDouble(), it.longitude.toDouble()) <= radius }
     }
 }

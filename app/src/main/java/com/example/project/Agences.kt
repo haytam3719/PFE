@@ -19,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.project.models.Agence
+import com.example.project.models.GAB
 import com.example.project.viewmodels.AgencesViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -86,6 +87,14 @@ class Agences : Fragment(), OnMapReadyCallback {
                 Log.d("LiveData", "No agences available to display.")
             }
         })
+
+        agencesViewModel.gabs.observe(viewLifecycleOwner, Observer { gabs ->
+            if (gabs.isNotEmpty()) {
+                updateGABMarkers(gabs)
+            } else {
+                Log.d("LiveData", "No GABs available to display.")
+            }
+        })
     }
 
 
@@ -119,7 +128,25 @@ class Agences : Fragment(), OnMapReadyCallback {
         val center = mMap.cameraPosition.target
         val radius = 10000.0 // Define your radius as required
         lifecycleScope.launch {
-            agencesViewModel.loadAgencesWithinRadius(center.latitude, center.longitude, radius, currentAction)
+            when (currentAction) {
+                "getAgencesNear", "getAgencesWafacashNear" -> {
+                    agencesViewModel.loadAgencesWithinRadius(
+                        center.latitude,
+                        center.longitude,
+                        radius,
+                        currentAction
+                    )
+                }
+
+                "getGABNear" -> {
+                    agencesViewModel.loadGABWithinRadius(
+                        center.latitude,
+                        center.longitude,
+                        radius,
+                        currentAction
+                    )
+                }
+            }
         }
     }
 
@@ -134,6 +161,21 @@ class Agences : Fragment(), OnMapReadyCallback {
                 mMap.addMarker(markerOptions)?.tag = agence
             } catch (e: Exception) {
                 Log.e("UpdateMapMarkers", "Error creating marker for agence: ${agence.nom}", e)
+            }
+        }
+    }
+
+
+    private fun updateGABMarkers(gabs: List<GAB>) {
+        mMap.clear()
+        gabs.forEach { gab ->
+            try {
+                val position = LatLng(gab.latitude.toDouble(), gab.longitude.toDouble())
+                val markerOptions = MarkerOptions().position(position).title(gab.nom)
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(getIconForResource(currentAction)))
+                mMap.addMarker(markerOptions)?.tag = gab
+            } catch (e: Exception) {
+                Log.e("UpdateGABMarkers", "Error creating marker for GAB: ${gab.nom}", e)
             }
         }
     }
@@ -181,7 +223,8 @@ class Agences : Fragment(), OnMapReadyCallback {
 
 
     private fun showCustomInfoWindow(marker: Marker) {
-        val agence = marker.tag as? Agence ?: return
+        val agence = marker.tag as? Agence
+        val gab = marker.tag as? GAB
 
         val dialogView = LayoutInflater.from(context).inflate(R.layout.marker_info_window, null)
         val tvName: TextView = dialogView.findViewById(R.id.tvAgencyName)
@@ -192,20 +235,32 @@ class Agences : Fragment(), OnMapReadyCallback {
         val tvPhone2: TextView = dialogView.findViewById(R.id.tvPhone2)
         val tvFax: TextView = dialogView.findViewById(R.id.tvFax)
 
-        tvName.text = agence.nom
-        tvAddress.text = agence.adresse
-        tvDistance.text = "Distance: ${agence.distance}"
-        tvHours.text = "Horaires d'ouverture: ${agence.horaire2}, Horaires d'été: ${agence.horaire4}, Samedi: ${agence.horaire6}"
-        tvPhone.text = agence.telephone1
-        tvPhone2.text = agence.telephone2
-        tvFax.text = agence.fax
+        if (agence != null) {
+            tvName.text = agence.nom
+            tvAddress.text = agence.adresse
+            tvDistance.text = "Distance: ${agence.distance}"
+            tvHours.text = "Horaires d'ouverture: ${agence.horaire2}, Horaires d'été: ${agence.horaire4}, Samedi: ${agence.horaire6}"
+            tvPhone.text = agence.telephone1
+            tvPhone2.text = agence.telephone2
+            tvFax.text = agence.fax
 
-        setDrawableStart(tvPhone, R.drawable.phone)
-        setDrawableStart(tvPhone2, R.drawable.phone)
-        setDrawableStart(tvHours, R.drawable.horaire)
-        setDrawableStart(tvFax, R.drawable.fax)
+            setDrawableStart(tvPhone, R.drawable.phone)
+            setDrawableStart(tvPhone2, R.drawable.phone)
+            setDrawableStart(tvHours, R.drawable.horaire)
+            setDrawableStart(tvFax, R.drawable.fax)
 
-        setupButtonListeners(dialogView, agence.telephone1, agence.latitude.toDouble(), agence.longitude.toDouble(), agence.nom, agence.adresse, agence.horaire2)
+            setupButtonListeners(dialogView, agence.telephone1, agence.latitude.toDouble(), agence.longitude.toDouble(), agence.nom, agence.adresse, agence.horaire2)
+        } else if (gab != null) {
+            tvName.text = gab.nom
+            tvAddress.text = gab.adresse
+            tvDistance.text = "Distance: ${gab.distance}"
+            tvHours.visibility = View.GONE
+            tvPhone.visibility = View.GONE
+            tvPhone2.visibility = View.GONE
+            tvFax.visibility = View.GONE
+
+            setupButtonListeners(dialogView, "", gab.latitude.toDouble(), gab.longitude.toDouble(), gab.nom, gab.adresse, "")
+        }
 
         AlertDialog.Builder(context)
             .setView(dialogView)
@@ -248,25 +303,22 @@ class Agences : Fragment(), OnMapReadyCallback {
     }
 
     private fun openNavigation(latitude: Double, longitude: Double) {
-        // Create a Uri representing the location with navigation intent
         val gmmIntentUri = Uri.parse("google.navigation:q=$latitude,$longitude&mode=d")
+        val googleMapsIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+        googleMapsIntent.setPackage("com.google.android.apps.maps")
 
-        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+        val wazeIntentUri = Uri.parse("waze://?ll=$latitude,$longitude&navigate=yes")
+        val wazeIntent = Intent(Intent.ACTION_VIEW, wazeIntentUri)
+        wazeIntent.setPackage("com.waze")
 
-        mapIntent.setPackage("com.google.android.apps.maps")
+        val chooserIntent = Intent.createChooser(googleMapsIntent, "Choisissez une application de navigation")
+        val intents = arrayOf(wazeIntent)
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents)
 
-        if (mapIntent.resolveActivity(activity!!.packageManager) != null) {
-            startActivity(mapIntent)
-        } else {
-            mapIntent.setPackage("com.waze")
-            if (mapIntent.resolveActivity(activity!!.packageManager) != null) {
-                startActivity(mapIntent)
-            } else {
-                mapIntent.setPackage(null)
-                startActivity(Intent.createChooser(mapIntent, "Choose an app for navigation"))
-            }
-        }
+        startActivity(chooserIntent)
     }
+
+
 
 
     private fun dialPhoneNumber(phoneNumber: String) {
