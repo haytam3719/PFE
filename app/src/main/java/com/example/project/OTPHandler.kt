@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -17,23 +18,30 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.FragmentOtpBinding
 import com.example.project.models.AccountCreationServiceImpl
+import com.example.project.models.CompteImpl
 import com.example.project.models.DeviceInfo
 import com.example.project.models.VirementViewModelFactory
 import com.example.project.prototype.AccountRepository
 import com.example.project.repositories.AccountRepositoryImpl
 import com.example.project.viewmodels.CollectInfoViewModel
-import com.example.project.viewmodels.ConsultationViewModel
+import com.example.project.viewmodels.DashboardViewModel
 import com.example.project.viewmodels.OtpViewModel
 import com.example.project.viewmodels.PaymentFourViewModel
 import com.example.project.viewmodels.PaymentViewModel
 import com.example.project.viewmodels.PaymentViewModelUpdated
 import com.example.project.viewmodels.TransportVirementViewModel
+import com.example.project.viewmodels.VirementUpdatedViewModel
 import com.example.project.viewmodels.VirementViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.json.JSONObject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @AndroidEntryPoint
 class OTPHandler : Fragment() {
@@ -43,16 +51,16 @@ class OTPHandler : Fragment() {
     private val otpViewModel: OtpViewModel by viewModels()
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
     private lateinit var deviceInfo: DeviceInfo
-    private lateinit var actualText:String
+    private var actualText= ""
     private val transportVirementViewModel: TransportVirementViewModel by activityViewModels()
     private val paymentViewModelUpdated: PaymentViewModelUpdated by activityViewModels()
     private val paymentViewModel:PaymentViewModel by viewModels()
-    private val consultationViewModel : ConsultationViewModel by viewModels()
+    private val dashboardViewModel : DashboardViewModel by viewModels()
     private val accountRepository: AccountRepository = AccountRepositoryImpl(
         AccountCreationServiceImpl()
     )
 
-    private lateinit var virement: Virement
+    private var currentVirement = com.example.project.models.Virement()
     private lateinit var virementViewModelFactory: VirementViewModelFactory
     private lateinit var virementViewModel: VirementViewModel
 
@@ -60,7 +68,13 @@ class OTPHandler : Fragment() {
     private var selectedAccountId: String? = null
 
     private val paymentFourViewModel: PaymentFourViewModel by activityViewModels()
+    private val sharedViewModel: VirementUpdatedViewModel by activityViewModels()
+    private var fromVirement = false
+    private var fromPayment = false
+    private var currentNumTel = ""
 
+    private var _binding: FragmentOtpBinding? = null
+    private val binding get() = _binding!!
     //val initialClientValue = clientViewModel.client.value
 
 
@@ -69,8 +83,6 @@ class OTPHandler : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("VM_VALUE", "CollectInfosViewModel: ${collectInfoViewModel.clientViewModel}")
-        checkAndRequestPermission()
-
 
         otpViewModel.navigateToPrint.observe(viewLifecycleOwner, Observer { shouldNavigate ->
             if (shouldNavigate) {
@@ -90,14 +102,15 @@ class OTPHandler : Fragment() {
             // You can update UI or perform any other actions based on the client data
             // For example, log the client data
             client.deviceInfo=deviceInfo
+            client.deviceInfoList = listOf(deviceInfo)
         })
 
 
-        val fromVirement = arguments?.getBoolean("fromVirement") ?: false
+        fromVirement = arguments?.getBoolean("fromVirement") ?: false
         Log.e("Navigation DEBUG", "fromVirement: $fromVirement")
 
 
-        val fromPayment = arguments?.getBoolean("fromPayment") ?: false
+        fromPayment = arguments?.getBoolean("fromPayment") ?: false
         Log.e("Navigation DEBUG", "fromPayment: $fromPayment")
 
         selectedAccountId = arguments?.getString("selectedAccountId")
@@ -112,6 +125,8 @@ class OTPHandler : Fragment() {
                     transportVirementViewModel.virement.observe(
                         viewLifecycleOwner,
                         Observer { virement ->
+
+
                             virementViewModelFactory =
                                 VirementViewModelFactory(virement, accountRepository)
                             Log.e(
@@ -124,6 +139,79 @@ class OTPHandler : Fragment() {
                                 virementViewModelFactory
                             )[VirementViewModel::class.java]
                             virementViewModel.onButtonClick(view)
+
+
+
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                try {
+                                    // Fetch the recipient and emettor account numbers from the shared ViewModel
+                                    val accountNumRecipient = sharedViewModel.selectedClient.value?.accountNumber
+                                    val accountNumEmettor = sharedViewModel.selectedAccount.value?.accountNumber
+
+                                    Log.d("Debug", "Fetching account details for recipient: $accountNumRecipient and emettor: $accountNumEmettor")
+
+                                    // Fetch the recipient account details
+                                    val recipientAccount = suspendCoroutine<CompteImpl?> { continuation ->
+                                        if (accountNumRecipient != null) {
+                                            accountRepository.getAccountByNumero(accountNumRecipient) { account ->
+                                                continuation.resume(account)
+                                            }
+                                        }
+                                    }
+
+                                    // Fetch the emettor account details
+                                    val emettorAccount = suspendCoroutine<CompteImpl?> { continuation ->
+                                        if (accountNumEmettor != null) {
+                                            accountRepository.getAccountByNumero(accountNumEmettor) { account ->
+                                                continuation.resume(account)
+                                            }
+                                        }
+                                    }
+
+                                    if (recipientAccount != null && emettorAccount != null) {
+                                        // Use the account's id_proprietaire to get the recipient and emettor UIDs
+                                        val recipientUid = recipientAccount.id_proprietaire
+                                        val emettorUid = emettorAccount.id_proprietaire
+
+                                        Log.d("Debug", "Fetching client details for recipient UID: $recipientUid and emettor UID: $emettorUid")
+
+                                        // Fetch the recipient and emettor client details
+                                        val recipientClient = otpViewModel.fetchRecipientClientDetails(recipientUid)
+                                        val emettorClient = otpViewModel.fetchRecipientClientDetails(emettorUid)
+
+                                        if (recipientClient != null && emettorClient != null) {
+                                            val formattedCompteEmet = formatAccountNumber(emettorAccount.numero)
+                                            val formattedCompteBenef = formatAccountNumber(recipientAccount.numero)
+                                            val messageToEmettor = "Votre virement a été effectué avec succès: Compte émetteur: $formattedCompteEmet, Bénéficiaire: M/Mme ${recipientClient.nom.toUpperCase()} ${recipientClient.prenom}, Montant: ${virement.montant} DH, Date: ${virement.date}"
+                                            val messageToBenef = "Vous avez reçu un virement de M/Mme ${emettorClient.nom.toUpperCase()} ${emettorClient.prenom}: Compte émetteur: $formattedCompteEmet, Montant: ${virement.montant} DH, Date: ${virement.date}"
+
+                                            Log.d("Debug", "Sending SMS to recipient: 0${recipientClient.numTele} with message: $messageToBenef")
+                                            sendSMS("0${recipientClient.numTele}", messageToBenef)
+                                            Log.d("Observe Num Tel", "Recipient num: 0${recipientClient.numTele}")
+
+                                            Log.d("Debug", "Sending SMS to emettor: $currentNumTel with message: $messageToEmettor")
+                                            sendSMS(currentNumTel, messageToEmettor)
+                                        } else {
+                                            throw Exception("Failed to fetch client details for recipient or emettor")
+                                        }
+                                    } else {
+                                        throw Exception("Recipient or emettor account not found")
+                                    }
+                                } catch (e: Exception) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Failed to get recipient or emettor details: ${e.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    val formattedCompteEmet = formatAccountNumber(virement.compteEmet.numero)
+                                    val formattedCompteBenef = formatAccountNumber(virement.compteBenef.numero)
+                                    val messageToEmettor = "Votre virement a été effectué avec succès: Compte émetteur: $formattedCompteEmet, Bénéficiaire: $formattedCompteBenef, Montant: ${virement.montant} DH, Date: ${virement.date}"
+                                    Log.d("SMS", "Sending virement confirmation SMS (failure case): $messageToEmettor")
+                                    sendSMS(currentNumTel, messageToEmettor)
+                                }
+                            }
+
+
                             virementViewModel.handleSuccessfulVirement()
                         })
                 }
@@ -153,6 +241,15 @@ class OTPHandler : Fragment() {
             }
         }
 
+        checkAndRequestPermission()
+        binding.verifyButton.setOnClickListener {
+            val enteredText = binding.editTextOTP.text.toString()
+            otpViewModel.onButtonClickProvisoire(requireActivity(), enteredText,actualText,bundle)
+
+            Log.e("Debug", actualText) // Log the entered text
+        }
+
+
     }
 
 
@@ -163,18 +260,29 @@ class OTPHandler : Fragment() {
             val billAmount = bill.amount
             Log.d("Bill ID",bill.id)
             Log.d("Bill Amount",billAmount.toString())
-            initiatePayment(bill.id, billAmount+0.25*billAmount)
+            initiatePayment(bill.id, (billAmount+0.25*billAmount).toInt())
+            otpViewModel.clientDetails.observe(viewLifecycleOwner){result->
+                result.onSuccess { client->
+                    val message = "Votre paiement a été effetcué avec succès. Facture N ${bill.id}, Montant: ${(billAmount+0.25*billAmount).toInt()} DH"
+                    Log.d("Paiement Phone Num","0${client.numTele}")
+                    Log.d("SMS", "Sending payment confirmation SMS: $message")
+                    sendSMS("0${client.numTele}",message)
+                }
+
+            }
 
             if (selectedAccountId != null) {
                 Log.d("paySelectedBills", "Selected account: $selectedAccountId")
                 paymentViewModel.makePaiement(bill.amount, "paiement", selectedAccountId!!)
+
+
             } else {
                 Log.e("paySelectedBills", "No account selected")
             }
         }
     }
 
-    private fun initiatePayment(billId: String, amount: Double) {
+    private fun initiatePayment(billId: String, amount: Int) {
         val requestData = JSONObject().apply {
             put("bill_id", billId)
             put("amount", amount)
@@ -197,7 +305,17 @@ class OTPHandler : Fragment() {
             val billAmount = bill.amount
             Log.d("Bill ID",bill.id)
             Log.d("Bill Amount",billAmount.toString())
-            initiatePayment(bill.id, billAmount+0.25*billAmount)
+            initiatePayment(bill.id, (billAmount+0.25*billAmount).toInt())
+            otpViewModel.clientDetails.observe(viewLifecycleOwner){result->
+                result.onSuccess { client->
+                    val message = "Votre paiement a été effetcué avec succès. Facture N ${bill.id}, Montant: ${(billAmount+0.25*billAmount).toInt()} DH"
+                    Log.d("Paiement Phone Num","0${client.numTele}")
+                    Log.d("SMS", "Sending payment confirmation SMS: $message")
+                    sendSMS("0${client.numTele}",message)
+                }
+
+            }
+
             val selectedAccountNum = paymentFourViewModel.selectedCard.value?.numeroCompte
             if (selectedAccountNum != null) {
                 Log.d("paySelectedBills", "Selected account (card): $selectedAccountNum")
@@ -214,19 +332,11 @@ class OTPHandler : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
 ): View {
-    val binding = FragmentOtpBinding.inflate(inflater, container, false)
+    _binding = FragmentOtpBinding.inflate(inflater, container, false)
+
     binding.otp = otpViewModel
 
     binding.lifecycleOwner = viewLifecycleOwner
-
-    binding.verifyButton.setOnClickListener {
-        val enteredText = binding.editTextOTP.text.toString()
-        otpViewModel.onButtonClickProvisoire(requireActivity(), enteredText,actualText,bundle)
-        Log.e("Debug", actualText) // Log the entered text
-    }
-
-    actualText=otpViewModel.generateOTP()
-
 
     return binding.root
 }
@@ -244,9 +354,37 @@ class OTPHandler : Fragment() {
                 SEND_SMS_PERMISSION_REQUEST_CODE
             )
         } else {
-            Log.e("OTP",actualText)
-            // Permission already granted, proceed with sending SMS
-            sendSMS("+2125223697854", "Code de vérification : Veuillez saisir ce code pour pouvoir continuer $actualText")
+            actualText=otpViewModel.generateOTP()
+            Log.e("OTP", actualText)
+            if (fromVirement || fromPayment) {
+                val currentClient = FirebaseAuth.getInstance().currentUser!!.uid
+                Log.d("OTPHandler", "Current client UID: $currentClient")
+
+                otpViewModel.clientDetails.observe(viewLifecycleOwner){result->
+                    result.onSuccess { client->
+                        Log.d("Téléphone Current Client","0${client.numTele}")
+                        sendSMS(
+                            "0${client.numTele}",
+                            "Code de vérification : Veuillez saisir ce code pour pouvoir continuer $actualText"
+                        )
+                        currentNumTel = "0${client.numTele}"
+                    }
+
+                }
+
+                otpViewModel.getClientDetailsByUid(currentClient)
+
+
+
+
+
+            }else{
+                actualText=otpViewModel.generateOTP()
+                sendSMS(
+                    "0${collectInfoViewModel.tel_portable}",
+                    "Code de vérification : Veuillez saisir ce code pour pouvoir continuer $actualText"
+                )
+            }
         }
     }
 
@@ -261,9 +399,19 @@ class OTPHandler : Fragment() {
         if (requestCode == SEND_SMS_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                sendSMS("+2125223697854", "Code de vérification : Veuillez saisir ce code pour pouvoir continuer $actualText")
+                collectInfoViewModel.observeClient().observe(viewLifecycleOwner){
+                    client->
+                    actualText=otpViewModel.generateOTP()
+                    sendSMS("0${client.numTele}","Code de vérification : Veuillez saisir ce code pour pouvoir continuer $actualText"
+                )
+                }
+
             } else {
-                //
+                Toast.makeText(
+                    requireContext(),
+                    "Permission refusée.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -272,10 +420,28 @@ class OTPHandler : Fragment() {
         try {
             val smsManager: SmsManager = SmsManager.getDefault()
             smsManager.sendTextMessage(phoneNumber, null, message, null, null)
-            // SMS sent successfully
+
         } catch (e: Exception) {
-            // Failed to send SMS
+
             e.printStackTrace()
+        }
+    }
+
+
+    private fun fetchRecipientDetailsAndSendSMS(virement: com.example.project.models.Virement, currentNumTel: String) {
+
+
+    }
+
+
+
+
+
+    private fun formatAccountNumber(accountNumber: String): String {
+        return if (accountNumber.startsWith("ACC")) {
+            "ACC ******${accountNumber.takeLast(4)}"
+        } else {
+            accountNumber
         }
     }
 
