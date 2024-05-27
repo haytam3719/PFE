@@ -7,13 +7,18 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.project.FCM.FirebaseMessagingServiceImpl
 import com.example.project.FCM.NotificationData
 import com.example.project.FCM.RetrofitClient
 import com.example.project.models.CompteImpl
 import com.example.project.models.Virement
 import com.example.project.prototype.AccountRepository
+import com.example.project.repositories.FCMRepository
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 
@@ -91,24 +96,76 @@ class VirementViewModel @Inject constructor(private var virement:Virement,privat
     fun handleSuccessfulVirement() {
         val apiService = RetrofitClient.instance
 
-        val notificationData = NotificationData(token = "cgMIBk0FQw-XFEn4JEAi05:APA91bGyaA07J5j-2W4TrlQs82GOkicVD3xby2RgXhsqjQxeUugNVPpV06QUNJ8-SgckpVgDOBaIQ-jXbwWZPOBWFjrgC70dM8-ad4V4t-XbBJ3tBQM8GQWvP6hm8Js8Ah8CHkDATfi4")
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                Log.d("FCM Token", "Token retrieved from HandleVirement: $token")
+                FirebaseMessagingServiceImpl.fcmToken = token
 
-        val call = apiService.sendNotification(notificationData)
-        call.enqueue(object : retrofit2.Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
-                if (response.isSuccessful) {
-                    // Notification sent successfully
-                    println("Notification sent successfully")
+                if (token != null) {
+                    val notificationData = NotificationData(
+                        token = token,
+                        title = "Virement effectué avec succès",
+                        body = "Votre virement a été effectué avec succès"
+                    )
+
+                    val call = apiService.sendNotification(notificationData)
+                    call.enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) {
+                                println("Notification sent successfully")
+                            } else {
+                                println("Failed to send notification: ${response.code()}")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            println("Failed to send notification: ${t.message}")
+                        }
+                    })
                 } else {
-                    println("Failed to send notification: ${response.code()}")
+                    println("FCM token is null, cannot send notification")
                 }
+            } else {
+                Log.w("FCM Token", "Fetching FCM registration token failed", task.exception)
+                println("Failed to retrieve FCM token, cannot send notification")
             }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                println("Failed to send notification: ${t.message}")
-            }
-        })
+        }
     }
+
+
+
+    fun sendNotificationToRecipient(recipientUserId: String, body: String) {
+        val apiService = RetrofitClient.instance
+
+        FCMRepository.getFcmTokenForUser(recipientUserId) { token ->
+            if (token != null) {
+                val notificationData = NotificationData(
+                    token = token,
+                    title = "Vous avez reçu un virement",
+                    body = body
+                )
+
+                val call = apiService.sendNotification(notificationData)
+                call.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            println("Notification sent successfully")
+                        } else {
+                            println("Failed to send notification: ${response.code()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        println("Failed to send notification: ${t.message}")
+                    }
+                })
+            } else {
+                println("FCM token is null, cannot send notification")
+            }
+        }
+    }
+
 
 
     fun onNavigationComplete() {

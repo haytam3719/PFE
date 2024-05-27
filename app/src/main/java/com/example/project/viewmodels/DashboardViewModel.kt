@@ -7,12 +7,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.project.models.Client
 import com.example.project.models.DeviceInfo
 import com.example.project.prototype.ClientRepository
 import com.example.project.repositories.AccountRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
@@ -131,6 +134,20 @@ class DashboardViewModel @Inject constructor(
     fun loadBalanceOverTime(userId: String) {
         accountRepositoryImpl.fetchAccountBalancesOverTime(userId) { data ->
             _balanceOverTime.postValue(data)
+        }
+    }
+
+
+    suspend fun fetchClientDetails(uid: String): Client? {
+        return suspendCoroutine { continuation ->
+            accountRepositoryImpl.getClientDetailsByUid(uid) { result ->
+                result.onSuccess { client ->
+                    continuation.resume(client)
+                }
+                result.onFailure {
+                    continuation.resume(null)
+                }
+            }
         }
     }
 

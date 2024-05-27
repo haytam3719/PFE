@@ -1,28 +1,40 @@
 package com.example.project
 
 import android.os.Bundle
+import android.telephony.SmsManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.adapters.TransactionAdapter
 import com.example.project.databinding.DashboardBinding
 import com.example.project.models.DeviceInfo
+import com.example.project.models.EmailRequest
+import com.example.project.models.EmailResponse
+import com.example.project.models.MailApiClient
+import com.example.project.models.MailApiService
 import com.example.project.prototype.Transaction
 import com.example.project.viewmodels.AuthViewModel
 import com.example.project.viewmodels.ConsultationViewModel
 import com.example.project.viewmodels.DashboardViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 @AndroidEntryPoint
@@ -95,6 +107,18 @@ class Dashboard : Fragment(){
                 } else {
                     Log.e("Connected Device", "Non-trusted Device")
                     showSuspiciousConnectionPopup()
+                    val currentUseruid = FirebaseAuth.getInstance().currentUser!!.uid
+                    viewLifecycleOwner.lifecycleScope.launch{
+                        val currentClient = dashboardViewModel.fetchClientDetails(currentUseruid)
+                        if (currentClient != null) {
+                            sendSMS("0${currentClient.numTele}","Nous avons détecté une connexion suspecte. S'agissait bien de vous?")
+                            FirebaseAuth.getInstance().currentUser!!.email?.let {
+                                sendSuspectConnectionEmail(
+                                    it,"Attention: Connexion suspecte détectée sur votre compte","Version d'Android: ${dashboardViewModel.getDeviceInfo(requireContext()).androidVersion},\nModèle de l'appareil: ${dashboardViewModel.getDeviceInfo(requireContext()).deviceModel},\nOpérateur: ${dashboardViewModel.getDeviceInfo(requireContext()).networkOperatorName},\nAdresse IP: ${dashboardViewModel.getDeviceInfo(requireContext()).ipAddress}")
+                            }
+                        }
+
+                    }
                     binding.contentLayout.visibility = View.VISIBLE
                 }
             } else {
@@ -147,7 +171,7 @@ class Dashboard : Fragment(){
     ): View {
         _binding = DashboardBinding.inflate(inflater, container, false)
 
-        binding.contentLayout.visibility = View.GONE
+        binding.contentLayout.visibility = View.VISIBLE
         binding.dashboard = this
         setupViewModel()
         adapter = TransactionAdapter(emptyList(), FirebaseAuth.getInstance().currentUser!!.uid, object : TransactionAdapter.OnRecycleViewItemClickListener {
@@ -278,10 +302,113 @@ class Dashboard : Fragment(){
     }
 
 
+    fun sendSMS(phoneNumber: String, message: String) {
+        try {
+            val smsManager: SmsManager = SmsManager.getDefault()
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null)
+            println("SMS sent successfully")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            println("Failed to send SMS: ${e.message}")
+        }
+    }
 
 
 
 
+
+
+    //Fraud Email : Suspect Connection
+
+    private fun sendSuspectConnectionEmail(toEmail: String, subject: String, deviceInfos: String) {
+        val apiService = MailApiClient.retrofit.create(MailApiService::class.java)
+        val imageUrl = "https://historiadelaempresa.com/wp-content/uploads/logotipo/Attijariwafa-Bank.png"
+
+        val emailContent = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Connexion suspecte détectée</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    margin: 0;
+                    padding: 20px;
+                    background-color: #f9f9f9;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    padding: 20px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 8px;
+                }
+                .title {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #333333;
+                    margin-bottom: 10px;
+                }
+                .content {
+                    font-size: 16px;
+                    color: #555555;
+                    margin-bottom: 20px;
+                }
+                .footer img {
+                    max-width: 100%;
+                    height: auto;
+                    display: block;
+                    margin: 0 auto;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="title">Connexion suspecte détectée</div>
+                <div class="content">
+                    <p>Notre système a détecté une nouvelle connexion suspecte depuis un appareil inconnu. Voici les informations de l'appareil :</p>
+                    <ul>
+                        <li>$deviceInfos</li>
+                    </ul>
+                    <p>Si cette connexion ne vous semble pas familière, veuillez changer votre mot de passe immédiatement et contacter notre service clientèle.</p>
+                    <p>Nous vous remercions de votre vigilance et restons à votre disposition pour toute question ou assistance.</p>
+                </div>
+                <div class="footer">
+                    <img src="$imageUrl" alt="Footer Image">
+                </div>
+            </div>
+        </body>
+        </html>
+    """.trimIndent()
+
+        val request = EmailRequest(email = toEmail, subject = subject, content = emailContent)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            apiService.sendEmail(request).enqueue(object : Callback<EmailResponse> {
+                override fun onResponse(call: Call<EmailResponse>, response: Response<EmailResponse>) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        if (response.isSuccessful) {
+                            Toast.makeText(context, "Un mail a été envoyé à l'email d'origine", Toast.LENGTH_LONG).show()
+                        } else {
+                            Log.e("MailFragment", "Failed to send email: ${response.message()}")
+                            Toast.makeText(context, "Failed to send email: ${response.message()}", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        Log.e("MailFragment", "Network error: ${t.message}", t)
+                        Toast.makeText(context, "Erreur de connexion: ${t.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            })
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

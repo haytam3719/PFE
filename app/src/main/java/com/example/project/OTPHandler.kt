@@ -206,6 +206,8 @@ class OTPHandler : Fragment() {
 
                                             Log.d("Debug", "Sending SMS to emettor: 0${emettorClient.numTele} with message: $messageToEmettor")
                                             sendSMS("0${emettorClient.numTele}", messageToEmettor)
+                                            virementViewModel.sendNotificationToRecipient(recipientUid,"Vous avez reçu un montant de ${virement.montant} DH, de la part de ${emettorClient.nom.toUpperCase()} ${emettorClient.prenom} le ${virement.date}")
+
                                         } else {
                                             throw Exception("Failed to fetch client details for recipient or emettor")
                                         }
@@ -286,7 +288,9 @@ class OTPHandler : Fragment() {
 
             }
 
+
             if (selectedAccountId != null) {
+                paymentViewModel.handleSuccessfulPayment("Votre paiement relatif à la facture N° ${bill.id}, montant: ${(billAmount+0.25*billAmount).toInt()} DH a été réglé")
                 Log.d("paySelectedBills", "Selected account: $selectedAccountId")
                 paymentViewModel.makePaiement(bill.amount, "paiement", selectedAccountId!!)
 
@@ -333,6 +337,7 @@ class OTPHandler : Fragment() {
 
             val selectedAccountNum = paymentFourViewModel.selectedCard.value?.numeroCompte
             if (selectedAccountNum != null) {
+                paymentViewModel.handleSuccessfulPayment("Votre paiement relatif à la facture N° ${bill.id}, montant: ${(billAmount+0.25*billAmount).toInt()} DH a été réglé")
                 Log.d("paySelectedBills", "Selected account (card): $selectedAccountNum")
                 paymentViewModel.makePaiementUsingCard(bill.amount, "Paiement", selectedAccountNum,paymentFourViewModel.selectedCard.value!!)
             } else {

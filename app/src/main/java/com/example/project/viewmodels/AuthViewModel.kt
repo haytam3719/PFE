@@ -11,6 +11,7 @@ import com.example.project.models.AuthState
 import com.example.project.models.LogInUserPartial
 import com.example.project.oAuthRessources.SecureManager
 import com.example.project.repositories.AuthRepository
+import com.example.project.repositories.FCMRepository
 import com.example.project.repositories.OAuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -29,7 +30,7 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val oAuthRepository: OAuthRepository,
-    private val secureManager: SecureManager
+    private val secureManager: SecureManager,
 ) : ViewModel() {
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private var fingerPrint: String = ""
@@ -76,38 +77,41 @@ class AuthViewModel @Inject constructor(
 
     suspend fun signIn(email: String, password: String) {
         viewModelScope.launch {
-            try {
-                val storedEmail = secureManager.getEmail()
-                val storedPassword = secureManager.getPassword()
-                val storedAccessToken = secureManager.getAccessToken()
+            //try {
 
-                if (email == storedEmail && password == storedPassword && storedAccessToken != null) {
+//                val storedEmail = secureManager.getEmail()
+//                val storedPassword = secureManager.getPassword()
+//                val storedAccessToken = secureManager.getAccessToken()
+//
+//                if (email == storedEmail && password == storedPassword && storedAccessToken != null) {
                     _authState.emit(AuthState.Loading)
                     authRepository.signIn(email, password).await()
                     FirebaseAuth.getInstance().currentUser?.let { Log.d("URGENT", it.uid) }
+                    FCMRepository.initializeAndSaveFcmToken()
+
                     Log.d("Access Token", "Client already has an access token")
                     _authState.emit(AuthState.Success)
-                } else {
+                //} else {
                     _authState.emit(AuthState.Loading)
 
-                    val accessToken = fetchAccessToken(email, password)
-                    if (accessToken != null) {
-                        secureManager.saveEmail(email)
-                        secureManager.savePassword(password)
-                        secureManager.saveAccessToken(accessToken)
-                        Log.d("Access Token", "Access token newly affected to the client")
+//                    val accessToken = fetchAccessToken(email, password)
+//                    if (accessToken != null) {
+//                        secureManager.saveEmail(email)
+//                        secureManager.savePassword(password)
+//                        secureManager.saveAccessToken(accessToken)
+//                        Log.d("Access Token", "Access token newly affected to the client")
                         authRepository.signIn(email, password).await()
                         FirebaseAuth.getInstance().currentUser?.let { Log.d("URGENT", it.uid) }
                         _authState.emit(AuthState.Success)
-                    } else {
-                        _authState.emit(AuthState.Error("Failed to fetch access token"))
-                    }
-                }
-            } catch (e: Exception) {
-                _authState.emit(AuthState.Error(e.localizedMessage ?: "Sign in failed"))
-            }
-        }
-    }
+//                    } else {
+//                        _authState.emit(AuthState.Error("Failed to fetch access token"))
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                _authState.emit(AuthState.Error(e.localizedMessage ?: "Sign in failed"))
+
+
+    }}
 
     fun signOut() {
         authRepository.signOut()

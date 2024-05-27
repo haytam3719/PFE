@@ -7,6 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.project.FCM.FirebaseMessagingServiceImpl
+import com.example.project.FCM.NotificationData
+import com.example.project.FCM.RetrofitClient
 import com.example.project.models.Bill
 import com.example.project.models.CarteImpl
 import com.example.project.models.PaymentRequest
@@ -14,10 +17,14 @@ import com.example.project.models.PaymentResponse
 import com.example.project.models.Virement
 import com.example.project.prototype.AccountRepository
 import com.example.project.prototype.PaymentRepository
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 @HiltViewModel
 class PaymentViewModel @Inject constructor(private val paymentRepository: PaymentRepository,private val accountRepository:AccountRepository,private var virement:Virement): ViewModel(){
@@ -180,7 +187,53 @@ class PaymentViewModel @Inject constructor(private val paymentRepository: Paymen
                 Log.e("Emet", "Emet null")
             }
         }
-    } }
+    }
+
+
+
+    fun handleSuccessfulPayment(body: String) {
+        val apiService = RetrofitClient.instance
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                Log.d("FCM Token", "Token retrieved: $token")
+                FirebaseMessagingServiceImpl.fcmToken = token
+
+                if (token != null) {
+                    val notificationData = NotificationData(
+                        token = token,
+                        title = "Paiement effectué avec succès",
+                        body = body
+                    )
+
+                    val call = apiService.sendNotification(notificationData)
+                    call.enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) {
+                                println("Notification sent successfully")
+                            } else {
+                                println("Failed to send notification: ${response.code()}")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            println("Failed to send notification: ${t.message}")
+                        }
+                    })
+                } else {
+                    println("FCM token is null, cannot send notification")
+                }
+            } else {
+                Log.w("FCM Token", "Fetching FCM registration token failed", task.exception)
+                println("Failed to retrieve FCM token, cannot send notification")
+            }
+        }
+    }
+
+
+
+}
 
 
 

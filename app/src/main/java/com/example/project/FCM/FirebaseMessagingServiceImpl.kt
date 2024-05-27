@@ -11,11 +11,28 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.project.R
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-
 class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
+
+    companion object {
+        var fcmToken: String? = null
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                fcmToken = task.result
+                Log.d("FCM", "Latest token on service start: $fcmToken")
+            } else {
+                Log.w("FCM", "Fetching FCM registration token failed", task.exception)
+            }
+        }
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
@@ -34,6 +51,12 @@ class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
         remoteMessage.data.isNotEmpty().let {
             Log.d("FCM", "Data Payload: ${remoteMessage.data}")
         }
+    }
+
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Log.d("FCM", "New token: $token")
+        fcmToken = token
     }
 
     private fun createNotification(title: String, body: String) {
@@ -55,7 +78,7 @@ class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
 
         // Create a notification builder
         val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.some) // Set your notification icon here
+            .setSmallIcon(R.drawable.attijari)
             .setContentTitle(title)
             .setContentText(body)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -67,21 +90,10 @@ class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return
             }
             notify(1234, builder.build())
         }
     }
 
-
-
-    override fun onNewToken(token: String) {}
 }
-
