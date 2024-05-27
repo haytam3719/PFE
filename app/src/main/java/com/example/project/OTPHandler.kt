@@ -38,6 +38,7 @@ import com.example.project.viewmodels.VirementUpdatedViewModel
 import com.example.project.viewmodels.VirementViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import kotlin.coroutines.resume
@@ -150,23 +151,29 @@ class OTPHandler : Fragment() {
 
                                     Log.d("Debug", "Fetching account details for recipient: $accountNumRecipient and emettor: $accountNumEmettor")
 
-                                    // Fetch the recipient account details
-                                    val recipientAccount = suspendCoroutine<CompteImpl?> { continuation ->
-                                        if (accountNumRecipient != null) {
-                                            accountRepository.getAccountByNumero(accountNumRecipient) { account ->
-                                                continuation.resume(account)
+                                    // Fetch the recipient and emettor account details concurrently
+                                    val recipientAccountDeferred = async {
+                                        suspendCoroutine<CompteImpl?> { continuation ->
+                                            if (accountNumRecipient != null) {
+                                                accountRepository.getAccountByNumero(accountNumRecipient) { account ->
+                                                    continuation.resume(account)
+                                                }
                                             }
                                         }
                                     }
 
-                                    // Fetch the emettor account details
-                                    val emettorAccount = suspendCoroutine<CompteImpl?> { continuation ->
-                                        if (accountNumEmettor != null) {
-                                            accountRepository.getAccountByNumero(accountNumEmettor) { account ->
-                                                continuation.resume(account)
+                                    val emettorAccountDeferred = async {
+                                        suspendCoroutine<CompteImpl?> { continuation ->
+                                            if (accountNumEmettor != null) {
+                                                accountRepository.getAccountByNumero(accountNumEmettor) { account ->
+                                                    continuation.resume(account)
+                                                }
                                             }
                                         }
                                     }
+
+                                    val recipientAccount = recipientAccountDeferred.await()
+                                    val emettorAccount = emettorAccountDeferred.await()
 
                                     if (recipientAccount != null && emettorAccount != null) {
                                         // Use the account's id_proprietaire to get the recipient and emettor UIDs
@@ -175,22 +182,30 @@ class OTPHandler : Fragment() {
 
                                         Log.d("Debug", "Fetching client details for recipient UID: $recipientUid and emettor UID: $emettorUid")
 
-                                        // Fetch the recipient and emettor client details
-                                        val recipientClient = otpViewModel.fetchRecipientClientDetails(recipientUid)
-                                        val emettorClient = otpViewModel.fetchRecipientClientDetails(emettorUid)
+                                        // Fetch the recipient and emettor client details concurrently
+                                        val recipientClientDeferred = async {
+                                            otpViewModel.fetchClientDetails(recipientUid)
+                                        }
+
+                                        val emettorClientDeferred = async {
+                                            otpViewModel.fetchClientDetails(emettorUid)
+                                        }
+
+                                        val recipientClient = recipientClientDeferred.await()
+                                        val emettorClient = emettorClientDeferred.await()
 
                                         if (recipientClient != null && emettorClient != null) {
                                             val formattedCompteEmet = formatAccountNumber(emettorAccount.numero)
                                             val formattedCompteBenef = formatAccountNumber(recipientAccount.numero)
                                             val messageToEmettor = "Votre virement a été effectué avec succès: Compte émetteur: $formattedCompteEmet, Bénéficiaire: M/Mme ${recipientClient.nom.toUpperCase()} ${recipientClient.prenom}, Montant: ${virement.montant} DH, Date: ${virement.date}"
-                                            val messageToBenef = "Vous avez reçu un virement de M/Mme ${emettorClient.nom.toUpperCase()} ${emettorClient.prenom}: Compte émetteur: $formattedCompteEmet, Montant: ${virement.montant} DH, Date: ${virement.date}"
+                                            val messageToBenef = "Vous avez reçu un montant de ${virement.montant} DH de la part de ${emettorClient.nom.toUpperCase()} ${emettorClient.prenom}"
 
                                             Log.d("Debug", "Sending SMS to recipient: 0${recipientClient.numTele} with message: $messageToBenef")
                                             sendSMS("0${recipientClient.numTele}", messageToBenef)
                                             Log.d("Observe Num Tel", "Recipient num: 0${recipientClient.numTele}")
 
-                                            Log.d("Debug", "Sending SMS to emettor: $currentNumTel with message: $messageToEmettor")
-                                            sendSMS(currentNumTel, messageToEmettor)
+                                            Log.d("Debug", "Sending SMS to emettor: 0${emettorClient.numTele} with message: $messageToEmettor")
+                                            sendSMS("0${emettorClient.numTele}", messageToEmettor)
                                         } else {
                                             throw Exception("Failed to fetch client details for recipient or emettor")
                                         }

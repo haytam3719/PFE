@@ -7,7 +7,6 @@ import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.project.models.Client
@@ -17,7 +16,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
@@ -151,21 +149,16 @@ class OtpViewModel @Inject constructor(private val accountRepositoryImpl: Accoun
     }
 
 
-    suspend fun fetchRecipientClientDetails(uid: String): Client {
+    suspend fun fetchClientDetails(uid: String): Client? {
         return suspendCoroutine { continuation ->
-            getRecipientClientDetailsByUid(uid)
-            recipientClientDetails.observeForever(object : Observer<Result<Client>> {
-                override fun onChanged(result: Result<Client>) {
-                    result?.let {
-                        if (it.isSuccess) {
-                            continuation.resume(it.getOrNull()!!)
-                        } else {
-                            continuation.resumeWithException(it.exceptionOrNull()!!)
-                        }
-                    }
-                    recipientClientDetails.removeObserver(this)
+            accountRepositoryImpl.getClientDetailsByUid(uid) { result ->
+                result.onSuccess { client ->
+                    continuation.resume(client)
                 }
-            })
+                result.onFailure {
+                    continuation.resume(null)
+                }
+            }
         }
     }
 
