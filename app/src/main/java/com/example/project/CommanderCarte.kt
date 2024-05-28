@@ -15,6 +15,7 @@ import com.example.project.adapters.AccountData
 import com.example.project.databinding.CommanderCarteBinding
 import com.example.project.viewmodels.CardsViewModel
 import com.example.project.viewmodels.ConsultationViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,7 +44,11 @@ class CommanderCarte : Fragment() {
     ): View {
         _binding = CommanderCarteBinding.inflate(inflater, container, false)
         binding.commanderCarte = this
+        val topAppBar: MaterialToolbar = binding.topAppBar
 
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         setupClickListeners()
         adapter = AccountsAdapter { account ->
             consultationViewModel.selectAccount(account)

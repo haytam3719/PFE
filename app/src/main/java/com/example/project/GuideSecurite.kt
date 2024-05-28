@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.project.databinding.GuideSecuriteBinding
+import com.google.android.material.appbar.MaterialToolbar
 
 class GuideSecurite : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -18,6 +19,11 @@ class GuideSecurite : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = GuideSecuriteBinding.inflate(inflater, container, false)
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         return binding.root
     }
 }

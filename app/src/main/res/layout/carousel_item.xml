@@ -20,19 +20,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingEnd="18dp"
             android:text="Compte chèque"
             android:textColor="@color/primaryTextColor"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:paddingEnd="18dp"
+            app:layout_constraintEnd_toStartOf="@+id/icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Icon Button -->
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:contentDescription="note"
             android:src="@drawable/note"
             app:tint="@color/colorPrimary"

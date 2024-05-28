@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.ActivityCollectionInfosBinding
 import com.example.project.viewmodels.CollectInfoViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,7 +45,11 @@ class CollectionInfosFragment() : Fragment() {
         binding.clientPartial = collectInfos.clientPartial
         binding.lifecycleOwner = viewLifecycleOwner
 
+        val topAppBar: MaterialToolbar = binding.topAppBar
 
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         return binding.root
     }
 

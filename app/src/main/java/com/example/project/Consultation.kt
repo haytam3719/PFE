@@ -21,6 +21,7 @@ import com.example.project.databinding.ConsultationBinding
 import com.example.project.prototype.Transaction
 import com.example.project.viewmodels.ConsultationViewModel
 import com.example.project.viewmodels.DashboardViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -98,6 +99,11 @@ class Consultation : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         setupViewModel()
         adapter = TransactionAdapter(emptyList(), FirebaseAuth.getInstance().currentUser!!.uid, object : TransactionAdapter.OnRecycleViewItemClickListener {
 

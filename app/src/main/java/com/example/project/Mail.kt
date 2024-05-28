@@ -16,6 +16,7 @@ import com.example.project.models.EmailResponse
 import com.example.project.models.MailApiClient
 import com.example.project.models.MailApiService
 import com.example.project.viewmodels.CollectInfoViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,11 @@ class Mail : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         binding.button.setOnClickListener {
             val email = binding.mailTextInputLayout.editText?.text.toString()
             if (email.isNotEmpty()) {

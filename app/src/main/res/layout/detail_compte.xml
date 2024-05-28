@@ -53,19 +53,17 @@
                     android:id="@+id/accountTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Compte chèque"
                     android:textColor="@color/reddish_orange"
-                    android:textStyle="bold"
                     android:textSize="18sp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/editAccount"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/accountBalance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="35,410.7 DH"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold"
                     android:textSize="32sp"
@@ -89,7 +87,6 @@
                     android:id="@+id/accountType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Compte chèque"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@id/natureLabel"
@@ -111,7 +108,6 @@
                     android:id="@+id/accountNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0000A0000000001"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@id/accountNumberLabel"
@@ -125,7 +121,8 @@
                     android:layout_height="24dp"
                     android:onClick="@{view -> detailCompte.onClickEditAccount(view)}"
                     android:src="@drawable/ic_edit"
-                    app:layout_constraintStart_toEndOf="@+id/accountBalance"
+                    android:layout_marginEnd="5dp"
+                    app:layout_constraintEnd_toStartOf="@+id/deleteAccount"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/orange" />
 
@@ -133,10 +130,10 @@
                     android:id="@+id/deleteAccount"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:onClick="@{view -> detailCompte.onClickDeleteAccount(view)}"
                     android:src="@drawable/ic_delete"
-                    app:layout_constraintStart_toEndOf="@id/editAccount"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/orange" />
 
@@ -155,7 +152,6 @@
                     android:id="@+id/balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="35,410.7 DH"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@id/balanceLabel"

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.project.databinding.FragmentStepContainerBinding
+import com.google.android.material.appbar.MaterialToolbar
 
 class Questionnaire : Fragment() {
 
@@ -31,6 +32,12 @@ class Questionnaire : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val stepView = binding.stepView
         val viewPager = binding.viewPager
+
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         //stepView.done(true)
         stepView.setStepsNumber(6)
 

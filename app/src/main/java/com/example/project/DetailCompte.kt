@@ -19,6 +19,7 @@ import com.example.project.models.TransactionImpl
 import com.example.project.prototype.Transaction
 import com.example.project.prototype.TypeCompte
 import com.example.project.viewmodels.DetailCompteViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.Normalizer
@@ -39,6 +40,11 @@ class DetailCompte : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = DetailCompteBinding.inflate(inflater, container, false)
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         adapter = TransactionAdapter(emptyList(),FirebaseAuth.getInstance().currentUser?.uid ?: "",object : TransactionAdapter.OnRecycleViewItemClickListener {
 
             override fun onItemClick(transactionData: Transaction) {

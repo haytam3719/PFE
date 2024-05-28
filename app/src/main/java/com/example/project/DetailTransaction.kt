@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.example.project.databinding.DetailOperationBinding
 import com.example.project.prototype.Transaction
 import com.example.project.viewmodels.DetailTransactionsViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,6 +33,11 @@ class DetailTransaction : Fragment() {
             Log.d("TransactionId",transactionId)
             detailTransactionsViewModel.loadTransaction(transactionId)
             observeTransactionDetails()
+        }
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 

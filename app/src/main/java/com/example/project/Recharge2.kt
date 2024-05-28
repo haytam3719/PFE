@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.adapters.MontantRechargeAdapter
 import com.example.project.databinding.RechargeSimple2Binding
 import com.example.project.viewmodels.RechargeViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +37,12 @@ class Recharge2 : Fragment(), MontantRechargeAdapter.OnAmountSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
 
         adapter = MontantRechargeAdapter(rechargeTypes, this)
         binding.recyclerViewTypeRecharge.layoutManager = LinearLayoutManager(requireContext())

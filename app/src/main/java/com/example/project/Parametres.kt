@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.ParametresBinding
+import com.google.android.material.appbar.MaterialToolbar
 
 class Parametres : Fragment() {
 
@@ -21,6 +22,11 @@ class Parametres : Fragment() {
     ): View {
         val binding = ParametresBinding.inflate(inflater, container, false)
         binding.parametres = this
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         return binding.root
     }
 

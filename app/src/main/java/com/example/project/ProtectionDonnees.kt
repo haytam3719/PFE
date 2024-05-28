@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.project.databinding.ProtectionDonneesBinding
+import com.google.android.material.appbar.MaterialToolbar
 
 class ProtectionDonnees : Fragment() {
 
@@ -19,7 +20,11 @@ class ProtectionDonnees : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = ProtectionDonneesBinding.inflate(inflater, container, false)
+        val topAppBar: MaterialToolbar = binding.topAppBar
 
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         return binding.root
     }
 }

@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.FragmentCinScanBinding
 import com.example.project.viewmodels.ScanCinViewModel
+import com.google.android.material.appbar.MaterialToolbar
 
 class ScanCin : Fragment() {
     private val scanCinViewModel: ScanCinViewModel by viewModels()
@@ -40,6 +41,12 @@ class ScanCin : Fragment() {
         binding.scanCinViewModel = scanCinViewModel
 
         binding.lifecycleOwner = viewLifecycleOwner
+
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
 
         val lottieAnimationView = binding.animationView
         lottieAnimationView.setAnimation("identity_card_scan.json")

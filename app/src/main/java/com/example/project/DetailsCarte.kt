@@ -21,6 +21,7 @@ import com.example.project.databinding.DetailsCarteBinding
 import com.example.project.models.CarteImpl
 import com.example.project.models.TransactionImpl
 import com.example.project.viewmodels.CardsViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,6 +40,11 @@ class DetailsCarte : Fragment(),ModifySecurityCodeDialogFragment.OnSecurityCodeM
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         val id_proprietaire = FirebaseAuth.getInstance().currentUser!!.uid
 
         transactionAdapter = TransactionAdapter(emptyList(), id_proprietaire, object : TransactionAdapter.OnRecycleViewItemClickListener {

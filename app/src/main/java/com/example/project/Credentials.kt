@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.project.databinding.CodeAttijariSecureBinding
 import com.example.project.viewmodels.CredentialsViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +26,11 @@ class Credentials : Fragment(){
     ): View {
         _binding = CodeAttijariSecureBinding.inflate(inflater, container, false)
         binding.credentials = this
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         return binding.root
     }
 

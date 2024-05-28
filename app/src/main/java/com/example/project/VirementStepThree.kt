@@ -15,6 +15,7 @@ import com.example.project.databinding.VirementStepThreeBinding
 import com.example.project.models.CircularProgressView
 import com.example.project.viewmodels.ProgressBarViewModel
 import com.example.project.viewmodels.VirementUpdatedViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,6 +43,12 @@ class VirementStepThree : Fragment() {
                 progressViewModel.setProgress(75)
             }
         }, 500)
+
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
 
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->

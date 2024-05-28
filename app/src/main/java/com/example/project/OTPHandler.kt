@@ -36,6 +36,7 @@ import com.example.project.viewmodels.PaymentViewModelUpdated
 import com.example.project.viewmodels.TransportVirementViewModel
 import com.example.project.viewmodels.VirementUpdatedViewModel
 import com.example.project.viewmodels.VirementViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.async
@@ -85,6 +86,11 @@ class OTPHandler : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("VM_VALUE", "CollectInfosViewModel: ${collectInfoViewModel.clientViewModel}")
 
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         otpViewModel.navigateToPrint.observe(viewLifecycleOwner, Observer { shouldNavigate ->
             if (shouldNavigate) {
                 // Navigate when event is triggered

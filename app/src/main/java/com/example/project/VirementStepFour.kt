@@ -25,6 +25,7 @@ import com.example.project.viewmodels.ProgressBarViewModel
 import com.example.project.viewmodels.TransportVirementViewModel
 import com.example.project.viewmodels.VirementUpdatedViewModel
 import com.example.project.viewmodels.VirementViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.security.KeyStore
 import javax.crypto.Cipher
@@ -73,6 +74,11 @@ class VirementStepFour : Fragment() {
         _binding = VirementStepFourBinding.inflate(inflater, container, false)
         binding.fingerPrintViewModel = fingerPrintViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         return binding.root
     }
 

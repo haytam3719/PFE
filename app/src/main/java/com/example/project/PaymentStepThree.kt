@@ -16,6 +16,7 @@ import com.example.project.adapters.OnItemClickListener
 import com.example.project.databinding.Payment3Binding
 import com.example.project.models.Bill
 import com.example.project.viewmodels.PaymentViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,6 +42,12 @@ class PaymentStepThree :Fragment(), OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = binding.recyclerViewInvoices
+
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
 
         paymentViewModel.bills.observe(viewLifecycleOwner, Observer<List<Bill>> { bills ->
             Log.e("debug bills", bills.toString())

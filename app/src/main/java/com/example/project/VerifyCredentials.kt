@@ -15,6 +15,7 @@ import com.example.project.databinding.VerifierCodeAttijariSecureBinding
 import com.example.project.viewmodels.CredentialsViewModel
 import com.example.project.viewmodels.DashboardViewModel
 import com.example.project.viewmodels.VerifyCredentialsViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -37,6 +38,11 @@ class VerifyCredentials : Fragment() {
         _binding = VerifierCodeAttijariSecureBinding.inflate(inflater, container, false)
         binding.verifyCredentials = this
         shouldTrustDevice = arguments?.getBoolean("shouldTrustDevice", false) ?: false
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
 
         return binding.root
     }

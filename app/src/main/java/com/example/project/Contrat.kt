@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.ContratBinding
 import com.example.project.viewmodels.CollectInfoViewModel
 import com.example.project.viewmodels.ContratViewModel
+import com.google.android.material.appbar.MaterialToolbar
 
 class Contrat : Fragment() {
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
@@ -64,7 +65,11 @@ class Contrat : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val topAppBar: MaterialToolbar = binding.topAppBar
 
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
     }
 
         override fun onDestroyView() {

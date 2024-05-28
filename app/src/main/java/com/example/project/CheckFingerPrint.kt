@@ -17,6 +17,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.example.project.databinding.FragmentFingerPrintBinding
 import com.example.project.viewmodels.BiometricViewModel
 import com.example.project.viewmodels.CollectInfoViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import java.security.KeyStore
 import java.util.concurrent.Executor
 import javax.crypto.Cipher
@@ -126,7 +127,11 @@ class CheckFingerPrint : Fragment() {
         binding.biometricViewModel = fingerPrintViewModel
         lottieAnimationView = binding.lottieAnimationView
         binding.lifecycleOwner = viewLifecycleOwner
+        val topAppBar: MaterialToolbar = binding.topAppBar
 
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
 
         fingerPrintViewModel.biometricEvent.observe(viewLifecycleOwner, Observer { event ->
             when (event) {

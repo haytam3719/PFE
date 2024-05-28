@@ -25,6 +25,7 @@ import com.example.project.viewmodels.CardsViewModel
 import com.example.project.viewmodels.ConsultationViewModel
 import com.example.project.viewmodels.PaymentFourViewModel
 import com.example.project.viewmodels.PaymentViewModelUpdated
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.security.KeyStore
@@ -81,6 +82,11 @@ class PaymentStepFour : Fragment() {
     ): View? {
         _binding = Payment4Binding.inflate(inflater, container, false)
         binding.fingerPrintViewModel = fingerPrintViewModel
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         setupClickListeners()
         adapter = AccountsAdapter { account ->
             consultationViewModel.selectAccount(account)

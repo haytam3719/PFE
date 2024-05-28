@@ -22,6 +22,7 @@ import com.example.project.viewmodels.BiometricViewModel
 import com.example.project.viewmodels.ConsultationViewModel
 import com.example.project.viewmodels.PaymentViewModelUpdated
 import com.example.project.viewmodels.RechargeViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.security.KeyStore
@@ -71,6 +72,11 @@ class Recharge3 : Fragment() {
     ): View? {
         _binding = RechargeSimple3Binding.inflate(inflater, container, false)
         binding.fingerPrintViewModel = fingerPrintViewModel
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         Log.d("Recharge3", "onCreateView: View created")
 
         setupClickListeners()

@@ -21,6 +21,7 @@ import com.example.project.models.ClientAccountDetails
 import com.example.project.viewmodels.ConsultationViewModel
 import com.example.project.viewmodels.ProgressBarViewModel
 import com.example.project.viewmodels.VirementUpdatedViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,6 +57,12 @@ class VirementStepOne : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         val circularProgressBar = binding.circularProgressBar
 
         if (savedInstanceState == null) {

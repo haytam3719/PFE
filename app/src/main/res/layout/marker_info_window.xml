@@ -51,6 +51,7 @@
             android:layout_marginTop="20dp"
             android:drawableStart="@drawable/phone"
             android:drawablePadding="8dp"
+            android:drawableTint="@color/reddish_orange"
             android:text="+212 22 43 50 50"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textSize="16sp"

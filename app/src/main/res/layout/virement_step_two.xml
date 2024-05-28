@@ -7,21 +7,23 @@
     android:layout_height="match_parent"
     android:background="@color/white"
 >
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
             android:background="@color/primary_orange"
+            android:minHeight="?attr/actionBarSize"
+            app:navigationIcon="@drawable/back"
             app:title="Virement"
-            app:titleTextColor="@color/white"
-            app:navigationIcon="@drawable/back" />
+            app:titleTextColor="@color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

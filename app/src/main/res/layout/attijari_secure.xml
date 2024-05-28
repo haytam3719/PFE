@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:title="Code d'Attijari Secure"
+            app:title="Attijari Secure"
             app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/back"
             android:background="@color/reddish_orange"
@@ -33,13 +33,14 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        app:cardBackgroundColor="#FFEEE2"
         app:cardCornerRadius="16dp"
         app:cardElevation="6dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="35dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -50,11 +51,11 @@
                 android:id="@+id/imageTransfer"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/transfer"
+                android:src="@drawable/telephone_intelligent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="#FF5722" /> <!-- Dark orange tint for the icon -->
+                app:tint="#FF5722" />
 
             <TextView
                 android:id="@+id/tvTransferts"
@@ -62,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:text="Appareils de confiance"
-                android:textColor="#FF5722"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/imageEndTransferts"
@@ -81,16 +82,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/definir_attijari_secure"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        app:cardBackgroundColor="#FFEEE2"
         app:cardCornerRadius="16dp"
         app:cardElevation="6dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/deviceButton"
@@ -105,11 +106,11 @@
                 android:id="@+id/image_code_attijari"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/transfer"
+                android:src="@drawable/password"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="#FF5722" /> <!-- Dark orange tint for the icon -->
+                app:tint="#FF5722" />
 
             <TextView
                 android:id="@+id/tv_code_attijari"
@@ -117,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:text="Définir un code Attijari Secure"
-                android:textColor="#FF5722"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/imageEnd_code_attijari"

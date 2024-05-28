@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.adapters.ClientAdapter
 import com.example.project.databinding.MesBeneficiairesBinding
 import com.example.project.viewmodels.ConsultationViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +35,11 @@ class MesBeneficiaires : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val topAppBar: MaterialToolbar = binding.topAppBar
 
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
         consultationViewModel.combinedDataLiveData.observe(viewLifecycleOwner) { result ->
             result.onSuccess { combinedData ->
                 Log.d("Fragment", "Combined data received: $combinedData")

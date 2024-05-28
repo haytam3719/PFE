@@ -20,6 +20,7 @@ import com.example.project.databinding.VirementStepTwoBinding
 import com.example.project.models.CircularProgressView
 import com.example.project.viewmodels.ProgressBarViewModel
 import com.example.project.viewmodels.VirementUpdatedViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,6 +44,14 @@ class VirementStepTwo : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
+
         val circularProgressBar = binding.circularProgressBar
         circularProgressBar.progress = 25
         Handler(Looper.getMainLooper()).postDelayed({

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.project.adapters.DeviceInfoAdapter
 import com.example.project.databinding.DeviceInfoListBinding
 import com.example.project.viewmodels.DashboardViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,6 +29,12 @@ class DeviceInfoList : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = DeviceInfoListBinding.inflate(inflater, container, false)
+        val topAppBar: MaterialToolbar = binding.topAppBar
+
+        topAppBar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         recyclerView = binding.recyclerView
         adapter = DeviceInfoAdapter(emptyList())
         recyclerView.adapter = adapter
