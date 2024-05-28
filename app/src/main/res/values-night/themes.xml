@@ -1,5 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
 
+    <style name="Theme.Project" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary and secondary colors. -->
+        <item name="colorPrimary">@color/orange_primary</item>
+        <item name="colorPrimaryDark">@color/orange_primary_dark</item>
+        <item name="colorAccent">@color/orange_accent</item>
+        <item name="cardViewStyle">@style/Widget.Project.CardView</item>
+    </style>
+
+    <style name="Widget.Project.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/card_background_dark</item>
+    </style>
 
 </resources>

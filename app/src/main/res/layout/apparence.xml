@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -79,25 +80,39 @@
         android:id="@+id/guideline70"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.57" />
+        android:orientation="horizontal"
+         />
 
-    <RadioButton
-        android:id="@+id/light"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        app:layout_constraintTop_toBottomOf="@id/darkModeImage"
-        app:layout_constraintStart_toStartOf="@id/guideline35"
-        android:button="@drawable/radio_button"
-        android:checked="true"
-        />
 
-    <RadioButton
-        android:id="@+id/dark"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        app:layout_constraintTop_toBottomOf="@id/darkModeImage"
-        app:layout_constraintStart_toStartOf="@id/guideline70"
-        android:button="@drawable/radio_button"
-        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <CheckBox
+            android:id="@+id/checkbox1"
+            style="@style/CustomCheckbox"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <CheckBox
+            android:id="@+id/checkbox2"
+            style="@style/CustomCheckbox"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="40dp"
+            app:layout_constraintBottom_toBottomOf="@+id/checkbox1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/checkbox1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

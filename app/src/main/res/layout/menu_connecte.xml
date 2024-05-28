@@ -57,7 +57,6 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    app:cardBackgroundColor="@color/white"
                     android:onClick="@{view -> menuConnecte.onClickTransferts(view)}">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -115,7 +114,6 @@
                     android:layout_marginTop="18dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    app:cardBackgroundColor="@color/white"
                     android:onClick="@{view -> menuConnecte.onClickPaiements(view)}">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -173,7 +171,6 @@
                     android:layout_marginTop="18dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    app:cardBackgroundColor="@color/white"
                     android:onClick="@{view -> menuConnecte.onClickConsultation(view)}">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -225,7 +222,6 @@
                     android:focusable="true"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="6dp"
-                    app:cardBackgroundColor="@color/white"
                     android:layout_marginTop="8dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="5dp"
@@ -274,7 +270,6 @@
                     android:focusable="true"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="6dp"
-                    app:cardBackgroundColor="@color/white"
                     android:layout_marginTop="8dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="5dp"
@@ -323,7 +318,7 @@
                     android:focusable="true"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="6dp"
-                    app:cardBackgroundColor="@color/white"
+
                     android:layout_marginTop="8dp"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="5dp"
@@ -380,7 +375,6 @@
                     android:layout_marginTop="18dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    app:cardBackgroundColor="@color/white"
                     android:onClick="@{view -> menuConnecte.onClickAttijariSecure(view)}">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -438,7 +432,6 @@
                     android:layout_marginTop="18dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    app:cardBackgroundColor="@color/white"
                     android:onClick="@{view -> menuConnecte.onClickAssistanceReclamation(view)}">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -496,7 +489,6 @@
                     android:layout_marginTop="18dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    app:cardBackgroundColor="@color/white"
                     android:onClick="@{view -> menuConnecte.onClickInfosUtiles(view)}">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -550,7 +542,6 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:onClick="@{view -> menuConnecte.onClickParametres(view)}"
-                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="6dp"
                     android:layout_marginBottom="40dp"

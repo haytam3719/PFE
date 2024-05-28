@@ -7,4 +7,11 @@
 
     </style>
 
+    <style name="CustomCheckbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/custom_checkbox</item>
+    </style>
+
+
+
 </resources>

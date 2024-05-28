@@ -81,6 +81,8 @@
 
     <color name="selectedColor">#4CAF50</color>
     <color name="unselectedColor">#BDBDBD</color>
+    <color name="card_background_light">#FFFFFF</color>
+    <color name="card_background_dark">#333333</color>
 
     <!--FF9800-->
 </resources>
