@@ -20,6 +20,7 @@
     <dimen name="pageMargin">16dp</dimen>
     <dimen name="offset">40dp</dimen>
 
-
+    <dimen name="margin_30dp">30dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
 
 </resources>

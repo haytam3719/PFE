@@ -58,177 +58,265 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp">
+                android:layout_marginTop="15dp">
 
                 <!-- TextView for Payment Account -->
                 <TextView
                     android:id="@+id/tv_payment_account"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Compte de paiement"
-                    android:textColor="@color/charcoal"
+                    android:text="Choisir le mode de paiement"
+                    android:textColor="@color/teal"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Card for Payment Account -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cl_payment_account"
-                    android:layout_width="0dp"
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/payer_par_compte"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    app:layout_constraintTop_toBottomOf="@id/tv_payment_account"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:padding="16dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    >
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_payment_account">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/image_wallet_payment"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/wallet_payment"
+                        app:layout_constraintBottom_toTopOf="@id/text_payer_par_compte"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/text_payer_par_compte"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        >
+                        android:layout_marginTop="10dp"
+                        android:text="Payer par compte"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/image_wallet_payment" />
 
-                        <ImageView
-                            android:id="@+id/iv_account_icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/note"
-                            android:contentDescription="Account Icon"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/tangerine_orange" />
-
-                        <TextView
-                            android:id="@+id/tv_account_name"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="15dp"
-                            android:text="Compte"
-                            android:textColor="@color/charcoal"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toStartOf="@id/iv_dropdown"
-                            app:layout_constraintStart_toEndOf="@id/iv_account_icon"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tv_account_number"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="Veuillez choisir un compte"
-                            android:textColor="@color/teal"
-                            android:textSize="14sp"
-                            android:layout_marginStart="15dp"
-
-                            app:layout_constraintTop_toBottomOf="@id/tv_account_name"
-                            app:layout_constraintStart_toEndOf="@id/iv_account_icon"
-                            app:layout_constraintEnd_toStartOf="@id/iv_dropdown"
-                            />
+                    <CheckBox
+                        android:id="@+id/checkbox_payer_par_compte"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="20dp"
+                        android:button="@drawable/payment_selector"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text_payer_par_compte" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                        <TextView
-                            android:id="@+id/tv_balance"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/charcoal"
-                            android:textSize="14sp"
-                            android:layout_marginStart="15dp"
-
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/iv_dropdown"
-                            app:layout_constraintStart_toEndOf="@id/iv_account_icon"
-                            app:layout_constraintTop_toBottomOf="@id/tv_account_number" />
-
-
-
-                        <ImageView
-                            android:id="@+id/iv_dropdown"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/down_icon"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/tangerine_orange" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                </androidx.cardview.widget.CardView>
-
-
-                <!-- CardView for Card Selection -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cl_card_selection"
-                    android:layout_width="0dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    app:layout_constraintTop_toBottomOf="@id/cl_payment_account"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:padding="16dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/payer_par_compte"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp">
+                    app:layout_constraintStart_toEndOf="@id/payer_par_compte"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_payment_account">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/image_card_payment"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/card_payment"
+                        app:layout_constraintBottom_toTopOf="@id/text_payer_par_carte"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/text_payer_par_carte"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp">
+                        android:layout_marginTop="10dp"
+                        android:text="Payer par carte"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/image_card_payment" />
 
-                        <ImageView
-                            android:id="@+id/iv_card_icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/card"
-                            android:contentDescription="Card Icon"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/tangerine_orange" />
+                    <CheckBox
+                        android:id="@+id/checkbox_payer_par_carte"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="20dp"
+                        android:button="@drawable/payment_selector"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text_payer_par_carte" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <TextView
-                            android:id="@+id/tv_card_label"
-                            android:layout_width="0dp"
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/mode_paiement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/payer_par_compte">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cl_payment_account"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:visibility="gone"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Carte de paiement"
-                            android:textColor="@color/charcoal"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toEndOf="@id/iv_card_icon"
-                            app:layout_constraintEnd_toStartOf="@id/iv_card_dropdown"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:layout_marginStart="15dp" />
+                            android:padding="16dp">
 
-                        <TextView
-                            android:id="@+id/tv_card_details"
-                            android:layout_width="0dp"
+                            <ImageView
+                                android:id="@+id/iv_account_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:contentDescription="Account Icon"
+                                android:src="@drawable/note"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/tangerine_orange" />
+
+                            <TextView
+                                android:id="@+id/tv_account_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:text="Compte"
+                                android:textColor="@color/charcoal"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toStartOf="@id/iv_dropdown"
+                                app:layout_constraintStart_toEndOf="@id/iv_account_icon"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_account_number"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:text="Veuillez choisir un compte"
+                                android:textColor="@color/teal"
+                                android:textSize="14sp"
+                                app:layout_constraintEnd_toStartOf="@id/iv_dropdown"
+                                app:layout_constraintStart_toEndOf="@id/iv_account_icon"
+                                app:layout_constraintTop_toBottomOf="@id/tv_account_name" />
+
+                            <TextView
+                                android:id="@+id/tv_balance"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:textColor="@color/charcoal"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/iv_dropdown"
+                                app:layout_constraintStart_toEndOf="@id/iv_account_icon"
+                                app:layout_constraintTop_toBottomOf="@id/tv_account_number" />
+
+                            <ImageView
+                                android:id="@+id/iv_dropdown"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/down_icon"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/tangerine_orange" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cl_card_selection"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:visibility="gone"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Veuillez sélectionner une carte"
-                            android:textColor="@color/teal"
-                            android:textSize="14sp"
-                            app:layout_constraintTop_toBottomOf="@id/tv_card_label"
-                            app:layout_constraintStart_toEndOf="@id/iv_card_icon"
-                            app:layout_constraintEnd_toStartOf="@id/iv_card_dropdown"
-                            android:layout_marginStart="15dp" />
+                            android:padding="16dp">
 
-                        <ImageView
-                            android:id="@+id/iv_card_dropdown"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/down_icon"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/tangerine_orange" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
+                            <ImageView
+                                android:id="@+id/iv_card_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:contentDescription="Card Icon"
+                                android:src="@drawable/card"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/tangerine_orange" />
+
+                            <TextView
+                                android:id="@+id/tv_card_label"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:text="Carte de paiement"
+                                android:textColor="@color/charcoal"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toStartOf="@id/iv_card_dropdown"
+                                app:layout_constraintStart_toEndOf="@id/iv_card_icon"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_card_details"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="15dp"
+                                android:text="Veuillez sélectionner une carte"
+                                android:textColor="@color/teal"
+                                android:textSize="14sp"
+                                app:layout_constraintEnd_toStartOf="@id/iv_card_dropdown"
+                                app:layout_constraintStart_toEndOf="@id/iv_card_icon"
+                                app:layout_constraintTop_toBottomOf="@id/tv_card_label" />
+
+                            <ImageView
+                                android:id="@+id/iv_card_dropdown"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/down_icon"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/tangerine_orange" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
                 <!-- TextView for Recharge Information -->
@@ -240,10 +328,10 @@
                     android:textColor="@color/charcoal"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@id/cl_card_selection"
+                    app:layout_constraintTop_toBottomOf="@id/mode_paiement"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginTop="30dp" />
 
                 <!-- Card for Recharge Information -->
                 <androidx.cardview.widget.CardView

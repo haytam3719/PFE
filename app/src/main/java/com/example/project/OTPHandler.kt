@@ -245,7 +245,7 @@ class OTPHandler : Fragment() {
         if(fromPayment) {
             bundle = "fromPayment"
 
-            if(paymentFourViewModel.selectedCard.value != null){
+            if(paymentFourViewModel.selectedCard.value != null && selectedAccountId == null){
                 Log.d("Card",paymentFourViewModel.selectedCard.value?.numeroCompte.toString())
                 otpViewModel.otpBiometricVerifiedPayment.observe(viewLifecycleOwner) { verified ->
                     if (verified) {

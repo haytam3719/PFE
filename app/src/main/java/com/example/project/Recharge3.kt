@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.Fragment
@@ -16,10 +17,13 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.adapters.AccountData
+import com.example.project.adapters.CardsAdapter
 import com.example.project.databinding.RechargeSimple3Binding
 import com.example.project.models.Bill
 import com.example.project.viewmodels.BiometricViewModel
+import com.example.project.viewmodels.CardsViewModel
 import com.example.project.viewmodels.ConsultationViewModel
+import com.example.project.viewmodels.PaymentFourViewModel
 import com.example.project.viewmodels.PaymentViewModelUpdated
 import com.example.project.viewmodels.RechargeViewModel
 import com.google.android.material.appbar.MaterialToolbar
@@ -38,10 +42,16 @@ class Recharge3 : Fragment() {
     private val consultationViewModel: ConsultationViewModel by activityViewModels()
     private val rechargeViewModel: RechargeViewModel by activityViewModels()
     private val paymentViewModelUpdated: PaymentViewModelUpdated by activityViewModels()
+    private val paymentFourViewModel: PaymentFourViewModel by activityViewModels()
+
 
     private lateinit var adapter: AccountsAdapter
     private var phoneNumberr = ""
     private var montantt = ""
+
+    private val cardsViewModel: CardsViewModel by viewModels()
+    private lateinit var cardsAdapter: CardsAdapter
+
 
     private val fingerPrintViewModel: BiometricViewModel by viewModels()
     private val mainThreadExecutor: MainThreadExecutor = MainThreadExecutor()
@@ -97,13 +107,26 @@ class Recharge3 : Fragment() {
             viewLifecycleOwner,
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
-                    val bundle = Bundle().apply {
-                        putBoolean("fromPayment", true)
-                        putString("selectedAccountId", selectedAccountId)
-                    }
-                    findNavController().navigate(R.id.recharge3_to_otp, bundle)
+                    if(binding.checkboxPayerParCompte.isChecked) {
+                        val bundle = Bundle().apply {
+                            putBoolean("fromPayment", true)
+                            putString("selectedAccountId", selectedAccountId)
+                        }
+                        findNavController().navigate(R.id.recharge3_to_otp, bundle)
 
-                    fingerPrintViewModel.onNavigationCompleteOtp()
+                        fingerPrintViewModel.onNavigationCompleteOtp()
+                    }else if(binding.checkboxPayerParCarte.isChecked){
+                        val bundle = Bundle().apply {
+                            putBoolean("fromPayment", true)
+                        }
+
+                        findNavController().navigate(R.id.recharge3_to_otp, bundle)
+                        fingerPrintViewModel.onNavigationCompleteOtp()
+
+                    }else{
+                        Toast.makeText(requireContext(),"Veuillez sélectionner au moins un moyen de paiement",
+                            Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
 
@@ -130,6 +153,7 @@ class Recharge3 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupCheckBoxListeners()
         Log.d("Recharge3", "onViewCreated: View created")
 
         rechargeViewModel.phoneNumber.observe(viewLifecycleOwner) { phoneNumber ->
@@ -154,6 +178,47 @@ class Recharge3 : Fragment() {
         val listBill = listOf<Bill>(bill)
         Log.d("Bill From RECHARGE 3",listBill.toString())
         paymentViewModelUpdated.loadBills(listBill)
+
+
+
+        //Cards Code
+        cardsAdapter = CardsAdapter(emptyList()) { selectedCard ->
+            paymentFourViewModel.selectCard(selectedCard)
+        }
+
+        binding.listViewOptionsCarte.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = cardsAdapter
+        }
+
+        // Observe the LiveData from the ViewModel
+        cardsViewModel.cartesByProprietaire.observe(viewLifecycleOwner, Observer { cards ->
+            cardsAdapter.updateCards(cards)
+        })
+
+        cardsViewModel.cartesByProprietaire.observe(viewLifecycleOwner, Observer { cards ->
+            cardsAdapter.updateCards(cards)
+        })
+
+
+        // Observe the selected card LiveData
+        paymentFourViewModel.selectedCard.observe(viewLifecycleOwner, Observer { selectedCard ->
+            binding.popupViewCarte.visibility = View.GONE
+            binding.tvCardDetails.text = "Numéro de la carte:\n **** **** **** ${selectedCard.numeroCarte.takeLast(4)}\nType carte: ${if (selectedCard.numeroCompte != null) "Débit" else "Crédit"}"
+            binding.ivCardDropdown.visibility = View.GONE
+        })
+
+        val proprietorId = FirebaseAuth.getInstance().currentUser!!.uid
+        cardsViewModel.getCartesByIdProprietaire(proprietorId)
+
+
+        binding.clCardSelection.setOnClickListener {
+            binding.popupViewCarte.visibility = View.VISIBLE
+        }
+
+        binding.closeImageViewCarte.setOnClickListener{
+            binding.popupViewCarte.visibility = View.GONE
+        }
     }
 
 
@@ -253,6 +318,57 @@ class Recharge3 : Fragment() {
         return amountString.toDouble()
     }
 
+
+    private fun setupCheckBoxListeners() {
+        binding.checkboxPayerParCompte.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.checkboxPayerParCarte.isChecked = false
+
+                toggleView(binding.clPaymentAccount, true)
+                toggleView(binding.clCardSelection, false)
+            } else {
+                toggleView(binding.clPaymentAccount, false)
+                toggleView(binding.clCardSelection, true)
+            }
+        }
+
+        binding.checkboxPayerParCarte.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.checkboxPayerParCompte.isChecked = false
+
+                toggleView(binding.clCardSelection, true)
+                toggleView(binding.clPaymentAccount, false)
+            } else {
+                toggleView(binding.clCardSelection, false)
+                toggleView(binding.clPaymentAccount, true)
+            }
+        }
+    }
+
+    private fun toggleView(view: View, show: Boolean) {
+        if (show) {
+            view.visibility = View.VISIBLE
+            view.alpha = 0f
+            view.scaleX = 0.8f
+            view.scaleY = 0.8f
+            view.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(300L)
+                .start()
+        } else {
+            view.animate()
+                .alpha(0f)
+                .scaleX(0.8f)
+                .scaleY(0.8f)
+                .setDuration(300L)
+                .withEndAction {
+                    view.visibility = View.GONE
+                }
+                .start()
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.Fragment
@@ -119,15 +120,28 @@ class PaymentStepFour : Fragment() {
             viewLifecycleOwner,
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
-                    val bundle = Bundle().apply {
-                        putBoolean("fromPayment", true)
-                        putString("selectedAccountId", selectedAccountId)
+                    if(binding.checkboxPayerParCompte.isChecked){
+                        val bundle = Bundle().apply {
+                            putBoolean("fromPayment", true)
+                            putString("selectedAccountId", selectedAccountId)
+                        }
+
+                        findNavController().navigate(R.id.paymentStepFour_to_otp, bundle)
+
+                        fingerPrintViewModel.onNavigationCompleteOtp()
+                    }else if(binding.checkboxPayerParCarte.isChecked){
+                        val bundle = Bundle().apply {
+                            putBoolean("fromPayment", true)
+                        }
+
+                        findNavController().navigate(R.id.paymentStepFour_to_otp, bundle)
+                        fingerPrintViewModel.onNavigationCompleteOtp()
+
+                    }else{
+                        Toast.makeText(requireContext(),"Veuillez sélectionner au moins un moyen de paiement",Toast.LENGTH_SHORT).show()
+                    }
                     }
 
-                    findNavController().navigate(R.id.paymentStepFour_to_otp, bundle)
-
-                    fingerPrintViewModel.onNavigationCompleteOtp()
-                }
             })
 
 
@@ -152,6 +166,9 @@ class PaymentStepFour : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupCheckBoxListeners()
+
         setupRecyclerView()
 
         //Cards Code
@@ -279,6 +296,60 @@ class PaymentStepFour : Fragment() {
         )
 
     }
+
+
+
+    private fun setupCheckBoxListeners() {
+        binding.checkboxPayerParCompte.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.checkboxPayerParCarte.isChecked = false
+
+                toggleView(binding.clPaymentAccount, true)
+                toggleView(binding.clCardSelection, false)
+            } else {
+                toggleView(binding.clPaymentAccount, false)
+                toggleView(binding.clCardSelection, true)
+            }
+        }
+
+        binding.checkboxPayerParCarte.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.checkboxPayerParCompte.isChecked = false
+
+                toggleView(binding.clCardSelection, true)
+                toggleView(binding.clPaymentAccount, false)
+            } else {
+                toggleView(binding.clCardSelection, false)
+                toggleView(binding.clPaymentAccount, true)
+            }
+        }
+    }
+
+    private fun toggleView(view: View, show: Boolean) {
+        if (show) {
+            view.visibility = View.VISIBLE
+            view.alpha = 0f
+            view.scaleX = 0.8f
+            view.scaleY = 0.8f
+            view.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(300L)
+                .start()
+        } else {
+            view.animate()
+                .alpha(0f)
+                .scaleX(0.8f)
+                .scaleY(0.8f)
+                .setDuration(300L)
+                .withEndAction {
+                    view.visibility = View.GONE
+                }
+                .start()
+        }
+    }
+
 
 
     private fun observeViewModel() {
