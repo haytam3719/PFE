@@ -298,7 +298,7 @@ class OTPHandler : Fragment() {
             if (selectedAccountId != null) {
                 paymentViewModel.handleSuccessfulPayment("Votre paiement relatif à la facture N° ${bill.id}, montant: ${(billAmount+0.25*billAmount).toInt()} DH a été réglé")
                 Log.d("paySelectedBills", "Selected account: $selectedAccountId")
-                paymentViewModel.makePaiement(bill.amount, "paiement", selectedAccountId!!)
+                paymentViewModel.makePaiement((bill.amount+0.25*bill.amount).toDouble(), "paiement", selectedAccountId!!)
 
 
             } else {
@@ -345,7 +345,7 @@ class OTPHandler : Fragment() {
             if (selectedAccountNum != null) {
                 paymentViewModel.handleSuccessfulPayment("Votre paiement relatif à la facture N° ${bill.id}, montant: ${(billAmount+0.25*billAmount).toInt()} DH a été réglé")
                 Log.d("paySelectedBills", "Selected account (card): $selectedAccountNum")
-                paymentViewModel.makePaiementUsingCard(bill.amount, "Paiement", selectedAccountNum,paymentFourViewModel.selectedCard.value!!)
+                paymentViewModel.makePaiementUsingCard((bill.amount+0.25*bill.amount).toDouble(), "Paiement", selectedAccountNum,paymentFourViewModel.selectedCard.value!!)
             } else {
                 Log.e("paySelectedBills", "No account selected")
             }

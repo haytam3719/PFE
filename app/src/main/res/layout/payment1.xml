@@ -63,6 +63,8 @@
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_telephonie_internet">
@@ -75,9 +77,10 @@
                     <!-- Icon 1 -->
                     <ImageView
                         android:id="@+id/iv_icon1"
-                        android:layout_width="48dp"
+                        android:layout_width="60dp"
                         android:layout_height="48dp"
                         android:layout_marginStart="30dp"
+                        android:src="@drawable/maroc_telecom"
                         android:clickable="true"
                         android:focusable="true"
                         app:layout_constraintStart_toStartOf="parent"
@@ -97,10 +100,11 @@
                     <!-- Icon 2 -->
                     <ImageView
                         android:id="@+id/iv_icon2"
-                        android:layout_width="48dp"
+                        android:layout_width="60dp"
                         android:layout_height="48dp"
                         android:clickable="true"
                         android:focusable="true"
+                        android:src="@drawable/inwi"
                         app:layout_constraintEnd_toStartOf="@+id/iv_icon3"
                         app:layout_constraintStart_toEndOf="@id/iv_icon1"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -119,8 +123,9 @@
                     <!-- Icon 3 -->
                     <ImageView
                         android:id="@+id/iv_icon3"
-                        android:layout_width="48dp"
+                        android:layout_width="60dp"
                         android:layout_height="48dp"
+                        android:src="@drawable/orange"
                         android:clickable="true"
                         android:focusable="true"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -162,6 +167,9 @@
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_eau_electricite">
@@ -174,9 +182,10 @@
                     <!-- Icon 4 -->
                     <ImageView
                         android:id="@+id/iv_icon4"
-                        android:layout_width="48dp"
+                        android:layout_width="60dp"
                         android:layout_height="48dp"
                         android:layout_marginStart="30dp"
+                        android:src="@drawable/amendis"
                         android:clickable="true"
                         android:focusable="true"
                         app:layout_constraintStart_toStartOf="parent"
@@ -186,7 +195,7 @@
                         android:id="@+id/tv_label4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Amendis Tanger"
+                        android:text="Amendis Tan."
                         android:textColor="@color/charcoal"
                         android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="@+id/iv_icon4"
@@ -196,8 +205,9 @@
                     <!-- Icon 5 -->
                     <ImageView
                         android:id="@+id/iv_icon5"
-                        android:layout_width="48dp"
+                        android:layout_width="60dp"
                         android:layout_height="48dp"
+                        android:src="@drawable/amendis"
                         android:clickable="true"
                         android:focusable="true"
                         app:layout_constraintEnd_toStartOf="@+id/iv_icon6"
@@ -208,7 +218,7 @@
                         android:id="@+id/tv_label5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Amendis Tetouan"
+                        android:text="Amendis Tet."
                         android:textColor="@color/charcoal"
                         android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="@+id/iv_icon5"
@@ -218,12 +228,13 @@
                     <!-- Icon 6 -->
                     <ImageView
                         android:id="@+id/iv_icon6"
-                        android:layout_width="48dp"
+                        android:layout_width="60dp"
                         android:layout_height="48dp"
                         android:clickable="true"
                         android:focusable="true"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/lydec"/>
 
                     <TextView
                         android:id="@+id/tv_label6"
@@ -257,9 +268,15 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="16dp"
+                android:paddingBottom="5dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="6dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_ecoles_universites">
@@ -272,11 +289,12 @@
                     <!-- Icon 7 -->
                     <ImageView
                         android:id="@+id/iv_icon7"
-                        android:layout_width="48dp"
+                        android:layout_width="60dp"
                         android:layout_height="48dp"
                         android:layout_marginStart="30dp"
                         android:clickable="true"
                         android:focusable="true"
+                        android:src="@drawable/hassan2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -284,7 +302,7 @@
                         android:id="@+id/tv_label7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="École EMSI"
+                        android:text="Univ Hassan 2"
                         android:textColor="@color/charcoal"
                         android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="@+id/iv_icon7"
@@ -294,10 +312,12 @@
                     <!-- Icon 8 -->
                     <ImageView
                         android:id="@+id/iv_icon8"
-                        android:layout_width="48dp"
+                        android:layout_width="60dp"
                         android:layout_height="48dp"
+                        android:background="@color/white"
                         android:clickable="true"
                         android:focusable="true"
+                        android:src="@drawable/um6"
                         app:layout_constraintEnd_toStartOf="@+id/iv_icon9"
                         app:layout_constraintStart_toEndOf="@id/iv_icon7"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -316,10 +336,11 @@
                     <!-- Icon 9 -->
                     <ImageView
                         android:id="@+id/iv_icon9"
-                        android:layout_width="48dp"
+                        android:layout_width="60dp"
                         android:layout_height="48dp"
                         android:clickable="true"
                         android:focusable="true"
+                        android:src="@drawable/ibn_zohr"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -327,7 +348,7 @@
                         android:id="@+id/tv_label9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ENSI"
+                        android:text="Ibn Zohr"
                         android:textColor="@color/charcoal"
                         android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="@+id/iv_icon9"

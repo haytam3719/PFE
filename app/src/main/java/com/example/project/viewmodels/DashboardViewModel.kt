@@ -23,6 +23,11 @@ class DashboardViewModel @Inject constructor(
     private val accountRepositoryImpl: AccountRepositoryImpl
 ):ViewModel(){
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
+
     private val _navigateToVirement = MutableLiveData<Boolean>()
     val navigateToVirement: LiveData<Boolean>
         get() = _navigateToVirement
