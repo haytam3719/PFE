@@ -40,6 +40,12 @@ class DetailCompte : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = DetailCompteBinding.inflate(inflater, container, false)
+
+        detailCompteViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
+
         val topAppBar: MaterialToolbar = binding.topAppBar
 
         topAppBar.setNavigationOnClickListener {
@@ -112,6 +118,9 @@ class DetailCompte : Fragment() {
 
     private fun observeViewModel() {
         detailCompteViewModel.transactionsForSingleAcc.observe(viewLifecycleOwner, Observer { transactions ->
+            if(transactions.isNullOrEmpty()){
+                binding.tvOperations.visibility = View.VISIBLE
+            }
             adapter.updateTransactions(transactions)
         })
 

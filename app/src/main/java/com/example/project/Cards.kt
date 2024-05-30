@@ -40,6 +40,12 @@ class Cards : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        cardsViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
+
         val topAppBar: MaterialToolbar = binding.topAppBar
 
         topAppBar.setNavigationOnClickListener {
@@ -65,6 +71,9 @@ class Cards : Fragment() {
 
         cardsViewModel.getCartesByIdProprietaire(id_proprietaire)
         cardsViewModel.cartesByProprietaire.observe(viewLifecycleOwner) { cartes ->
+            if(cartes.isNullOrEmpty()){
+                binding.tvCards.visibility = View.VISIBLE
+            }
             adapter.updateCards(cartes)
             val accountsNumbers = cartes.map { it.numeroCompte }
             Log.d("Cards Accounts",accountsNumbers.toString())
@@ -84,6 +93,9 @@ class Cards : Fragment() {
         val allTransactions = mutableListOf<TransactionImpl>()
 
         cardsViewModel.transactions.observe(viewLifecycleOwner, Observer { transactions ->
+            if(transactions.isNullOrEmpty()){
+                binding.transactions.visibility = View.VISIBLE
+            }
             transactions?.let {
                 transactionAdapter.updateTransactions(it)
                 allTransactions.addAll(it)

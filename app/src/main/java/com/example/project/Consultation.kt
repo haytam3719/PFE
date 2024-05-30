@@ -10,6 +10,7 @@ import android.webkit.WebView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -71,6 +72,9 @@ class Consultation : Fragment() {
         }
 
         consultationViewModel.accounts.observe(viewLifecycleOwner) { accounts ->
+            if(accounts.isNullOrEmpty()){
+                binding.tvComptes.visibility = View.VISIBLE
+            }
             if (accounts.isNotEmpty()) {
                 updateAccountsDisplay(accounts)
                 Log.d("ConsultationFragment", "Accounts updated in UI: $accounts")
@@ -99,6 +103,17 @@ class Consultation : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        consultationViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
+        dashboardViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
+
+
         val topAppBar: MaterialToolbar = binding.topAppBar
 
         topAppBar.setNavigationOnClickListener {
@@ -125,6 +140,9 @@ class Consultation : Fragment() {
 
 
         dashboardViewModel.accountBalances.observe(viewLifecycleOwner) { balances ->
+            if(balances.isNotEmpty()){
+                binding.tvWebView.visibility = View.VISIBLE
+            }
             if (balances.isNotEmpty()) {
                 updateWebView(balances)
             }
@@ -143,6 +161,9 @@ class Consultation : Fragment() {
 
     private fun observeTransactions() {
         consultationViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
+            if(transactions.isNullOrEmpty()){
+                binding.tvOperation.visibility = View.VISIBLE
+            }
             adapter.updateTransactions(transactions)
         }
     }

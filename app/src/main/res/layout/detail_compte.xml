@@ -15,6 +15,15 @@
         android:background="@android:color/white"
         tools:context=".DetailCompteActivity">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <!-- AppBarLayout and Toolbar -->
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -170,6 +179,21 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/balance" />
+
+
+                <TextView
+                    android:id="@+id/tvOperations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/recentTransactionsRecyclerView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recentTransactionsLabel"
+                    android:textSize="16sp"
+                    android:text="Aucune transaction pour le moment"
+                    android:visibility="gone"/>
+
 
                 <!-- RecyclerView for Recent Transactions -->
                 <androidx.recyclerview.widget.RecyclerView

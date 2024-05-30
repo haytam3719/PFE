@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +40,11 @@ class DetailsCarte : Fragment(),ModifySecurityCodeDialogFragment.OnSecurityCodeM
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        cardsViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
 
         val topAppBar: MaterialToolbar = binding.topAppBar
 
@@ -73,6 +79,14 @@ class DetailsCarte : Fragment(),ModifySecurityCodeDialogFragment.OnSecurityCodeM
         val allTransactions = mutableListOf<TransactionImpl>()
 
         cardsViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
+            if(transactions.isNullOrEmpty()){
+                if(currentCard.numeroCompte == null){
+                    binding.tvTransactionsCarte.setText("Les transactions en utilisant des cartes Crédit ne sont pas encore prises en charge, puisqu'elles ne sont pas associée à un compte spécifique.")
+                }else{
+                    binding.tvTransactionsCarte.visibility = View.VISIBLE
+                }
+
+            }
             transactions?.let {
                 val filteredTransactions = it.filter { transaction ->
                     val regex = Regex("""\d{4} \d{4} \d{4} \d{4}""")

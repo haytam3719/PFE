@@ -15,16 +15,23 @@ class DetailTransactionsViewModel @Inject constructor(
     private val accountRepositoryImpl: AccountRepositoryImpl
 ) : ViewModel() {
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
     private val _transactionDetails = MutableLiveData<Transaction?>()
     val transactionDetails: LiveData<Transaction?> = _transactionDetails
 
     fun loadTransaction(transactionId: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
             try {
                 val transaction = accountRepositoryImpl.getHistoriqueTransactionsById(transactionId)
                 _transactionDetails.postValue(transaction)
             } catch (e: Exception) {
                 _transactionDetails.postValue(null)
+            } finally {
+                _isLoading.postValue(false)
             }
         }
     }

@@ -53,6 +53,11 @@ class Dashboard : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        dashboardViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
+
         dashboardViewModel.navigateToPayment.observe(
             viewLifecycleOwner,
             Observer{shouldnavigate ->
@@ -210,6 +215,9 @@ class Dashboard : Fragment(){
 
     private fun observeTransactions() {
         consultationViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
+            if(transactions.isNullOrEmpty()){
+                binding.noTransactions.visibility = View.VISIBLE
+            }
             adapter.updateTransactions(transactions)
         }
     }

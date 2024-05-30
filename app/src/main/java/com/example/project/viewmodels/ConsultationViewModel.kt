@@ -19,6 +19,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConsultationViewModel @Inject constructor(private val accountRepositoryImpl: AccountRepositoryImpl) : ViewModel() {
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
+    private val _dataLoaded = MutableLiveData<Boolean>()
+    val dataLoaded: LiveData<Boolean> get() = _dataLoaded
+
     private val _accounts = MutableLiveData<List<AccountData>>()
     val accounts: LiveData<List<AccountData>> get() = _accounts
 
@@ -28,7 +35,16 @@ class ConsultationViewModel @Inject constructor(private val accountRepositoryImp
 
     fun getAccounts() {
         viewModelScope.launch {
-            accountRepositoryImpl.getAccounts()
+            _isLoading.value = true
+            try {
+                val accounts = accountRepositoryImpl.getAccounts()
+                _dataLoaded.postValue(true)
+            } catch (e: Exception) {
+                Log.e("ConsultationViewModel", "Error fetching accounts", e)
+                _dataLoaded.postValue(false)
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
@@ -56,43 +72,59 @@ class ConsultationViewModel @Inject constructor(private val accountRepositoryImp
         }
     }
 
-
     val userAccountsLiveData = MutableLiveData<List<CompteImpl>>()
 
     fun fetchAccountsForCurrentUser(userId: String) {
         viewModelScope.launch {
-            val accounts = accountRepositoryImpl.getAccountsForCurrentUser(userId)
-            _accounts.postValue(accounts.map { AccountData(it.type.toString(), it.numero, it.solde.toString()) })
-        }
-    }
-
-
-
-    private val _transactions = MutableLiveData<List<Transaction>>()
-    val transactions: LiveData<List<Transaction>> = _transactions
-
-    fun loadTransactions(uid: String) {
-        viewModelScope.launch {
-            val accountId = FirebaseAuth.getInstance().currentUser?.uid
-            if (accountId != null) {
-                accountRepositoryImpl.fetchHistoriqueTransactions(accountId) { transactions ->
-                    transactions?.let {
-                        _transactions.postValue(it)
-                    } ?: run {
-                        Log.e("ViewModel", "No transactions found.")
-                        _transactions.postValue(emptyList())
-                    }
-                }
-            } else {
-                Log.e("ViewModel", "Account ID is null")
-                _transactions.postValue(emptyList())
+            _isLoading.value = true
+            try {
+                val accounts = accountRepositoryImpl.getAccountsForCurrentUser(userId)
+                _accounts.postValue(accounts.map { AccountData(it.type.toString(), it.numero, it.solde.toString()) })
+                _dataLoaded.postValue(true)
+            } catch (e: Exception) {
+                Log.e("ConsultationViewModel", "Error fetching accounts for current user", e)
+                _dataLoaded.postValue(false)
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
+    private val _transactions = MutableLiveData<List<Transaction>>()
+    val transactions: LiveData<List<Transaction>> get() = _transactions
+
+    fun loadTransactions(uid: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val accountId = FirebaseAuth.getInstance().currentUser?.uid
+                if (accountId != null) {
+                    accountRepositoryImpl.fetchHistoriqueTransactions(accountId) { transactions ->
+                        transactions?.let {
+                            _transactions.postValue(it)
+                        } ?: run {
+                            Log.e("ConsultationViewModel", "No transactions found.")
+                            _transactions.postValue(emptyList())
+                        }
+                        _dataLoaded.postValue(true)
+                    }
+                } else {
+                    Log.e("ConsultationViewModel", "Account ID is null")
+                    _transactions.postValue(emptyList())
+                    _dataLoaded.postValue(false)
+                }
+            } catch (e: Exception) {
+                Log.e("ConsultationViewModel", "Error loading transactions", e)
+                _dataLoaded.postValue(false)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 
     private val _selectedAccount = MutableLiveData<AccountData>()
-    val selectedAccount: LiveData<AccountData> = _selectedAccount
+    val selectedAccount: LiveData<AccountData> get() = _selectedAccount
+
     fun selectAccount(account: AccountData) {
         _selectedAccount.value = account
     }
@@ -100,28 +132,38 @@ class ConsultationViewModel @Inject constructor(private val accountRepositoryImp
     val combinedDataLiveData = MutableLiveData<Result<List<ClientAccountDetails>>>()
 
     fun loadCombinedData(userId: String) {
-        Log.d("ViewModel", "Starting loadCombinedData for userId: $userId")
+        Log.d("ConsultationViewModel", "Starting loadCombinedData for userId: $userId")
         viewModelScope.launch {
-            accountRepositoryImpl.getCombinedBeneficiaryClientData(userId) { result ->
-                Log.d("ViewModel", "Received result from repository")
-                result.onSuccess { combinedData ->
-                    Log.d("ViewModel", "Combined data loaded successfully: ${combinedData.size}")
+            _isLoading.value = true
+            try {
+                accountRepositoryImpl.getCombinedBeneficiaryClientData(userId) { result ->
+                    Log.d("ConsultationViewModel", "Received result from repository")
+                    result.onSuccess { combinedData ->
+                        Log.d("ConsultationViewModel", "Combined data loaded successfully: ${combinedData.size}")
+                        combinedDataLiveData.postValue(Result.success(combinedData))
+                        _dataLoaded.postValue(true)
+                    }
+                    result.onFailure { exception ->
+                        Log.e("ConsultationViewModel", "Error loading combined data: ${exception.message}")
+                        combinedDataLiveData.postValue(Result.failure(exception))
+                        _dataLoaded.postValue(false)
+                    }
                 }
-                result.onFailure { exception ->
-                    Log.e("ViewModel", "Error loading combined data: ${exception.message}")
-                }
-                combinedDataLiveData.postValue(result)
-                Log.d("ViewModel", "Posted combined data result")
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
-
     private val _selectedClient = MutableLiveData<ClientAccountDetails>()
-    val selectedClient: LiveData<ClientAccountDetails> = _selectedClient
+    val selectedClient: LiveData<ClientAccountDetails> get() = _selectedClient
 
     fun selectClient(client: ClientAccountDetails) {
         _selectedClient.value = client
+    }
+
+    fun resetDataLoaded() {
+        _dataLoaded.value = false
     }
 
 }

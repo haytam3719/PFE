@@ -15,6 +15,10 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailCompteViewModel @Inject constructor(private val accountRepositoryImpl: AccountRepositoryImpl) : ViewModel() {
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
     private val _transactionsForSingleAcc = MutableLiveData<List<Transaction>>()
     val transactionsForSingleAcc: LiveData<List<Transaction>> = _transactionsForSingleAcc
     private val _error = MutableLiveData<String>()
@@ -22,12 +26,17 @@ class DetailCompteViewModel @Inject constructor(private val accountRepositoryImp
 
     fun loadTransactionsForSingleAcc(accountNumber: String) {
         viewModelScope.launch {
-            val (transactions, errorMessage) = accountRepositoryImpl.fetchTransactionsByAccountNumber(accountNumber)
-            if (errorMessage == null) {
-                _transactionsForSingleAcc.postValue(transactions ?: emptyList())
-            } else {
-                _error.postValue(errorMessage!!)
-                Log.e("DetailCompteViewModel",errorMessage)
+            _isLoading.value = true
+            try {
+                val (transactions, errorMessage) = accountRepositoryImpl.fetchTransactionsByAccountNumber(accountNumber)
+                if (errorMessage == null) {
+                    _transactionsForSingleAcc.postValue(transactions ?: emptyList())
+                } else {
+                    _error.postValue(errorMessage!!)
+                    Log.e("DetailCompteViewModel", errorMessage)
+                }
+            } finally {
+                _isLoading.value = false
             }
         }
     }
@@ -41,11 +50,14 @@ class DetailCompteViewModel @Inject constructor(private val accountRepositoryImp
 
     fun deleteAccount(numeroAccount: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
             try {
                 accountRepositoryImpl.deleteAccountByNumero(numeroAccount)
                 _deletionSuccess.postValue(true)
             } catch (e: Exception) {
                 _deletionError.postValue(e.message ?: "Failed to delete account")
+            } finally {
+                _isLoading.postValue(false)
             }
         }
     }
@@ -60,11 +72,14 @@ class DetailCompteViewModel @Inject constructor(private val accountRepositoryImp
 
     fun updateAccount(numero: String, updatedAccount: Compte) {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
                 accountRepositoryImpl.updateAccount(numero, updatedAccount)
                 _updateStatus.postValue(true)
             } catch (e: Exception) {
                 _updateError.postValue(e.message ?: "Error updating account.")
+            } finally {
+                _isLoading.value = false
             }
         }
     }

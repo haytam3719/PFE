@@ -49,7 +49,7 @@ class CameraFace : Fragment() {
             val email = "${client.numCin}@example.com"
             val password="haytam123"
             Log.e("The Client : ",client.toString())
-            collectInfoViewModel.signUpClient(email,password,client)
+            //collectInfoViewModel.signUpClient(email,password,client)
         })
 
 

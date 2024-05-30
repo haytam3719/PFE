@@ -89,6 +89,7 @@ class DashboardViewModel @Inject constructor(
     fun fetchDeviceListByClientUid(uid: String) {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
                 Log.d("ViewModel", "Fetching devices for UID: $uid")
                 val devices = clientRepository.getClientDevices(uid)
                 _deviceInfoList.postValue(devices)
@@ -100,6 +101,8 @@ class DashboardViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.e("ViewModel", "Error fetching devices: ${e.message}")
                 _errorMessage.postValue("Error: ${e.message}")
+            }finally {
+                _isLoading.value = false
             }
         }
     }
@@ -113,8 +116,10 @@ class DashboardViewModel @Inject constructor(
     val totalBalance: LiveData<Double> = _totalBalance
 
     fun loadTotalBalance(clientUid: String) {
+        _isLoading.value = true
         accountRepositoryImpl.getTotalBalanceByClientUid(clientUid) { totalBalance ->
             _totalBalance.postValue(totalBalance)
+            _isLoading.value = false
         }
     }
 
@@ -126,9 +131,11 @@ class DashboardViewModel @Inject constructor(
     val isDataLoaded: LiveData<Boolean> = _isDataLoaded
 
     fun loadAccountBalances(userId: String) {
+        _isLoading.value = true
         accountRepositoryImpl.fetchAccountBalances(userId) { balances, isSuccess ->
             _accountBalances.postValue(balances)
             _isDataLoaded.postValue(isSuccess)
+            _isLoading.value = false
         }
     }
 
@@ -137,8 +144,10 @@ class DashboardViewModel @Inject constructor(
     val balanceOverTime: LiveData<List<Pair<String, Double>>> = _balanceOverTime
 
     fun loadBalanceOverTime(userId: String) {
+        _isLoading.value = true
         accountRepositoryImpl.fetchAccountBalancesOverTime(userId) { data ->
             _balanceOverTime.postValue(data)
+            _isLoading.value = false
         }
     }
 

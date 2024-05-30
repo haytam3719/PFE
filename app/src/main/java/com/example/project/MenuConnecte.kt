@@ -9,12 +9,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.MenuConnecteBinding
+import com.example.project.viewmodels.CardsViewModel
+import com.example.project.viewmodels.ConsultationViewModel
+import com.example.project.viewmodels.DashboardViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MenuConnecte : Fragment() {
     private var _binding: MenuConnecteBinding? = null
     private val binding get() = _binding!!
+
+    private val consultationViewModel: ConsultationViewModel by activityViewModels()
+    private val dashboardViewModel:DashboardViewModel by activityViewModels()
+    private val cardsViewModel: CardsViewModel by activityViewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
@@ -70,7 +82,16 @@ class MenuConnecte : Fragment() {
 
 
     fun onClickTransferts(view: View){
-        findNavController().navigate(R.id.menuConnecte_to_transfers)
+        consultationViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+        consultationViewModel.dataLoaded.observe(viewLifecycleOwner) { dataLoaded ->
+            if (dataLoaded) {
+                findNavController().navigate(R.id.menuConnecte_to_transfers)
+                consultationViewModel.resetDataLoaded()
+
+            }
+        }
     }
 
     fun onClickPaiements(view: View){
@@ -88,10 +109,19 @@ class MenuConnecte : Fragment() {
     }
 
     fun onClickConsultationCompte(view: View) {
+        consultationViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+        dashboardViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
         findNavController().navigate(R.id.menuConnecte_to_consultation)
     }
 
     fun onClickAttijariSecure(view:View){
+        dashboardViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
         findNavController().navigate(R.id.menuConnecte_to_attijariSecure)
     }
 
@@ -108,11 +138,17 @@ class MenuConnecte : Fragment() {
     }
 
     fun onClickButtonCards(view: View){
+        cardsViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
         findNavController().navigate(R.id.menuConnecte_to_mesCartes)
     }
 
 
     fun onClickButtonMesBenef(view:View){
+        consultationViewModel.isLoading.observe(viewLifecycleOwner){isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
         findNavController().navigate(R.id.menuConnecte_to_mesBenef)
     }
 

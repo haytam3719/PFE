@@ -76,7 +76,7 @@ class AuthViewModel @Inject constructor(
     }
 
     suspend fun signIn(email: String, password: String) {
-        viewModelScope.launch {
+        //viewModelScope.launch {
             //try {
 
 //                val storedEmail = secureManager.getEmail()
@@ -92,7 +92,7 @@ class AuthViewModel @Inject constructor(
                     Log.d("Access Token", "Client already has an access token")
                     _authState.emit(AuthState.Success)
                 //} else {
-                    _authState.emit(AuthState.Loading)
+                    //_authState.emit(AuthState.Loading)
 
 //                    val accessToken = fetchAccessToken(email, password)
 //                    if (accessToken != null) {
@@ -100,9 +100,9 @@ class AuthViewModel @Inject constructor(
 //                        secureManager.savePassword(password)
 //                        secureManager.saveAccessToken(accessToken)
 //                        Log.d("Access Token", "Access token newly affected to the client")
-                        authRepository.signIn(email, password).await()
-                        FirebaseAuth.getInstance().currentUser?.let { Log.d("URGENT", it.uid) }
-                        _authState.emit(AuthState.Success)
+                        //authRepository.signIn(email, password).await()
+                        //FirebaseAuth.getInstance().currentUser?.let { Log.d("URGENT", it.uid) }
+                        //_authState.emit(AuthState.Success)
 //                    } else {
 //                        _authState.emit(AuthState.Error("Failed to fetch access token"))
 //                    }
@@ -111,7 +111,7 @@ class AuthViewModel @Inject constructor(
 //                _authState.emit(AuthState.Error(e.localizedMessage ?: "Sign in failed"))
 
 
-    }}
+    }
 
     fun signOut() {
         authRepository.signOut()
@@ -138,11 +138,13 @@ class AuthViewModel @Inject constructor(
             Log.d("Password", password)
             try {
                 signIn(email, password)
-                _navigateToDashboard.value = true
+                Log.d("SignIn","Signing In....")
             } catch (e: Exception) {
                 Log.e("AuthViewModel", "Sign in failed: ${e.message}")
             }
+            _navigateToDashboard.value = true
         }
+
     }
 
     fun onNavigationCompleteDash() {

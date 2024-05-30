@@ -13,6 +13,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -45,6 +54,20 @@
             android:padding="16dp"
             android:layout_marginTop="30dp">
 
+
+            <TextView
+                android:id="@+id/tvComptes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aucun compte n'est encore créé"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="17sp"
+                android:visibility="gone"
+                />
+
+
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
@@ -76,6 +99,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/quotas_comptes" />
 
+            <TextView
+                android:id="@+id/tvWebView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pour visualiser les quotas des comptes, vous devez moins créer un"
+                app:layout_constraintBottom_toBottomOf="@id/webView"
+                app:layout_constraintEnd_toEndOf="@id/webView"
+                app:layout_constraintStart_toStartOf="@id/webView"
+                app:layout_constraintTop_toTopOf="@id/webView"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:visibility="gone"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/actionLayout"
                 android:layout_width="0dp"
@@ -100,6 +136,18 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tvOperation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/rvRecentTransactions"
+                app:layout_constraintEnd_toEndOf="@+id/rvRecentTransactions"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/actionLayout"
+                android:visibility="gone"
+                android:textSize="16sp"/>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRecentTransactions"

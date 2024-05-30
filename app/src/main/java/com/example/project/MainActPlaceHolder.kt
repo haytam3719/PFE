@@ -20,6 +20,7 @@ import com.example.project.models.AuthState
 import com.example.project.oAuthRessources.SecureManager
 import com.example.project.viewmodels.AuthViewModel
 import com.example.project.viewmodels.BiometricViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -149,6 +150,7 @@ class MainActPlaceHolder : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseAuth.getInstance().signOut()
     }
 
 

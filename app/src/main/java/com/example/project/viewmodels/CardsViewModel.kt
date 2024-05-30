@@ -21,7 +21,16 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
-class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteRepositoryImpl,private val accountRepositoryImpl: AccountRepositoryImpl) : ViewModel() {
+class CardsViewModel @Inject constructor(
+    private val carteRepositoryImpl: CarteRepositoryImpl,
+    private val accountRepositoryImpl: AccountRepositoryImpl
+) : ViewModel() {
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
+    private val _dataLoaded = MutableLiveData<Boolean>()
+    val dataLoaded: LiveData<Boolean> get() = _dataLoaded
 
     private val _cartes = MutableLiveData<List<CarteImpl>>()
     val cartes: LiveData<List<CarteImpl>> = _cartes
@@ -35,18 +44,27 @@ class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteR
     private val _cartesByProprietaire = MutableLiveData<List<CarteImpl>>()
     val cartesByProprietaire: LiveData<List<CarteImpl>> = _cartesByProprietaire
 
+    private val _transactions = MutableLiveData<List<TransactionImpl>>()
+    val transactions: LiveData<List<TransactionImpl>> get() = _transactions
+
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> get() = _errorMessage
+
     fun ajouterCarte(carte: CarteImpl) {
         Log.d("CardsVM", "Adding carte: ${carte.numeroCarte}")
         viewModelScope.launch {
+            _isLoading.value = true
             carteRepositoryImpl.ajouterCarte(carte, object :
                 CarteRepositoryImpl.CarteRepositoryCallback<Unit> {
                 override fun onSuccess(result: Unit) {
                     _operationStatus.postValue(true)
+                    _isLoading.value = false
                     Log.d("CardsVM", "Add carte operation successful")
                 }
 
                 override fun onError(error: DatabaseError) {
                     _operationStatus.postValue(false)
+                    _isLoading.value = false
                     Log.e("CardsVM", "Add carte operation failed: ${error.message}")
                 }
             })
@@ -55,30 +73,35 @@ class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteR
 
     fun supprimerCarte(id: String) {
         viewModelScope.launch {
+            _isLoading.value = true
             carteRepositoryImpl.supprimerCarte(id, object :
                 CarteRepositoryImpl.CarteRepositoryCallback<Unit> {
                 override fun onSuccess(result: Unit) {
                     _operationStatus.postValue(true)
+                    _isLoading.value = false
                 }
 
                 override fun onError(error: DatabaseError) {
                     _operationStatus.postValue(false)
+                    _isLoading.value = false
                 }
             })
         }
     }
 
-
     fun modifierSecurityCode(id: String, newSecurityCode: String) {
         viewModelScope.launch {
+            _isLoading.value = true
             carteRepositoryImpl.modifierSecurityCode(id, newSecurityCode, object :
                 CarteRepositoryImpl.CarteRepositoryCallback<Unit> {
                 override fun onSuccess(result: Unit) {
                     _operationStatus.postValue(true)
+                    _isLoading.value = false
                 }
 
                 override fun onError(error: DatabaseError) {
                     _operationStatus.postValue(false)
+                    _isLoading.value = false
                 }
             })
         }
@@ -101,13 +124,17 @@ class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteR
 
     fun getCarte(id: String) {
         viewModelScope.launch {
+            _isLoading.value = true
             carteRepositoryImpl.getCarte(id, object : CarteRepositoryImpl.CarteRepositoryCallback<CarteImpl> {
-                override fun onSuccess(result:CarteImpl) {
+                override fun onSuccess(result: CarteImpl) {
                     _singleCarte.postValue(result)
+                    _dataLoaded.postValue(true)
+                    _isLoading.value = false
                 }
 
                 override fun onError(error: DatabaseError) {
-
+                    _dataLoaded.postValue(false)
+                    _isLoading.value = false
                 }
             })
         }
@@ -115,14 +142,18 @@ class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteR
 
     fun getAllCartes() {
         viewModelScope.launch {
+            _isLoading.value = true
             carteRepositoryImpl.getAllCartes(object :
                 CarteRepositoryImpl.CarteRepositoryCallback<List<CarteImpl>> {
                 override fun onSuccess(result: List<CarteImpl>) {
                     _cartes.postValue(result)
+                    _dataLoaded.postValue(true)
+                    _isLoading.value = false
                 }
 
                 override fun onError(error: DatabaseError) {
-
+                    _dataLoaded.postValue(false)
+                    _isLoading.value = false
                 }
             })
         }
@@ -130,21 +161,25 @@ class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteR
 
     fun getCartesByIdProprietaire(idProprietaire: String) {
         viewModelScope.launch {
+            _isLoading.value = true
             carteRepositoryImpl.getCartesByIdProprietaire(idProprietaire, object :
                 CarteRepositoryImpl.CarteRepositoryCallback<List<CarteImpl>> {
                 override fun onSuccess(result: List<CarteImpl>) {
                     _cartesByProprietaire.postValue(result)
+                    _dataLoaded.postValue(true)
+                    _isLoading.value = false
                 }
 
                 override fun onError(error: DatabaseError) {
                     _cartesByProprietaire.postValue(emptyList())
+                    _dataLoaded.postValue(false)
+                    _isLoading.value = false
                 }
             })
         }
     }
 
-
-    fun generateCreditCard(nom_titulaire:String,adresse_facturation:String): CarteCredit {
+    fun generateCreditCard(nom_titulaire: String, adresse_facturation: String): CarteCredit {
         val idCarte = UUID.randomUUID().toString()
         val id_proprietaire = FirebaseAuth.getInstance().currentUser!!.uid
         val numeroCarte = generateRandomCardNumber()
@@ -152,17 +187,17 @@ class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteR
         val codeSecurite = Random.nextInt(100, 1000).toString()
         val limiteCredit = Random.nextDouble(1000.0, 10000.0)
 
-        return CarteCredit(idCarte,id_proprietaire,numeroCarte,dateExpiration,codeSecurite,nom_titulaire,adresse_facturation,limiteCredit)
+        return CarteCredit(idCarte, id_proprietaire, numeroCarte, dateExpiration, codeSecurite, nom_titulaire, adresse_facturation, limiteCredit)
     }
 
-    fun generateDebitCard(nom_titulaire:String,adresse_facturation:String,numero_compte:String): CarteDebit {
+    fun generateDebitCard(nom_titulaire: String, adresse_facturation: String, numero_compte: String): CarteDebit {
         val idCarte = UUID.randomUUID().toString()
         val id_proprietaire = FirebaseAuth.getInstance().currentUser!!.uid
         val numeroCarte = generateRandomCardNumber()
         val dateExpiration = generateRandomExpirationDate()
         val codeSecurite = Random.nextInt(100, 1000).toString()
 
-        return CarteDebit(idCarte,id_proprietaire,numeroCarte,dateExpiration,codeSecurite,nom_titulaire,adresse_facturation,numero_compte)
+        return CarteDebit(idCarte, id_proprietaire, numeroCarte, dateExpiration, codeSecurite, nom_titulaire, adresse_facturation, numero_compte)
     }
 
     private fun generateRandomCardNumber(): String {
@@ -181,28 +216,23 @@ class CardsViewModel @Inject constructor(private val carteRepositoryImpl: CarteR
         return "${month.toString().padStart(2, '0')}/$year"
     }
 
-
-
-    private val _transactions = MutableLiveData<List<TransactionImpl>>()
-    val transactions: LiveData<List<TransactionImpl>> get() = _transactions
-
-    private val _errorMessage = MutableLiveData<String?>()
-    val errorMessage: LiveData<String?> get() = _errorMessage
-
     fun fetchTransactionsByPaymentMethod(accountNumber: String?) {
         viewModelScope.launch {
-            if(accountNumber !=null){
-            val (transactions, error) = accountRepositoryImpl.fetchTransactionsByPaymentMethod(accountNumber)
-
-            if (error == null) {
-                _transactions.value = transactions!!
+            _isLoading.value = true
+            if (accountNumber != null) {
+                val (transactions, error) = accountRepositoryImpl.fetchTransactionsByPaymentMethod(accountNumber)
+                if (error == null) {
+                    _transactions.value = transactions!!
+                    _dataLoaded.postValue(true)
+                } else {
+                    _errorMessage.value = error
+                    _dataLoaded.postValue(false)
+                }
             } else {
-                _errorMessage.value = error
+                Log.e("CardsViewModel", "It's a credit card")
+                _dataLoaded.postValue(false)
             }
+            _isLoading.value = false
         }
-            else{
-                Log.e("CardsViewModel","It's a credit card")
-            }}
-
     }
 }

@@ -39,7 +39,8 @@ class CollectInfoViewModel @Inject constructor(private val authRepository: AuthR
         viewModelScope.launch {
             try {
                 _signUpState.postValue(SignUpState.Loading)
-                authRepository.signUp(email, password) // Assuming signUp returns UserCredential
+                authRepository.signUp(email, password)
+                authRepository.signIn(email, password)// Assuming signUp returns UserCredential
                 val clientUid: String? = authRepository.auth.uid
                 if (clientUid != null) {
                     if (clientUid.isNotEmpty()) {

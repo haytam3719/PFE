@@ -31,6 +31,12 @@ class DeviceInfoList : Fragment() {
         val binding = DeviceInfoListBinding.inflate(inflater, container, false)
         val topAppBar: MaterialToolbar = binding.topAppBar
 
+        dashboardViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
+
+
+
         topAppBar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
