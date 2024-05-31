@@ -2,15 +2,18 @@ package com.example.project.viewmodels
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.SurfaceTexture
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.util.Size
 import android.view.TextureView
 import android.view.View
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,7 +26,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") private val context: Context) : ViewModel() {
-    private lateinit var surfaceProvider: Preview.SurfaceProvider
     var imageCapture: ImageCapture? = null
     private val storage: FirebaseStorage = FirebaseStorage.getInstance()
     private val storageRef: StorageReference = storage.reference
@@ -33,6 +35,10 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
     private val _navigateToViewPager = MutableLiveData<Boolean>()
     val navigateToViewPager: LiveData<Boolean>
         get() = _navigateToViewPager
+
+
+    private val _faceUrl = MutableLiveData<String>()
+    val faceUrl: LiveData<String> = _faceUrl
 
     private lateinit var numCin: String
     private val _data = MutableLiveData<String>()
@@ -106,6 +112,9 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
                 // Handle successful upload
                 _imageSavedEvent.postValue(File(photoUri.path ?: ""))
 
+                _faceUrl.postValue("$folderName/${photoUri.lastPathSegment}")
+
+
                 // Post navigation event with delay
                 val delayMillis = 2000
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -119,9 +128,6 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
             }
     }
 
-    fun setSurfaceProvider(surfaceProvider: Preview.SurfaceProvider) {
-        this.surfaceProvider = surfaceProvider
-    }
 
     fun onButtonClick(view: View) {
         numCin.let { this.takePhoto(it) }
@@ -130,4 +136,26 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
     fun onNavigationComplete() {
         _navigateToViewPager.value = false
     }
+
+
+    private var previewSize: Size? = null
+
+    fun getPreviewSize(): Size {
+        if (previewSize == null) {
+            previewSize = fetchPreviewSize()
+        }
+        return previewSize!!
+    }
+
+    private fun fetchPreviewSize(): Size {
+        val cameraManager = context.getSystemService(CameraManager::class.java)
+        val cameraId = cameraManager.cameraIdList[0]
+        val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+        val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+        val sizes = map!!.getOutputSizes(SurfaceTexture::class.java)
+
+
+        return sizes.maxByOrNull { it.width * it.height } ?: sizes[0]
+    }
+
 }

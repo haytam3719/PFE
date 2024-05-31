@@ -469,6 +469,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <TextView
+                android:id="@+id/emptyCompte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aucun compte émetteur pour le moment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/listViewOptions"
+                app:layout_constraintStart_toStartOf="@+id/listViewOptions"
+                app:layout_constraintTop_toTopOf="@+id/listViewOptions"
+                android:textSize="17dp"
+                android:textColor="@color/white"
+                android:layout_marginTop="15dp"
+                android:visibility="gone"/>
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listViewOptions"
                 android:layout_width="0dp"
@@ -523,6 +539,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvCarte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/listViewOptionsCarte"
+                app:layout_constraintEnd_toEndOf="@+id/popupHeaderCarte"
+                app:layout_constraintStart_toStartOf="@+id/popupHeaderCarte"
+                app:layout_constraintTop_toBottomOf="@id/popupHeaderCarte"
+                android:text="Aucune carte pour le moment"
+                android:textSize="17dp"
+                android:textColor="@color/white"
+                android:layout_marginTop="15dp"
+                android:visibility="gone"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listViewOptionsCarte"

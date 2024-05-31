@@ -21,7 +21,6 @@
             android:layout_height="40dp"
             android:contentDescription="Profile Image"
             android:src="@drawable/ic_user"
-            app:tint="@color/reddish_orange"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

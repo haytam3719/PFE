@@ -11,6 +11,7 @@ import com.example.project.models.Client
 import com.example.project.models.DeviceInfo
 import com.example.project.prototype.ClientRepository
 import com.example.project.repositories.AccountRepositoryImpl
+import com.example.project.repositories.ClientRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +21,8 @@ import kotlin.coroutines.suspendCoroutine
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val clientRepository: ClientRepository,
-    private val accountRepositoryImpl: AccountRepositoryImpl
+    private val accountRepositoryImpl: AccountRepositoryImpl,
+    private val clientRepositoryImpl: ClientRepositoryImpl
 ):ViewModel(){
 
     private val _isLoading = MutableLiveData<Boolean>()
@@ -165,4 +167,22 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
+
+
+    private val _resourceData = MutableLiveData<ByteArray>()
+    val resourceData: LiveData<ByteArray> get() = _resourceData
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> get() = _error
+
+    fun fetchResource(resourcePath: String) {
+        viewModelScope.launch {
+            val result = clientRepositoryImpl.fetchResource(resourcePath)
+            result.onSuccess { data ->
+                _resourceData.postValue(data)
+            }.onFailure { exception ->
+                _error.postValue(exception.message)
+            }
+        }
+    }
 }

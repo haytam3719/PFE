@@ -10,10 +10,15 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.tasks.await
 
 class ClientRepositoryImpl : ClientRepository {
     private val databaseReference = FirebaseDatabase.getInstance().getReference("clients")
+    private val storageReference: StorageReference by lazy {
+        FirebaseStorage.getInstance().reference
+    }
     override suspend fun getClientDevices(clientUid: String): List<DeviceInfo>? {
         val databaseReference = FirebaseDatabase.getInstance().getReference("clients")
 
@@ -116,6 +121,17 @@ class ClientRepositoryImpl : ClientRepository {
                 callback(Result.failure(databaseError.toException()))
             }
         })
+    }
+
+
+    suspend fun fetchResource(resourcePath: String): Result<ByteArray> {
+        return try {
+            val resourceReference = storageReference.child(resourcePath)
+            val data = resourceReference.getBytes(Long.MAX_VALUE).await()
+            Result.success(data)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
 }

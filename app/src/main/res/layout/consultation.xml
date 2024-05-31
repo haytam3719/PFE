@@ -103,14 +103,17 @@
                 android:id="@+id/tvWebView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pour visualiser les quotas des comptes, vous devez moins créer un"
-                app:layout_constraintBottom_toBottomOf="@id/webView"
-                app:layout_constraintEnd_toEndOf="@id/webView"
-                app:layout_constraintStart_toStartOf="@id/webView"
-                app:layout_constraintTop_toTopOf="@id/webView"
+                android:layout_marginTop="14dp"
                 android:gravity="center"
+                android:text="Pour visualiser les quotas des comptes, vous devez moins créer un"
                 android:textSize="16sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/quotas_comptes"
+                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/actionLayout"
@@ -141,12 +144,13 @@
                 android:id="@+id/tvOperation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/rvRecentTransactions"
-                app:layout_constraintEnd_toEndOf="@+id/rvRecentTransactions"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/actionLayout"
+                android:text="Aucune Opération n'a été effectuée"
+                android:layout_marginTop="30dp"
+                android:textSize="16sp"
                 android:visibility="gone"
-                android:textSize="16sp"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/actionLayout" />
 
 
             <androidx.recyclerview.widget.RecyclerView

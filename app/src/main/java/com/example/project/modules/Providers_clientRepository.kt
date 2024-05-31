@@ -16,4 +16,11 @@ object ClientRepositoryModule {
     fun provideClientRepository(): ClientRepository {
         return ClientRepositoryImpl()
     }
+
+
+    @Provides
+    @ViewModelScoped
+    fun provideClientRepositoryImpl(): ClientRepositoryImpl {
+        return ClientRepositoryImpl()
+    }
 }

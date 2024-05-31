@@ -22,21 +22,28 @@ class MesBeneficiairesViewModel @Inject constructor(private val accountRepositor
     }
 
 
-    val combinedDataLiveData = MutableLiveData<Result<List<ClientAccountDetails>>>()
+    private val _combinedDataLiveData = MutableLiveData<Result<List<ClientAccountDetails>>>()
+    val combinedDataLiveData: LiveData<Result<List<ClientAccountDetails>>> get() = _combinedDataLiveData
 
     fun loadCombinedData(userId: String) {
         Log.d("MesBenefViewModel", "Starting loadCombinedData for userId: $userId")
         viewModelScope.launch {
-            accountRepositoryImpl.getCombinedBeneficiaryClientData(userId) { result ->
-                Log.d("MesBenefViewModel", "Received result from repository")
+            try {
+                Log.d("MesBenefViewModel", "Launching coroutine to fetch combined data")
+                val result = accountRepositoryImpl.getCombinedBeneficiaryClientDataAux(userId)
+                Log.d("MesBenefViewModel", "Received result from repository: $result")
+
                 result.onSuccess { combinedData ->
                     Log.d("MesBenefViewModel", "Combined data loaded successfully: ${combinedData.size}")
                 }
                 result.onFailure { exception ->
                     Log.e("MesBenefViewModel", "Error loading combined data: ${exception.message}")
                 }
-                combinedDataLiveData.postValue(result)
-                Log.d("MesBenefViewModel", "Posted combined data result")
+                _combinedDataLiveData.postValue(result)
+                Log.d("MesBenefViewModel", "Posted combined data result to LiveData")
+            } catch (e: Exception) {
+                Log.e("MesBenefViewModel", "Error in loadCombinedData: ${e.message}")
+                _combinedDataLiveData.postValue(Result.failure(e))
             }
         }
     }

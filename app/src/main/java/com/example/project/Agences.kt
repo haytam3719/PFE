@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -52,11 +53,10 @@ class Agences : Fragment(), OnMapReadyCallback {
         mView = inflater.inflate(R.layout.agences, container, false)
         tabLayout = mView.findViewById(R.id.tabLayout)
         setupTabTitles()
-
-        setupObservers()
+        setupMapFragment()
         setupTabListener()
 
-        setupMapFragment()
+
         return mView
     }
 
@@ -193,6 +193,7 @@ class Agences : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         setupMap()
+        setupObservers()
     }
 
     private fun setupMap() {
@@ -210,7 +211,11 @@ class Agences : Fragment(), OnMapReadyCallback {
                 setDefaultLocation()
             }
         } else {
-            setDefaultLocation()
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
         }
 
         loadAgencesForCurrentPosition()
@@ -340,6 +345,7 @@ class Agences : Fragment(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15f))
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
@@ -357,6 +363,7 @@ class Agences : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
     }
+
 
 
 }

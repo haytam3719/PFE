@@ -32,7 +32,6 @@ class Mail : Fragment() {
     private var _binding: MailBinding? = null
     private val binding get() = _binding!!
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
-    private var firebasePassword: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -50,26 +49,33 @@ class Mail : Fragment() {
         topAppBar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
-        binding.button.setOnClickListener {
-            val email = binding.mailTextInputLayout.editText?.text.toString()
-            if (email.isNotEmpty()) {
-                collectInfoViewModel.observeClient().observe(viewLifecycleOwner, Observer { client ->
-                    val password = generateStrongPassword(8)
-                    firebasePassword = password
-                    Log.e("The Client: ", client.toString())
-                    collectInfoViewModel.signUpClient(email, password, client)
-                })
 
-                sendEmail(
-                    toEmail = email,
-                    subject = "Ouverture de compte Attijariwafa",
-                    identifiant = email,
-                    motDePasse = firebasePassword
-                )
+
+        collectInfoViewModel.observeClient().observe(viewLifecycleOwner, Observer { client ->
+            if (client != null) {
+                Log.e("The Client: ", client.toString())
+                binding.button.setOnClickListener {
+                    val email = binding.mailTextInputLayout.editText?.text.toString()
+                    if (email.isNotEmpty()) {
+                        val password = generateStrongPassword(8)
+                        Log.d("CameraFaceFragment", "Generated password: $password for email: $email")
+
+                        collectInfoViewModel.signUpClient(email, password, client)
+
+                        sendEmail(
+                            toEmail = email,
+                            subject = "Ouverture de compte Attijariwafa",
+                            identifiant = email,
+                            motDePasse = password
+                        )
+                    } else {
+                        Toast.makeText(context, "Adresse Email invalide", Toast.LENGTH_LONG).show()
+                    }
+                }
             } else {
-                Toast.makeText(context, "Adresse Email invalide", Toast.LENGTH_LONG).show()
+                Log.e("CameraFaceFragment", "Client object is null")
             }
-        }
+        })
     }
 
     private fun sendEmail(toEmail: String, subject: String, identifiant: String, motDePasse: String) {

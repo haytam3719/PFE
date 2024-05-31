@@ -104,6 +104,7 @@ class VirementStepOne : Fragment() {
             result.onSuccess { combinedData ->
                 Log.d("Fragment", "Combined data received: $combinedData")
                 adapterBeneficiary.updateClientDetails(combinedData)
+
             }
             result.onFailure { exception ->
                 Log.e("Fragment", "Error receiving combined data: ${exception.message}")
@@ -128,6 +129,10 @@ class VirementStepOne : Fragment() {
 
     private fun observeAccounts() {
         consultationViewModel.accounts.observe(viewLifecycleOwner) { accounts ->
+            if(accounts.isNullOrEmpty()){
+                binding.emptyCompte.visibility = View.VISIBLE
+                binding.listViewOptions.visibility = View.GONE
+            }
             adapter.updateAccounts(accounts)
         }
     }

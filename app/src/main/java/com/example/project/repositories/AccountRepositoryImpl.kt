@@ -19,6 +19,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class AccountRepositoryImpl @Inject constructor(private val accountService:AccountCreationServiceImpl): AccountRepository {
     private val database =
@@ -447,7 +449,7 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
                                 ClientAccountDetails(
                                     nom = client.nom,
                                     prenom = client.prenom,
-                                    profileImageUrl = null,
+                                    profileImageUrl = client.facePhotoUrl,
                                     accountNumber = beneficiary.numero,
                                 )
                             )
@@ -464,6 +466,78 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
             }
         }
     }
+
+
+
+
+
+    suspend fun getCombinedBeneficiaryClientDataAux(userId: String): Result<List<ClientAccountDetails>> {
+        return try {
+            Log.d("Repository", "Fetching beneficiaries for userId: $userId")
+            val beneficiariesResult = suspendCoroutine<Result<List<CompteImpl>>> { continuation ->
+                getBeneficiariesForUser(userId) { result ->
+                    Log.d("Repository", "Beneficiaries result received: $result")
+                    continuation.resume(result)
+                }
+            }
+
+            if (beneficiariesResult.isFailure) {
+                Log.e("Repository", "Failed to fetch beneficiaries: ${beneficiariesResult.exceptionOrNull()}")
+                return beneficiariesResult.map { emptyList<ClientAccountDetails>() }
+            }
+
+            val beneficiaries = beneficiariesResult.getOrThrow()
+            val combinedData = mutableListOf<ClientAccountDetails>()
+            Log.d("Repository", "Beneficiaries fetched: ${beneficiaries.size}")
+
+            if (beneficiaries.isEmpty()) {
+                Log.d("Repository", "No beneficiaries found, returning empty list")
+                return Result.success(combinedData)
+            }
+
+            for (beneficiary in beneficiaries) {
+                if(beneficiary.id_proprietaire!="Banque") {
+                    Log.d(
+                        "Repository",
+                        "Fetching client details for id_proprietaire: ${beneficiary.id_proprietaire}"
+                    )
+                    val clientResult = withContext(Dispatchers.IO) {
+                        suspendCoroutine<Result<Client>> { continuation ->
+                            getClientDetailsByUid(beneficiary.id_proprietaire) { result ->
+                                Log.d("Repository", "Client details result received: $result")
+                                continuation.resume(result)
+                            }
+                        }
+                    }
+
+                    if (clientResult.isSuccess) {
+                        val client = clientResult.getOrThrow()
+                        Log.d("Repository", "Client details fetched: $client")
+                        combinedData.add(
+                            ClientAccountDetails(
+                                nom = client.nom,
+                                prenom = client.prenom,
+                                profileImageUrl = client.facePhotoUrl,
+                                accountNumber = beneficiary.numero,
+                            )
+                        )
+                    } else {
+                        Log.e(
+                            "Repository",
+                            "Error fetching client details for id_proprietaire: ${beneficiary.id_proprietaire}, exception: ${clientResult.exceptionOrNull()}"
+                        )
+                    }
+                }
+            }
+
+            Log.d("Repository", "Returning combined data: ${combinedData.size} items")
+            Result.success(combinedData)
+        } catch (e: Exception) {
+            Log.e("Repository", "Error combining beneficiary and client data", e)
+            Result.failure(e)
+        }
+    }
+
 
 
 

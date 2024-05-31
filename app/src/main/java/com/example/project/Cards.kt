@@ -94,6 +94,7 @@ class Cards : Fragment() {
 
         cardsViewModel.transactions.observe(viewLifecycleOwner, Observer { transactions ->
             if(transactions.isNullOrEmpty()){
+                binding.recyclerView.visibility = View.GONE
                 binding.transactions.visibility = View.VISIBLE
             }
             transactions?.let {

@@ -103,12 +103,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
-                    app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
-                    app:layout_constraintEnd_toEndOf="@+id/recyclerView"
-                    app:layout_constraintStart_toStartOf="@+id/recyclerView"
-                    app:layout_constraintTop_toTopOf="@+id/recyclerView"
                     android:text="Aucune transaction n'a été effectuée"
-                    android:textSize="16dp"
+                    android:textSize="17dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/textView4"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4"
+                    android:layout_marginTop="30dp"
                     android:visibility="gone"/>
 
                 <androidx.recyclerview.widget.RecyclerView

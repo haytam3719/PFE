@@ -15,6 +15,7 @@ import com.example.project.repositories.AuthRepository
 import com.example.project.repositories.SignUpRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
@@ -39,24 +40,37 @@ class CollectInfoViewModel @Inject constructor(private val authRepository: AuthR
         viewModelScope.launch {
             try {
                 _signUpState.postValue(SignUpState.Loading)
-                authRepository.signUp(email, password)
-                authRepository.signIn(email, password)// Assuming signUp returns UserCredential
-                val clientUid: String? = authRepository.auth.uid
-                if (clientUid != null) {
-                    if (clientUid.isNotEmpty()) {
+                val userCredential = authRepository.signUp(email, password).await()
+                if (userCredential != null) {
+                    val clientUid = authRepository.auth.currentUser?.uid
+                    Log.d("SignUpClient", "Client UID: $clientUid")
+                    if (!clientUid.isNullOrEmpty()) {
                         client.uid = clientUid
-                        signUpRepository.storeClient(client) // Store client in the database
-                        signUpRepository.getStockClientById(clientUid) // Retrieve client from the database (optional)
-                        _signUpState.postValue(SignUpState.Success)
+                        try {
+                            signUpRepository.storeClient(client)
+                            Log.d("SignUpClient", "Client stored successfully in the database")
+                            signUpRepository.getStockClientById(clientUid)
+                            Log.d("SignUpClient", "Client retrieved successfully from the database")
+                            _signUpState.postValue(SignUpState.Success)
+                        } catch (e: Exception) {
+                            Log.e("SignUpClient", "Error storing client in the database: ${e.message}", e)
+                            _signUpState.postValue(SignUpState.Error("Error storing client in the database: ${e.message}"))
+                        }
                     } else {
+                        Log.e("SignUpClient", "Failed to get user UID")
                         _signUpState.postValue(SignUpState.Error("Failed to get user UID"))
                     }
+                } else {
+                    Log.e("SignUpClient", "Sign up failed")
+                    _signUpState.postValue(SignUpState.Error("Sign up failed"))
                 }
             } catch (e: Exception) {
+                Log.e("SignUpClient", "Error during sign-up process: ${e.message}", e)
                 _signUpState.postValue(SignUpState.Error(e.message ?: "Unknown error"))
             }
         }
     }
+
 
 
 

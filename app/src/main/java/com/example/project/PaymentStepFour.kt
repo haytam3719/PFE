@@ -183,12 +183,13 @@ class PaymentStepFour : Fragment() {
 
         // Observe the LiveData from the ViewModel
         cardsViewModel.cartesByProprietaire.observe(viewLifecycleOwner, Observer { cards ->
+            if(cards.isNullOrEmpty()){
+                binding.listViewOptionsCarte.visibility = View.GONE
+                binding.tvCarte.visibility = View.VISIBLE
+            }
             cardsAdapter.updateCards(cards)
         })
 
-        cardsViewModel.cartesByProprietaire.observe(viewLifecycleOwner, Observer { cards ->
-            cardsAdapter.updateCards(cards)
-        })
 
 
         // Observe the selected card LiveData
@@ -244,6 +245,10 @@ class PaymentStepFour : Fragment() {
 
     private fun observeAccounts() {
         consultationViewModel.accounts.observe(viewLifecycleOwner) { accounts ->
+            if(accounts.isNullOrEmpty()){
+                binding.listViewOptions.visibility = View.GONE
+                binding.emptyCompte.visibility = View.VISIBLE
+            }
             adapter.updateAccounts(accounts)
         }
     }

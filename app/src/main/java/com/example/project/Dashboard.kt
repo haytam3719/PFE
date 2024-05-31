@@ -1,5 +1,6 @@
 package com.example.project
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.util.Log
@@ -141,6 +142,25 @@ class Dashboard : Fragment(){
 
         dashboardViewModel.loadTotalBalance(userUid)
 
+
+
+        dashboardViewModel.resourceData.observe(viewLifecycleOwner) { data ->
+            val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
+            binding.imgUser.setImageBitmap(bitmap)
+        }
+
+        dashboardViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            Log.e("Dashboard",errorMessage)
+        }
+
+        lifecycleScope.launch {
+            val currentClient = dashboardViewModel.fetchClientDetails(FirebaseAuth.getInstance().currentUser!!.uid)
+            if (currentClient != null) {
+                currentClient.facePhotoUrl?.let { dashboardViewModel.fetchResource(it) }
+
+            }
+        }
 
     }
 

@@ -102,13 +102,20 @@ class CommanderCarte : Fragment() {
         val nomTitulaire = binding.nameInputLayout.editText!!.text.toString()
         val adresseFacturation = binding.addressInputLayout.editText!!.text.toString()
         val numCompte = extractAccountNumber(binding.textViewSubtext.text.toString())
-        Log.d("Commander Carte",numCompte!!)
+        //Log.d("Commander Carte",numCompte!!)
 
 
         val selectedType = binding.cardTypeSpinner.selectedItem.toString()
         if (selectedType == "Carte Débit") {
-            val carteDebit = cardsViewModel.generateDebitCard(nomTitulaire,adresseFacturation,numCompte)
-            cardsViewModel.ajouterCarte(carteDebit)
+            val carteDebit =
+                numCompte?.let {
+                    cardsViewModel.generateDebitCard(nomTitulaire,adresseFacturation,
+                        it
+                    )
+                }
+            if (carteDebit != null) {
+                cardsViewModel.ajouterCarte(carteDebit)
+            }
         }else{
             val carteCredit = cardsViewModel.generateCreditCard(nomTitulaire,adresseFacturation)
             cardsViewModel.ajouterCarte(carteCredit)

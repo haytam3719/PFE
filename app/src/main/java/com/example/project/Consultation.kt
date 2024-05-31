@@ -140,7 +140,7 @@ class Consultation : Fragment() {
 
 
         dashboardViewModel.accountBalances.observe(viewLifecycleOwner) { balances ->
-            if(balances.isNotEmpty()){
+            if(balances.isNullOrEmpty()){
                 binding.tvWebView.visibility = View.VISIBLE
             }
             if (balances.isNotEmpty()) {
@@ -162,6 +162,9 @@ class Consultation : Fragment() {
     private fun observeTransactions() {
         consultationViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
             if(transactions.isNullOrEmpty()){
+                binding.rvRecentTransactions.visibility = View.GONE
+                binding.webView.visibility = View.GONE
+                binding.tvWebView.visibility = View.VISIBLE
                 binding.tvOperation.visibility = View.VISIBLE
             }
             adapter.updateTransactions(transactions)
