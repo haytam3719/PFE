@@ -14,15 +14,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/ivory">
 
+        <!-- AppBarLayout with MaterialToolbar -->
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
@@ -32,9 +31,8 @@
                 app:title="Scan du visage"
                 app:menu="@menu/top_app_bar"
                 app:navigationIcon="@drawable/back"
-                android:background="@color/reddish_orange"
-                app:titleTextColor="@color/white"
-                />
+                android:background="@color/sunset_orange"
+                app:titleTextColor="@color/white" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -42,15 +40,27 @@
             android:id="@+id/instructionTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Cette section est dédiée à la vérification faciale pour confirmer votre identité. Bien vouloir prendre un selfie."
-            android:textAlignment="center"
-            android:padding="20sp"
-            android:textSize="20sp"
-            android:textColor="@android:color/black"
 
-            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            android:text="Cette section est dédiée à la vérification faciale pour confirmer votre identité. Bien vouloir prendre un selfie"
+            android:textColor="@color/charcoal"
+            android:textSize="20sp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
+        <ImageView
+            android:id="@+id/info"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_info"
+            android:layout_marginTop="0dp"
+            android:layout_marginStart="10dp"
+            app:tint="@color/vivid_orange"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/instructionTextView" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/face_scan_anim"
@@ -70,22 +80,21 @@
             android:id="@+id/scanButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/reddish_orange"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="@color/vivid_orange"
             android:elevation="8dp"
             android:onClick="@{view->scanFaceViewModel.onButtonClick(view)}"
-            android:padding="16dp"
             android:text="Ouvrir caméra"
-            android:textColor="@android:color/white"
+            android:textColor="@color/white"
             android:textSize="18sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/face_scan_anim"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/face_scan_anim"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

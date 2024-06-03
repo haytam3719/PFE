@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.ViewPager
@@ -38,11 +39,29 @@ class Questionnaire1 : Fragment() {
 
         val confirmationButton = binding.button
         confirmationButton.setOnClickListener {
-            // Log the Questionnaire object
-            questionnaireViewModel.questionnaire.observe(viewLifecycleOwner) { questionnaire ->
-                Log.d("Questionnaire1", "Questionnaire object: $questionnaire")
+            if(!(binding.customRadioButton.isChecked) && !(binding.customRadioButton1.isChecked)){
+                Toast.makeText(requireContext(),"Veuillez sélectionner au moins une option",Toast.LENGTH_LONG).show()
             }
-            onNextButtonClick()
+            else {
+                // Log the Questionnaire object
+                questionnaireViewModel.questionnaire.observe(viewLifecycleOwner) { questionnaire ->
+                    Log.d("Questionnaire1", "Questionnaire object: $questionnaire")
+                }
+                onNextButtonClick()
+            }
+        }
+
+
+        binding.customRadioButton.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.customRadioButton1.isChecked = false
+            }
+        }
+
+        binding.customRadioButton1.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.customRadioButton.isChecked = false
+            }
         }
 
         return rootView

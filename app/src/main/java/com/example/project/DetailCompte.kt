@@ -70,6 +70,7 @@ class DetailCompte : Fragment() {
             binding.accountType.text = accountType
             binding.accountNumber.text = accountNumber
             binding.accountBalance.text = "$balance DH"
+            binding.balance.text = "$balance DH"
         }
 
         setupRecyclerView()

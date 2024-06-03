@@ -13,7 +13,12 @@ import com.example.project.databinding.ContratBinding
 import com.example.project.viewmodels.CollectInfoViewModel
 import com.example.project.viewmodels.ContratViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
+@AndroidEntryPoint
 class Contrat : Fragment() {
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
     private val contratViewModel: ContratViewModel by viewModels()
@@ -70,6 +75,26 @@ class Contrat : Fragment() {
         topAppBar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
+
+        val contractText = getString(R.string.contrat)
+
+        collectInfoViewModel.observeClient().observe(viewLifecycleOwner){client->
+            val bankName = "Attijariwafa Bank"
+            val clientName = "${client.nom.toUpperCase()} ${client.prenom}"
+            val place = "Casablanca - MAROC"
+            val date = getCurrentDate()
+
+            val formattedText = contractText
+                .replace("[Nom de la Banque]", bankName)
+                .replace("[Nom du Client]", clientName)
+                .replace("[lieu]", place)
+                .replace("[date]", date)
+
+            binding.textView2.text = formattedText
+        }
+
+
+
     }
 
         override fun onDestroyView() {
@@ -78,6 +103,11 @@ class Contrat : Fragment() {
     }
 
 
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val date = Date()
+        return dateFormat.format(date)
+    }
     private fun setDataToViewModel(data: String) {
         contratViewModel.setData(data)
     }

@@ -42,7 +42,11 @@ class DetailsCarte : Fragment(),ModifySecurityCodeDialogFragment.OnSecurityCodeM
         super.onViewCreated(view, savedInstanceState)
 
         cardsViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if(currentCard.numeroCompte!=null){
+                binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }else{
+                binding.progressBar.visibility = View.GONE
+            }
         })
 
 

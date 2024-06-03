@@ -14,6 +14,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MesBeneficiairesViewModel @Inject constructor(private val accountRepositoryImpl:AccountRepositoryImpl) : ViewModel(){
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     private val _selectedClient = MutableLiveData<ClientAccountDetails>()
     val selectedClient: LiveData<ClientAccountDetails> = _selectedClient
 
@@ -28,6 +31,7 @@ class MesBeneficiairesViewModel @Inject constructor(private val accountRepositor
     fun loadCombinedData(userId: String) {
         Log.d("MesBenefViewModel", "Starting loadCombinedData for userId: $userId")
         viewModelScope.launch {
+            _isLoading.value = true
             try {
                 Log.d("MesBenefViewModel", "Launching coroutine to fetch combined data")
                 val result = accountRepositoryImpl.getCombinedBeneficiaryClientDataAux(userId)
@@ -44,6 +48,8 @@ class MesBeneficiairesViewModel @Inject constructor(private val accountRepositor
             } catch (e: Exception) {
                 Log.e("MesBenefViewModel", "Error in loadCombinedData: ${e.message}")
                 _combinedDataLiveData.postValue(Result.failure(e))
+            } finally {
+                _isLoading.value = false
             }
         }
     }

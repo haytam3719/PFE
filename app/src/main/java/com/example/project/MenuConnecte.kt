@@ -11,12 +11,15 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.MenuConnecteBinding
 import com.example.project.viewmodels.CardsViewModel
 import com.example.project.viewmodels.ConsultationViewModel
 import com.example.project.viewmodels.DashboardViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MenuConnecte : Fragment() {
@@ -82,15 +85,11 @@ class MenuConnecte : Fragment() {
 
 
     fun onClickTransferts(view: View){
-        consultationViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
-        consultationViewModel.dataLoaded.observe(viewLifecycleOwner) { dataLoaded ->
-            if (dataLoaded) {
-                findNavController().navigate(R.id.menuConnecte_to_transfers)
-                consultationViewModel.resetDataLoaded()
-
-            }
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.progressBar.visibility = View.VISIBLE
+            delay(2000)  // Delay for 2 seconds
+            binding.progressBar.visibility = View.GONE
+            findNavController().navigate(R.id.menuConnecte_to_transfers)
         }
     }
 
@@ -109,13 +108,12 @@ class MenuConnecte : Fragment() {
     }
 
     fun onClickConsultationCompte(view: View) {
-        consultationViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        })
-        dashboardViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        })
-        findNavController().navigate(R.id.menuConnecte_to_consultation)
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.progressBar.visibility = View.VISIBLE
+            delay(4000)
+            binding.progressBar.visibility = View.GONE
+            findNavController().navigate(R.id.menuConnecte_to_consultation)
+        }
     }
 
     fun onClickAttijariSecure(view:View){
@@ -123,6 +121,7 @@ class MenuConnecte : Fragment() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         })
         findNavController().navigate(R.id.menuConnecte_to_attijariSecure)
+
     }
 
     fun onClickAssistanceReclamation(view: View){
@@ -137,19 +136,22 @@ class MenuConnecte : Fragment() {
         findNavController().navigate(R.id.menuConnecte_to_parametres)
     }
 
-    fun onClickButtonCards(view: View){
-        cardsViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        })
-        findNavController().navigate(R.id.menuConnecte_to_mesCartes)
+    fun onClickButtonCards(view:View) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.progressBar.visibility = View.VISIBLE
+            delay(2000)  // Delay for 2 seconds
+            binding.progressBar.visibility = View.GONE
+            findNavController().navigate(R.id.menuConnecte_to_mesCartes)
+        }
     }
 
-
-    fun onClickButtonMesBenef(view:View){
-        consultationViewModel.isLoading.observe(viewLifecycleOwner){isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    fun onClickButtonMesBenef(view:View) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.progressBar.visibility = View.VISIBLE
+            delay(2000)  // Delay for 2 seconds
+            binding.progressBar.visibility = View.GONE
+            findNavController().navigate(R.id.menuConnecte_to_mesBenef)
         }
-        findNavController().navigate(R.id.menuConnecte_to_mesBenef)
     }
 
 

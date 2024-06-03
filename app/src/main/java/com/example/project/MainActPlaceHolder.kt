@@ -33,6 +33,10 @@ import javax.crypto.KeyGenerator
 class MainActPlaceHolder : Fragment() {
     private val authViewModel: AuthViewModel by viewModels()
     private val fingerPrintViewModel: BiometricViewModel by viewModels()
+
+    private var _binding: MainActpalceholderBinding? = null
+    private val binding get() = _binding!!
+
     private val mainThreadExecutor: MainThreadExecutor = MainThreadExecutor()
     private val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
     private val secureManager:SecureManager? = null
@@ -57,6 +61,14 @@ class MainActPlaceHolder : Fragment() {
     //private var authState= AuthState.Initial
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        authViewModel.loading.observe(viewLifecycleOwner, Observer { isLoading ->
+            if (isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
+            }
+        })
 
         authViewModel.navigateToCollectInfos.observe(
             viewLifecycleOwner,
@@ -160,7 +172,7 @@ class MainActPlaceHolder : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = MainActpalceholderBinding.inflate(inflater, container, false)
+        _binding = MainActpalceholderBinding.inflate(inflater, container, false)
         binding.viewModel = authViewModel
         binding.clientPartial = authViewModel.clientPartial
         binding.fingerPrintViewModel=fingerPrintViewModel

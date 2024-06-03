@@ -1,7 +1,6 @@
 package com.example.project
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +8,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import com.example.project.databinding.MailBinding
+import com.example.project.models.Client
 import com.example.project.models.EmailRequest
 import com.example.project.models.EmailResponse
 import com.example.project.models.MailApiClient
 import com.example.project.models.MailApiService
 import com.example.project.viewmodels.CollectInfoViewModel
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,52 +31,45 @@ class Mail : Fragment() {
     private val binding get() = _binding!!
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
 
+    private var generatedEmail: String? = null
+    private var generatedPassword: String = generateStrongPassword(8)
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         _binding = MailBinding.inflate(inflater, container, false)
-
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val topAppBar: MaterialToolbar = binding.topAppBar
+        val topAppBar = binding.topAppBar
 
         topAppBar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
 
-
         collectInfoViewModel.observeClient().observe(viewLifecycleOwner, Observer { client ->
             if (client != null) {
-                Log.e("The Client: ", client.toString())
                 binding.button.setOnClickListener {
                     val email = binding.mailTextInputLayout.editText?.text.toString()
                     if (email.isNotEmpty()) {
-                        val password = generateStrongPassword(8)
-                        Log.d("CameraFaceFragment", "Generated password: $password for email: $email")
-
-                        collectInfoViewModel.signUpClient(email, password, client)
-
-                        sendEmail(
-                            toEmail = email,
-                            subject = "Ouverture de compte Attijariwafa",
-                            identifiant = email,
-                            motDePasse = password
-                        )
+                        if (generatedEmail == null) {
+                            generatedEmail = email
+                        }
+                        sendEmailWithCredentials(generatedEmail!!, generatedPassword, client)
                     } else {
                         Toast.makeText(context, "Adresse Email invalide", Toast.LENGTH_LONG).show()
                     }
                 }
             } else {
-                Log.e("CameraFaceFragment", "Client object is null")
+                Toast.makeText(context, "Client object is null", Toast.LENGTH_LONG).show()
             }
         })
     }
 
-    private fun sendEmail(toEmail: String, subject: String, identifiant: String, motDePasse: String) {
+    private fun sendEmailWithCredentials(email: String, password: String, client: Client) {
         val apiService = MailApiClient.retrofit.create(MailApiService::class.java)
         val imageUrl = "https://historiadelaempresa.com/wp-content/uploads/logotipo/Attijariwafa-Bank.png"
 
@@ -130,8 +121,8 @@ class Mail : Fragment() {
                     <div class="content">
                         <p>Félicitations, vous êtes désormais client d'Attijariwafa bank. Pour vous connecter, veuillez utiliser l'identifiant et le mot de passe suivants :</p>
                         <ul>
-                            <li><strong>Identifiant :</strong> $identifiant</li>
-                            <li><strong>Mot de passe :</strong> $motDePasse</li>
+                            <li><strong>Identifiant :</strong> $email</li>
+                            <li><strong>Mot de passe :</strong> $password</li>
                         </ul>
                         <p>Nous vous remercions de votre confiance et restons à votre disposition pour toute question ou assistance.</p>
                     </div>
@@ -143,29 +134,32 @@ class Mail : Fragment() {
             </html>
         """.trimIndent()
 
-        val request = EmailRequest(email = toEmail, subject = subject, content = emailContent)
+        val request = EmailRequest(email = email, subject = "Ouverture de compte Attijariwafa", content = emailContent)
 
         CoroutineScope(Dispatchers.IO).launch {
             apiService.sendEmail(request).enqueue(object : Callback<EmailResponse> {
                 override fun onResponse(call: Call<EmailResponse>, response: Response<EmailResponse>) {
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        if (response.isSuccessful) {
-                            Toast.makeText(context, "Mail envoyé avec succès", Toast.LENGTH_LONG).show()
-                        } else {
-                            Log.e("MailFragment", "Failed to send email: ${response.message()}")
+                    if (response.isSuccessful) {
+                        // Email sent successfully, proceed to create user in Firebase
+                        createUserInFirebase(email, password, client)
+                    } else {
+                        CoroutineScope(Dispatchers.Main).launch {
                             Toast.makeText(context, "Failed to send email: ${response.message()}", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        Log.e("MailFragment", "Network error: ${t.message}", t)
+                    CoroutineScope(Dispatchers.Main).launch {
                         Toast.makeText(context, "Erreur de connexion: ${t.message}", Toast.LENGTH_LONG).show()
                     }
                 }
             })
         }
+    }
+
+    private fun createUserInFirebase(email: String, password: String, client: Client) {
+        collectInfoViewModel.signUpClient(email, password, client)
     }
 
     private fun generateStrongPassword(length: Int): String {
@@ -178,7 +172,6 @@ class Mail : Fragment() {
         val random = SecureRandom()
 
         val password = StringBuilder(length)
-
         password.append(upperCaseLetters[random.nextInt(upperCaseLetters.length)])
         password.append(lowerCaseLetters[random.nextInt(lowerCaseLetters.length)])
         password.append(digits[random.nextInt(digits.length)])
@@ -190,7 +183,6 @@ class Mail : Fragment() {
 
         return password.toString().toList().shuffled().joinToString("")
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

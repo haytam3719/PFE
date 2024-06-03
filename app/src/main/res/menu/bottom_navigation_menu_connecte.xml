@@ -5,11 +5,11 @@
         android:icon="@drawable/home_connecte"
         android:title="Acceuil" />
     <item
-        android:id="@+id/fragment_virement"
+        android:id="@+id/virement_step_one"
         android:icon="@drawable/transferr"
         android:title="Transfers" />
     <item
-        android:id="@+id/fragment_payment"
+        android:id="@+id/paymentStepOne"
         android:icon="@drawable/billl"
         android:title="Factures" />
     <item

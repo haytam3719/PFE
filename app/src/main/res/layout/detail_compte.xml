@@ -65,6 +65,7 @@
                     android:textColor="@color/reddish_orange"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    android:text="Informations"
                     app:layout_constraintEnd_toStartOf="@+id/editAccount"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

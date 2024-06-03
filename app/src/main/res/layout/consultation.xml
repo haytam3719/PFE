@@ -64,6 +64,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:textSize="17sp"
+                android:layout_marginTop="20dp"
                 android:visibility="gone"
                 />
 
@@ -99,21 +100,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/quotas_comptes" />
 
-            <TextView
-                android:id="@+id/tvWebView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:gravity="center"
-                android:text="Pour visualiser les quotas des comptes, vous devez moins créer un"
-                android:textSize="16sp"
-                android:visibility="gone"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/quotas_comptes"
-                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/actionLayout"

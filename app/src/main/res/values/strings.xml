@@ -13,7 +13,7 @@
 
 
 
-    <string name="conditions_generales">Conditions Générales :\n\n 1.1 Ces Conditions Générales d\'Utilisation (ci-après dénommées les "CGU") régissent l\'utilisation du service fourni par la société ABC Solutions, accessible sur le site web www.abcsolutions.com (ci-après dénommé le "Service").\n\n
+    <string name="conditions_generales">1.1 Ces Conditions Générales d\'Utilisation (ci-après dénommées les "CGU") régissent l\'utilisation du service fourni par la société ABC Solutions, accessible sur le site web www.abcsolutions.com (ci-après dénommé le "Service").\n\n
 1.2 En accédant ou en utilisant le Service, vous acceptez d\'être lié par ces CGU. Si vous n\'acceptez pas ces CGU, veuillez ne pas utiliser le Service.\n\n
 2. Description du Service\n\n
 2.1 Le Service fournit une plateforme en ligne pour la gestion de projets et la collaboration d\'équipes.\n\n
@@ -36,20 +36,22 @@
 9.1 Ces CGU sont régies par les lois de la République de Ruritania, et tout litige découlant de ces CGU sera soumis à la juridiction exclusive des tribunaux de la ville de Nouvelle-Ville.</string>
 
 
-    <string name="contrat">Entre [Nom de la Banque], désignée ci-après comme "la Banque", et [Nom du Client], ci-après désigné comme "le Client".\n\n
-1. Objet\n\n
-La Banque ouvre un compte bancaire au nom du Client, sous les conditions suivantes.\n\n
-2. Conditions d\'ouverture de compte\n\n
-2.1 Le Client fournira à la Banque les informations et documents nécessaires à l\'ouverture du compte, y compris une pièce d\'identité valide, un justificatif de domicile et toute autre information requise par la Banque.\n\n
-2.2 Le Client reconnaît avoir lu et accepté les conditions générales de la Banque, ainsi que les tarifs et frais applicables à l\'utilisation du compte bancaire.\n\n
-3. Utilisation du compte\n\n
-Le Client pourra utiliser le compte bancaire ouvert auprès de la Banque pour effectuer des dépôts, des retraits, des virements, des paiements par carte bancaire, et toutes autres opérations autorisées par la Banque.\n\n
-4. Confidentialité et sécurité\n\n
-La Banque s\'engage à protéger les informations personnelles du Client conformément à sa politique de confidentialité.\n\n
-Le Client s\'engage à protéger ses identifiants de compte et à ne pas les divulguer à des tiers.\n\n
-5. Durée du contrat\n\n
-Ce contrat entre en vigueur à compter de la date d\'ouverture du compte et reste en vigueur jusqu\'à sa résiliation par l\'une ou l\'autre des parties.\n\n
-Fait en deux exemplaires, à [lieu], le [date].</string>
+    <string name="contrat">
+        Entre [Nom de la Banque], désignée ci-après comme "la Banque", et [Nom du Client], ci-après désigné comme "le Client".\n\n
+        1. Objet\n\n
+        La Banque ouvre un compte bancaire au nom du Client, sous les conditions suivantes.\n\n
+        2. Conditions d\'ouverture de compte\n\n
+        2.1 Le Client fournira à la Banque les informations et documents nécessaires à l\'ouverture du compte, y compris une pièce d\'identité valide, un justificatif de domicile et toute autre information requise par la Banque.\n\n
+        2.2 Le Client reconnaît avoir lu et accepté les conditions générales de la Banque, ainsi que les tarifs et frais applicables à l\'utilisation du compte bancaire.\n\n
+        3. Utilisation du compte\n\n
+        Le Client pourra utiliser le compte bancaire ouvert auprès de la Banque pour effectuer des dépôts, des retraits, des virements, des paiements par carte bancaire, et toutes autres opérations autorisées par la Banque.\n\n
+        4. Confidentialité et sécurité\n\n
+        La Banque s\'engage à protéger les informations personnelles du Client conformément à sa politique de confidentialité.\n\n
+        Le Client s\'engage à protéger ses identifiants de compte et à ne pas les divulguer à des tiers.\n\n
+        5. Durée du contrat\n\n
+        Ce contrat entre en vigueur à compter de la date d\'ouverture du compte et reste en vigueur jusqu\'à sa résiliation par l\'une ou l\'autre des parties.\n\n
+        Fait en deux exemplaires, à [lieu], le [date].
+    </string>
 
 
     <string-array name="type_compte_array">

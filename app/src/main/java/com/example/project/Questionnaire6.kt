@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -50,8 +51,11 @@ class Questionnaire6 : Fragment() {
         }
 
         buttonNext.setOnClickListener {
-            Log.e("Debug6", "$selectedResponse")
-            if (selectedResponse == "Oui") {
+            if(!(binding.customRadioButton.isChecked) && !(binding.customRadioButton1.isChecked)){
+                Toast.makeText(requireContext(),"Veuillez sélctionner au moins une option", Toast.LENGTH_LONG).show()
+            }
+            //Log.e("Debug6", "$selectedResponse")
+            else if (selectedResponse == "Oui") {
                 questionnaireViewModel.updateQuestion6(true)
                 findNavController().navigate(R.id.viewPager_to_conditiongene)
             } else {
@@ -60,6 +64,18 @@ class Questionnaire6 : Fragment() {
             }
         }
 
+
+        binding.customRadioButton.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.customRadioButton1.isChecked = false
+            }
+        }
+
+        binding.customRadioButton1.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.customRadioButton.isChecked = false
+            }
+        }
         return rootView
     }
 

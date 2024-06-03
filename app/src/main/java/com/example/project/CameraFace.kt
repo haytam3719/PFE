@@ -1,7 +1,5 @@
 package com.example.project
 
-import android.graphics.Matrix
-import android.graphics.RectF
 import android.graphics.SurfaceTexture
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +10,7 @@ import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
@@ -31,15 +30,16 @@ import java.util.concurrent.Executor
 class CameraFace : Fragment() {
     private val cameraFaceViewModel: CameraFaceViewModel by viewModels({requireActivity()})
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
-
+    private var _binding: CameraFaceBinding? = null
+    private val binding get() = _binding!!
     private lateinit var textureView: TextureView
-    private lateinit var surfaceProvider: Preview.SurfaceProvider
     private var numCin:String=""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         textureView = view.findViewById(R.id.textureViewF)
         val executor = Executor { command -> command.run() }
+
 
         collectInfoViewModel.observeClient().observe(viewLifecycleOwner, Observer { client ->
             // Handle client update here
@@ -60,36 +60,34 @@ class CameraFace : Fragment() {
         })
 
 
-        textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-            @RequiresApi(Build.VERSION_CODES.P)
-            override fun onSurfaceTextureAvailable(
-                surfaceTexture: SurfaceTexture,
-                width: Int,
-                height: Int
-            ) {
-
-                configureTransform(width, height)
+        binding.captureButton.setOnClickListener {
+            binding.progressBar.visibility = View.VISIBLE
+            numCin.let { cameraFaceViewModel.takePhoto(it) }
+        }
 
 
-            }
+        if (binding.textureViewF.isAvailable) {
+            startCamera()
+        } else {
+            binding.textureViewF.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+                @RequiresApi(Build.VERSION_CODES.P)
+                override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
+                    startCamera()
+                    //updateTransform(width, height)
+                }
 
-            override fun onSurfaceTextureSizeChanged(
-                surface: SurfaceTexture,
-                width: Int,
-                height: Int
-            ) {
-                configureTransform(width, height)
-            }
+                override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
+//
+                    //updateTransform(width, height)
+                }
 
-            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-                return true
-            }
+                override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+                    return true
+                }
 
-            override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-                //
+                override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
             }
         }
-        startCamera()
 
         cameraFaceViewModel.navigateToViewPager.observe(viewLifecycleOwner, Observer { shouldNavigate->
             if(shouldNavigate){
@@ -103,37 +101,43 @@ class CameraFace : Fragment() {
         cameraFaceViewModel.setData(data)
     }
 
-    private fun configureTransform(viewWidth: Int, viewHeight: Int) {
-        val previewSize = cameraFaceViewModel.getPreviewSize()
-        val rotation = requireActivity().windowManager.defaultDisplay.rotation
-        val matrix = Matrix()
 
-        val viewRect = RectF(0f, 0f, viewWidth.toFloat(), viewHeight.toFloat())
-        val bufferRect = RectF(0f, 0f, previewSize.height.toFloat(), previewSize.width.toFloat())
-        val centerX = viewRect.centerX()
-        val centerY = viewRect.centerY()
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
-        bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
-        matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
+        cameraProviderFuture.addListener({
+            try {
+                val cameraProvider = cameraProviderFuture.get()
 
-        val scale = Math.max(
-            viewHeight.toFloat() / previewSize.height,
-            viewWidth.toFloat() / previewSize.width
-        )
-        matrix.postScale(scale, scale, centerX, centerY)
-        matrix.postRotate(getRotationDegrees(rotation), centerX, centerY)
+                val preview = Preview.Builder()
+                    .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+                    .setTargetRotation(binding.textureViewF.display.rotation)
+                    .build()
 
-        textureView.setTransform(matrix)
-    }
+                preview.setSurfaceProvider { request ->
+                    val surface = Surface(binding.textureViewF.surfaceTexture)
+                    request.provideSurface(surface, ContextCompat.getMainExecutor(requireContext())) {}
+                }
 
-    private fun getRotationDegrees(rotation: Int): Float {
-        return when (rotation) {
-            Surface.ROTATION_0 -> 0f
-            Surface.ROTATION_90 -> 90f
-            Surface.ROTATION_180 -> 180f
-            Surface.ROTATION_270 -> 270f
-            else -> 0f
-        }
+                val imageCapture = ImageCapture.Builder()
+                    .setTargetRotation(binding.textureViewF.display.rotation)
+                    .build() // No aspect ratio set for ImageCapture
+
+
+                cameraFaceViewModel.initImageCapture(imageCapture)
+                Log.d("Debug", "Preview: $preview, ImageCapture: $imageCapture")
+
+                val cameraSelector = CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_FRONT) // Choose the front camera
+                    .build()
+
+                cameraProvider?.unbindAll()
+                cameraProvider?.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+            } catch (exc: Exception) {
+                // Handle any errors
+                Log.e("CameraCin", "Error starting camera", exc)
+            }
+        }, ContextCompat.getMainExecutor(requireContext()))
     }
 
 
@@ -142,41 +146,12 @@ class CameraFace : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = CameraFaceBinding.inflate(inflater, container, false)
+        _binding = CameraFaceBinding.inflate(inflater, container, false)
         binding.cameraFaceViewModel=cameraFaceViewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
 
 
-    }
-
-    fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
-        cameraProviderFuture.addListener({
-            try {
-                val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-                val preview = Preview.Builder()
-                    .build()
-                    .also { it.setSurfaceProvider(surfaceProvider) }
-
-                val imageCapture = ImageCapture.Builder()
-                    .build()
-
-                cameraFaceViewModel.initImageCapture(imageCapture)
-                Log.d("Debug", "Preview: $preview, ImageCapture: $imageCapture")
-                val cameraSelector = CameraSelector.Builder()
-                    .requireLensFacing(CameraSelector.LENS_FACING_FRONT) // Choose the back camera
-                    .build()
-
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
-            } catch (exc: Exception) {
-                // Handle any errors
-                Log.e("CameraCin", "Error starting camera", exc)
-            }
-        }, ContextCompat.getMainExecutor(requireContext()))
     }
 
 

@@ -368,6 +368,11 @@
             app:enterAnim="@anim/slide_in_right"
             />
 
+        <action
+            android:id="@+id/infosUtiles_to_agencesConnectee"
+            app:destination="@id/agences_connecte"
+            />
+
     </fragment>
 
 
@@ -659,6 +664,10 @@
         <action
             android:id="@+id/action_virementStepOne_to_virementStepTwo"
             app:destination="@id/virementStepTwo" />
+
+        <action
+            android:id="@+id/virementStepOne_to_fragmentVirement"
+            app:destination="@id/fragment_virement"/>
     </fragment>
 
 
@@ -764,6 +773,12 @@
             app:destination="@id/activity_collection_otp"
             />
 
+        <action
+            android:id="@+id/paymentStepFour_to_dashboard"
+            app:destination="@id/fragment_dashboard"
+            app:enterAnim="@anim/bas_en_haut"
+            />
+
     </fragment>
 
 
@@ -819,6 +834,14 @@
         android:name="com.example.project.MesBeneficiaires"
         android:label="Mes Bénéficiaires"
         tools:layout="@layout/mes_beneficiaires"/>
+
+
+    <fragment
+        android:id="@+id/agences_connecte"
+        android:name="com.example.project.AgencesConnecte"
+        android:label="agence connectee"
+        tools:layout="@layout/agences"/>
+
 
 
 </navigation>

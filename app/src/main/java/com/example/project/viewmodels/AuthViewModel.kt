@@ -43,6 +43,10 @@ class AuthViewModel @Inject constructor(
     private val _navigateToDashboard = MutableLiveData<Boolean>()
     val navigateToDashboard: LiveData<Boolean> get() = _navigateToDashboard
 
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> get() = _loading
+
+
     suspend fun signUp(email: String, password: String) {
         viewModelScope.launch {
             try {
@@ -136,13 +140,17 @@ class AuthViewModel @Inject constructor(
             password = clientPartial.password
             Log.d("Email", email)
             Log.d("Password", password)
+            _loading.value = true
             try {
                 signIn(email, password)
                 Log.d("SignIn","Signing In....")
+                _navigateToDashboard.value = true
             } catch (e: Exception) {
                 Log.e("AuthViewModel", "Sign in failed: ${e.message}")
+            }finally {
+                _loading.value = false
             }
-            _navigateToDashboard.value = true
+
         }
 
     }
@@ -154,4 +162,6 @@ class AuthViewModel @Inject constructor(
     fun getCurrentUserUid(): String? {
         return Firebase.auth.currentUser?.uid
     }
+
+
 }

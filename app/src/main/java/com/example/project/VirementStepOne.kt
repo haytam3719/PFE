@@ -1,6 +1,7 @@
 package com.example.project
 
 import android.animation.ValueAnimator
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,11 +9,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.animation.addListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide.with
 import com.example.project.adapters.AccountData
 import com.example.project.adapters.ClientAdapter
 import com.example.project.databinding.VirementStepOneBinding
@@ -23,7 +26,12 @@ import com.example.project.viewmodels.ProgressBarViewModel
 import com.example.project.viewmodels.VirementUpdatedViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage.getInstance
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @AndroidEntryPoint
 class VirementStepOne : Fragment() {
@@ -42,6 +50,11 @@ class VirementStepOne : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = VirementStepOneBinding.inflate(inflater, container, false)
+
+        consultationViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
         setupClickListeners()
         adapter = AccountsAdapter { account ->
             consultationViewModel.selectAccount(account)
@@ -88,8 +101,12 @@ class VirementStepOne : Fragment() {
                 )
                 sharedViewModel.selectClient(clientDetails)
 
-            findNavController().navigate(R.id.action_virementStepOne_to_virementStepTwo)
-        }
+                if(!accountNumber.startsWith("ACC") || binding.textViewSubtextBenef.text.toString().isBlank()){
+                    Toast.makeText(requireContext(),"Veuillez renseigner tous les champs",Toast.LENGTH_SHORT).show()
+                }else {
+                    findNavController().navigate(R.id.action_virementStepOne_to_virementStepTwo)
+                }
+            }
 
 
         observeViewModel()
@@ -117,9 +134,31 @@ class VirementStepOne : Fragment() {
         consultationViewModel.selectedClient.observe(viewLifecycleOwner) { client ->
             binding.textViewBenef.text = "${client.nom.toUpperCase()} ${client.prenom}"
             binding.textViewSubtextBenef.text = client.accountNumber
+
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val storageRef = getInstance().reference
+                    val imageRef = client.profileImageUrl?.let { storageRef.child(it) }
+                    val imageData = imageRef?.getBytes(Long.MAX_VALUE)?.await()
+                    val bitmap = imageData?.let { BitmapFactory.decodeByteArray(imageData, 0, it.size) }
+                    bitmap?.let {
+                        with(binding.imageView.context)
+                            .load(it)
+                            .circleCrop()
+                            .into(binding.imageBenef)
+                    }
+                    binding.imageBenef.imageTintList = null
+                } catch (e: Exception) {
+                    Log.e("ClientAdapter", "Error fetching image", e)
+                }
+            }
             binding.popupViewBenef.visibility = View.GONE
             binding.endImageViewBenef.visibility = View.GONE
             binding.nextButton.visibility = View.VISIBLE
+        }
+
+        binding.virementNumCompte.setOnClickListener{
+            findNavController().navigate(R.id.virementStepOne_to_fragmentVirement)
         }
     }
 

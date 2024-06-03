@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -184,7 +185,7 @@ class Agences : Fragment(), OnMapReadyCallback {
     private fun getIconForResource(action: String): Int {
         return when (action) {
             "getGABNear" -> R.drawable.atm
-            "getAgencesWafacashNear" -> R.drawable.atm
+            "getAgencesWafacashNear" -> R.drawable.cash
             else -> R.drawable.agence
         }
 
@@ -239,6 +240,8 @@ class Agences : Fragment(), OnMapReadyCallback {
         val tvPhone: TextView = dialogView.findViewById(R.id.tvPhone)
         val tvPhone2: TextView = dialogView.findViewById(R.id.tvPhone2)
         val tvFax: TextView = dialogView.findViewById(R.id.tvFax)
+        val logo: ImageView = dialogView.findViewById(R.id.type)
+        val buttonCall: CardView = dialogView.findViewById(R.id.btnCall)
 
         if (agence != null) {
             tvName.text = agence.nom
@@ -250,11 +253,16 @@ class Agences : Fragment(), OnMapReadyCallback {
             tvFax.text = agence.fax
 
             setDrawableStart(tvPhone, R.drawable.phone)
-            setDrawableStart(tvPhone2, R.drawable.phone)
             setDrawableStart(tvHours, R.drawable.horaire)
             setDrawableStart(tvFax, R.drawable.fax)
 
             setupButtonListeners(dialogView, agence.telephone1, agence.latitude.toDouble(), agence.longitude.toDouble(), agence.nom, agence.adresse, agence.horaire2)
+            if(agence.horaire3.toString().isBlank()){
+                logo.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.attijari))
+            }else{
+                logo.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.wafacash))
+            }
+
         } else if (gab != null) {
             tvName.text = gab.nom
             tvAddress.text = gab.adresse
@@ -263,7 +271,7 @@ class Agences : Fragment(), OnMapReadyCallback {
             tvPhone.visibility = View.GONE
             tvPhone2.visibility = View.GONE
             tvFax.visibility = View.GONE
-
+            buttonCall.visibility = View.GONE
             setupButtonListeners(dialogView, "", gab.latitude.toDouble(), gab.longitude.toDouble(), gab.nom, gab.adresse, "")
         }
 

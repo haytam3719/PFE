@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.ViewPager
@@ -44,13 +45,29 @@ class Questionnaire2 : Fragment() {
         }
 
         buttonNext.setOnClickListener {
-            if (selectedResponse == "Oui") {
+            if(!(binding.customRadioButton.isChecked) && !(binding.customRadioButton1.isChecked)){
+                Toast.makeText(requireContext(),"Veuillez sélectionner au moins une option", Toast.LENGTH_LONG).show()
+            }
+            else if (selectedResponse == "Oui") {
                 questionnaireViewModel.updateQuestion2(true)
             } else {
                 questionnaireViewModel.updateQuestion2(false)
             }
 
             onNextButtonClick()
+        }
+
+
+        binding.customRadioButton.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.customRadioButton1.isChecked = false
+            }
+        }
+
+        binding.customRadioButton1.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.customRadioButton.isChecked = false
+            }
         }
 
         return rootView

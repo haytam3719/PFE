@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                     bottomNavigationView.visibility = View.VISIBLE
                     bottomNavigationViewLoggedIn.visibility = View.GONE
                 }
-                R.id.fragment_dashboard, R.id.fragment_virement, R.id.fragment_payment, R.id.menu_connecte -> {
+                R.id.fragment_dashboard, R.id.fragment_virement, R.id.fragment_payment, R.id.menu_connecte, R.id.agences_connecte -> {
                     // Show only the logged-in menu
                     bottomNavigationView.visibility = View.GONE
                     bottomNavigationViewLoggedIn.visibility = View.VISIBLE

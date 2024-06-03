@@ -19,7 +19,9 @@
             android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/card"
+            app:tint="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/tv_card_number"

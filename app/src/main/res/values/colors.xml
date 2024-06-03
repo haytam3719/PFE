@@ -84,5 +84,58 @@
     <color name="card_background_light">#FFFFFF</color>
     <color name="card_background_dark">#333333</color>
 
+
+    <color name="sunset_orange">#FF5733</color>
+    <color name="tangerine">#FF7043</color>
+    <color name="pumpkin">#FF9800</color>
+
+    <!-- Secondary Colors -->
+    <color name="carrot">#F57C00</color>
+    <color name="butterscotch">#FFA726</color>
+    <color name="apricot">#FFB74D</color>
+    <color name="peach">#FFD54F</color>
+    <color name="honey">#FFE082</color>
+
+    <!-- Accent Colors -->
+    <color name="cantaloupe">#FFCC80</color>
+    <color name="mango">#FFAB91</color>
+    <color name="papaya">#FFCCBC</color>
+    <color name="salmon">#FFEBEE</color>
+    <color name="mandarin">#FFF3E0</color>
+
+    <!-- Background Colors -->
+    <color name="light_apricot">#FFF8E1</color>
+    <color name="seashell">#FFF9C4</color>
+    <color name="champagne">#FFFDE7</color>
+    <color name="mellow_yellow">#FFECB3</color>
+    <color name="ivory">#FFFFF0</color>
+
+    <!-- Text Colors -->
+    <color name="dark_orange">#E64A19</color>
+    <color name="rust">#BF360C</color>
+    <color name="sienna">#6D4C41</color>
+
+    <!-- Border Colors -->
+    <color name="deep_saffron">#FF6F00</color>
+    <color name="flame">#E65100</color>
+    <color name="brick">#BF360C</color>
+    <color name="copper">#A1887F</color>
+    <color name="bronze">#8D6E63</color>
+
+    <!-- Button Colors -->
+    <color name="vivid_orange">#FF5722</color>
+    <color name="neon_carrot">#FF7043</color>
+    <color name="burnt_sienna">#FF8A65</color>
+    <color name="persimmon">#FFAB91</color>
+    <color name="bittersweet">#FFCCBC</color>
+
+    <!-- Hover Colors -->
+    <color name="tomato">#FF6F61</color>
+    <color name="crimson">#E57373</color>
+    <color name="scarlet">#EF5350</color>
+    <color name="firebrick">#F44336</color>
+    <color name="blood_orange">#E53935</color>
+
+
     <!--FF9800-->
 </resources>

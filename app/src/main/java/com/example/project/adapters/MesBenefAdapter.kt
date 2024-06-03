@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.project.databinding.ItemBeneficiaireBinding
 import com.example.project.models.ClientAccountDetails
 import com.example.project.viewmodels.MesBeneficiairesViewModel
@@ -40,7 +41,12 @@ class MesBenefAdapter(private var clientDetails: List<ClientAccountDetails>, pri
                     val imageRef = clientDetail.profileImageUrl?.let { storageRef.child(it) }
                     val imageData = imageRef?.getBytes(Long.MAX_VALUE)?.await()
                     val bitmap = imageData?.let { BitmapFactory.decodeByteArray(imageData, 0, it.size) }
-                    binding.imageView.setImageBitmap(bitmap)
+                    bitmap?.let {
+                        Glide.with(binding.imageView.context)
+                            .load(it)
+                            .circleCrop()
+                            .into(binding.imageView)
+                    }
                 } catch (e: Exception) {
                     Log.e("ClientAdapter", "Error fetching image", e)
                 }

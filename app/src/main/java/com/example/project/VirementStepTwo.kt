@@ -72,7 +72,12 @@ class VirementStepTwo : Fragment() {
             } else {
                 sharedViewModel.setMotif(motif)
                 sharedViewModel.setAmount(amount)
-                findNavController().navigate(R.id.virementStepTwo_to_virementStepThree)
+
+                if(amount > sharedViewModel.selectedAccount.value?.balance!!.toDouble()){
+                    Toast.makeText(requireContext(), "Votre solde est insuffisant pour effectuer l'opération courante", Toast.LENGTH_LONG).show()
+                }else {
+                    findNavController().navigate(R.id.virementStepTwo_to_virementStepThree)
+                }
             }
         }
 

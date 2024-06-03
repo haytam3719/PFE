@@ -23,15 +23,16 @@
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
             android:src="@drawable/chip"
-            app:layout_constraintBottom_toBottomOf="@+id/tvExpiryDate"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/attijari"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -62,12 +63,13 @@
             app:layout_constraintTop_toBottomOf="@id/tvCardNumber" />
 
         <ImageView
-            android:layout_width="90dp"
-            android:layout_height="80dp"
-            android:src="@drawable/master_card"
+            android:layout_width="60dp"
+            android:layout_height="70dp"
+            android:src="@drawable/mastercard"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:backgroundTint="@color/usualColor"/>
 
         <TextView
             android:id="@+id/tvExpiryDate"

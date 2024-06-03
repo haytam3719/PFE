@@ -24,6 +24,10 @@ import com.example.project.databinding.FragmentOtpBinding
 import com.example.project.models.AccountCreationServiceImpl
 import com.example.project.models.CompteImpl
 import com.example.project.models.DeviceInfo
+import com.example.project.models.EmailRequest
+import com.example.project.models.EmailResponse
+import com.example.project.models.MailApiClient
+import com.example.project.models.MailApiService
 import com.example.project.models.VirementViewModelFactory
 import com.example.project.prototype.AccountRepository
 import com.example.project.repositories.AccountRepositoryImpl
@@ -39,9 +43,14 @@ import com.example.project.viewmodels.VirementViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -214,6 +223,16 @@ class OTPHandler : Fragment() {
                                             sendSMS("0${emettorClient.numTele}", messageToEmettor)
                                             virementViewModel.sendNotificationToRecipient(recipientUid,"Vous avez reçu un montant de ${virement.montant} DH, de la part de ${emettorClient.nom.toUpperCase()} ${emettorClient.prenom} le ${virement.date}")
 
+
+                                            FirebaseAuth.getInstance().currentUser!!.email?.let {
+                                                sendEmailToEmettor(
+                                                    it,formattedCompteEmet,"${recipientClient.nom.toUpperCase()} ${recipientClient.prenom}",virement.montant.toString(),virement.date)
+                                            }
+
+
+
+
+
                                         } else {
                                             throw Exception("Failed to fetch client details for recipient or emettor")
                                         }
@@ -246,12 +265,21 @@ class OTPHandler : Fragment() {
             bundle = "fromPayment"
 
             if(paymentFourViewModel.selectedCard.value != null && selectedAccountId == null){
-                Log.d("Card",paymentFourViewModel.selectedCard.value?.numeroCompte.toString())
-                otpViewModel.otpBiometricVerifiedPayment.observe(viewLifecycleOwner) { verified ->
-                    if (verified) {
-                        paySelectedBillsUsingCard()
+                if(paymentFourViewModel.selectedCard.value!!.numeroCompte==null){
+                    //Carte Crédit
+                    Toast.makeText(requireContext(), "Les cartes Crédit ne sont pas encore prise en charge lors des paiements",Toast.LENGTH_LONG).show()
+                }else{
+                    if(paymentFourViewModel.selectedCard.value!!.loadBlockStatus(requireContext())){
+                        //Carte Bloquée
+                        Toast.makeText(requireContext(),"La carte est actuellement bloquée. Veuillez changer la méthode de paiement",Toast.LENGTH_LONG).show()
+                    }else {
+                        Log.d("Card", paymentFourViewModel.selectedCard.value?.numeroCompte.toString())
+                        otpViewModel.otpBiometricVerifiedPayment.observe(viewLifecycleOwner) { verified ->
+                            if (verified) {
+                                paySelectedBillsUsingCard()
+                            }
+                        }
                     }
-
             }}
 
             else{
@@ -471,6 +499,204 @@ class OTPHandler : Fragment() {
         }
     }
 
+
+
+    private fun sendEmailToEmettor(email: String, formattedCompteEmet: String, recipientName: String, montant: String, date: String) {
+        val apiService = MailApiClient.retrofit.create(MailApiService::class.java)
+        val imageUrl = "https://historiadelaempresa.com/wp-content/uploads/logotipo/Attijariwafa-Bank.png"
+        val emailSubject = "Confirmation de Virement"
+
+        val emailContent = """
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Confirmation de Virement</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    margin: 0;
+                    padding: 20px;
+                    background-color: #f9f9f9;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    padding: 20px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 8px;
+                }
+                .title {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #333333;
+                    margin-bottom: 10px;
+                }
+                .content {
+                    font-size: 16px;
+                    color: #555555;
+                    margin-bottom: 20px;
+                }
+                .footer img {
+                    max-width: 100%;
+                    height: auto;
+                    display: block;
+                    margin: 0 auto;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="title">Confirmation de Virement</div>
+                <div class="content">
+                    <p>Votre virement a été effectué avec succès:</p>
+                    <ul>
+                        <li><strong>Compte émetteur :</strong> $formattedCompteEmet</li>
+                        <li><strong>Bénéficiaire :</strong> $recipientName</li>
+                        <li><strong>Montant :</strong> $montant DH</li>
+                        <li><strong>Date :</strong> $date</li>
+                    </ul>
+                    <p>Nous vous remercions de votre confiance et restons à votre disposition pour toute question ou assistance.</p>
+                </div>
+                <div class="footer">
+                    <img src="$imageUrl" alt="Footer Image">
+                </div>
+            </div>
+        </body>
+        </html>
+    """.trimIndent()
+
+        val request = EmailRequest(email = email, subject = emailSubject, content = emailContent)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                apiService.sendEmail(request).enqueue(object : Callback<EmailResponse> {
+                    override fun onResponse(call: Call<EmailResponse>, response: Response<EmailResponse>) {
+                        if (response.isSuccessful) {
+                            // Email sent successfully
+                            CoroutineScope(Dispatchers.Main).launch {
+                                Toast.makeText(context, "Email sent successfully", Toast.LENGTH_LONG).show()
+                            }
+                        } else {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                Toast.makeText(context, "Failed to send email: ${response.message()}", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(context, "Erreur de connexion: ${t.message}", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                })
+            } catch (e: Exception) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, "Unexpected error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+
+
+
+    private fun sendEmailToBenef(email: String, emettorName: String, montant: String) {
+        val apiService = MailApiClient.retrofit.create(MailApiService::class.java)
+        val imageUrl = "https://historiadelaempresa.com/wp-content/uploads/logotipo/Attijariwafa-Bank.png"
+        val emailSubject = "Notification de Réception de Virement"
+
+        val emailContent = """
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Notification de Réception de Virement</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    margin: 0;
+                    padding: 20px;
+                    background-color: #f9f9f9;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    padding: 20px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 8px;
+                }
+                .title {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #333333;
+                    margin-bottom: 10px;
+                }
+                .content {
+                    font-size: 16px;
+                    color: #555555;
+                    margin-bottom: 20px;
+                }
+                .footer img {
+                    max-width: 100%;
+                    height: auto;
+                    display: block;
+                    margin: 0 auto;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="title">Notification de Réception de Virement</div>
+                <div class="content">
+                    <p>Vous avez reçu un montant de $montant DH de la part de $emettorName.</p>
+                    <p>Nous vous remercions de votre confiance et restons à votre disposition pour toute question ou assistance.</p>
+                </div>
+                <div class="footer">
+                    <img src="$imageUrl" alt="Footer Image">
+                </div>
+            </div>
+        </body>
+        </html>
+    """.trimIndent()
+
+        val request = EmailRequest(email = email, subject = emailSubject, content = emailContent)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                apiService.sendEmail(request).enqueue(object : Callback<EmailResponse> {
+                    override fun onResponse(call: Call<EmailResponse>, response: Response<EmailResponse>) {
+                        if (response.isSuccessful) {
+                            // Email sent successfully
+                            CoroutineScope(Dispatchers.Main).launch {
+                                Toast.makeText(context, "Email sent successfully", Toast.LENGTH_LONG).show()
+                            }
+                        } else {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                Toast.makeText(context, "Failed to send email: ${response.message()}", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(context, "Erreur de connexion: ${t.message}", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                })
+            } catch (e: Exception) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(context, "Unexpected error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
 
 
 }

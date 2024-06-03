@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.InfoUtilesBinding
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.auth.FirebaseAuth
 
 class InfosUtiles : Fragment() {
 
@@ -43,6 +44,10 @@ class InfosUtiles : Fragment() {
     }
 
     fun onClickAgences(view:View){
-        findNavController().navigate(R.id.infosUtiles_to_agences)
+        if(FirebaseAuth.getInstance().currentUser?.uid!=null){
+            findNavController().navigate(R.id.infosUtiles_to_agencesConnectee)
+        }else {
+            findNavController().navigate(R.id.infosUtiles_to_agences)
+        }
     }
 }

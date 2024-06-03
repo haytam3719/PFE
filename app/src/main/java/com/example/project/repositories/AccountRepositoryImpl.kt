@@ -300,38 +300,43 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
         dbRef.orderByChild("id_proprietaire").equalTo(userId)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val balanceChanges = mutableListOf<Pair<String, Double>>()
+                    val balanceChanges = mutableMapOf<String, Double>()
+                    var currentTotalBalance = 0.0
+
                     snapshot.children.forEach { accountSnapshot ->
                         val account = accountSnapshot.getValue(CompteImpl::class.java)
-                        account?.historiqueTransactions?.forEach { transaction ->
-                            val date = transaction.date
-                            val amount = transaction.montant
-                            val isOutgoing = transaction.compteEmet.id_proprietaire == userId
-                            val isIncoming = transaction.compteBenef.id_proprietaire == userId
+                        account?.let {
+                            currentTotalBalance += it.solde
 
-                            // Determine balance change based on the direction of the transaction
-                            val currentBalanceChange = when {
-                                isIncoming -> amount
-                                isOutgoing -> -amount
-                                else -> 0.0
-                            }
-
-                            val existingEntry = balanceChanges.find { it.first == date }
-                            if (existingEntry != null) {
-                                val index = balanceChanges.indexOf(existingEntry)
-                                balanceChanges[index] =
-                                    existingEntry.copy(second = existingEntry.second + currentBalanceChange)
-                            } else {
-                                balanceChanges.add(Pair(date, currentBalanceChange))
+                            it.historiqueTransactions?.forEach { transaction ->
+                                val date = transaction.date
+                                val amount = transaction.montant
+                                val isIncoming = transaction.compteBenef.id_proprietaire == userId
+                                val isOutgoing = transaction.compteEmet.id_proprietaire == userId
+                                val balanceChange = when {
+                                    isIncoming -> amount
+                                    isOutgoing -> -amount
+                                    else -> 0.0
+                                }
+                                balanceChanges[date] = (balanceChanges[date] ?: 0.0) + balanceChange
                             }
                         }
                     }
-                    val sortedBalances = balanceChanges.sortedBy { it.first }
-                    var cumulativeBalance = 0.0
-                    val finalBalances = sortedBalances.map { balanceChange ->
-                        cumulativeBalance += balanceChange.second
-                        Pair(balanceChange.first, cumulativeBalance)
+
+                    val sortedBalances = balanceChanges.toList().sortedBy { it.first }
+                    var cumulativeBalance = currentTotalBalance - balanceChanges.values.sum() // Starting balance considering all transactions
+                    val finalBalances = mutableListOf<Pair<String, Double>>()
+
+                    sortedBalances.forEach { (date, balanceChange) ->
+                        cumulativeBalance += balanceChange
+                        finalBalances.add(Pair(date, cumulativeBalance))
                     }
+
+                    // Ensure the final cumulative balance matches the current total balance
+                    if (finalBalances.isEmpty() || finalBalances.last().second != currentTotalBalance) {
+                        finalBalances.add(Pair("Current", currentTotalBalance))
+                    }
+
                     callback(finalBalances)
                 }
 
@@ -340,6 +345,8 @@ class AccountRepositoryImpl @Inject constructor(private val accountService:Accou
                 }
             })
     }
+
+
 
 
     fun getBeneficiariesForUser(userId: String, callback: (Result<List<CompteImpl>>) -> Unit) {

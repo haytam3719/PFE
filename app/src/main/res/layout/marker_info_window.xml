@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardElevation="8dp"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="0dp"
     android:layout_margin="8dp"
     android:layout_gravity="center"
     android:background="@android:color/transparent"
@@ -27,15 +27,26 @@
 
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/type" />
+
+
+        <ImageView
+            android:id="@+id/type"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+           
 
         <TextView
             android:id="@+id/tvAddress"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:drawableStart="@drawable/location"
+            android:drawableStart="@drawable/location_menu"
             android:drawablePadding="8dp"
+            android:drawableTint="@color/vivid_orange"
             android:text="N°5, Boulevard Bordeaux, magasin N13, Casablanca"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
 
@@ -51,7 +62,7 @@
             android:layout_marginTop="20dp"
             android:drawableStart="@drawable/phone"
             android:drawablePadding="8dp"
-            android:drawableTint="@color/reddish_orange"
+            android:drawableTint="@color/vivid_orange"
             android:text="+212 22 43 50 50"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textSize="16sp"
@@ -66,6 +77,7 @@
             android:text="00212522435050"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/tvPhone"
             app:layout_constraintTop_toBottomOf="@+id/tvPhone" />
 
         <TextView
@@ -78,7 +90,7 @@
             android:text="Horaries d'ouverture: 08h00-19h00, \nHoraires d'été: 08h00-20h00,\nSamedi: 09h00-16h00"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             app:layout_constraintStart_toStartOf="@id/tvPhone"
-
+            android:drawableTint="@color/vivid_orange"
             app:layout_constraintTop_toBottomOf="@id/tvPhone2" />
 
         <TextView
@@ -89,6 +101,7 @@
             android:drawableStart="@drawable/fax"
             android:drawablePadding="8dp"
             android:text="05 22 27 27 29"
+            android:drawableTint="@color/vivid_orange"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             app:layout_constraintStart_toStartOf="@+id/tvOpeningHours"
             app:layout_constraintTop_toBottomOf="@+id/tvOpeningHours" />
@@ -128,6 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/partager"
+                    app:tint="@color/vivid_orange"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -180,7 +194,8 @@
                     android:src="@drawable/telephone_intelligent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/vivid_orange"/>
 
 
                 <TextView
@@ -226,7 +241,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/locationn"
+                    app:tint="@color/vivid_orange"
+                    android:src="@drawable/location_menu"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -6,12 +6,9 @@ import android.graphics.SurfaceTexture
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.util.Size
 import android.view.TextureView
-import android.view.View
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.core.content.ContextCompat
@@ -115,11 +112,8 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
                 _faceUrl.postValue("$folderName/${photoUri.lastPathSegment}")
 
 
-                // Post navigation event with delay
-                val delayMillis = 2000
-                Handler(Looper.getMainLooper()).postDelayed({
-                    _navigateToViewPager.postValue(true)
-                }, delayMillis.toLong())
+                _navigateToViewPager.postValue(true)
+
             }
             .addOnFailureListener { exception ->
                 // Handle unsuccessful upload
@@ -128,10 +122,6 @@ class CameraFaceViewModel @Inject constructor(@SuppressLint("StaticFieldLeak") p
             }
     }
 
-
-    fun onButtonClick(view: View) {
-        numCin.let { this.takePhoto(it) }
-    }
 
     fun onNavigationComplete() {
         _navigateToViewPager.value = false

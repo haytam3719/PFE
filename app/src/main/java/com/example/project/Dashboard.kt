@@ -17,8 +17,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.project.adapters.TransactionAdapter
 import com.example.project.databinding.DashboardBinding
+import com.example.project.models.CircleTransform
 import com.example.project.models.DeviceInfo
 import com.example.project.models.EmailRequest
 import com.example.project.models.EmailResponse
@@ -56,6 +58,7 @@ class Dashboard : Fragment(){
 
         dashboardViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.nested.visibility = if (isLoading) View.GONE else View.VISIBLE
         })
 
 
@@ -145,9 +148,15 @@ class Dashboard : Fragment(){
 
 
         dashboardViewModel.resourceData.observe(viewLifecycleOwner) { data ->
-            val bitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
-            binding.imgUser.setImageBitmap(bitmap)
+            data?.let {
+                val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+                Glide.with(this)
+                    .load(bitmap)
+                    .transform(CircleTransform())
+                    .into(binding.imgUser)
+            }
         }
+
 
         dashboardViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
@@ -162,6 +171,10 @@ class Dashboard : Fragment(){
             }
         }
 
+
+        binding.voirPlus.setOnClickListener{
+            findNavController().navigate(R.id.dashboard_to_consultation)
+        }
     }
 
 
@@ -237,8 +250,13 @@ class Dashboard : Fragment(){
         consultationViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
             if(transactions.isNullOrEmpty()){
                 binding.noTransactions.visibility = View.VISIBLE
+                binding.voirPlus.visibility = View.GONE
+            }else {
+                binding.noTransactions.visibility = View.GONE
+                binding.voirPlus.visibility = View.VISIBLE
+                val recentTransactions = transactions.sortedByDescending { it.date }.take(3)
+                adapter.updateTransactions(recentTransactions)
             }
-            adapter.updateTransactions(transactions)
         }
     }
 

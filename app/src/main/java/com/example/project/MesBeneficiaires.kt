@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.project.adapters.MesBenefAdapter
 import com.example.project.databinding.MesBeneficiairesBinding
@@ -17,6 +18,8 @@ import com.example.project.viewmodels.MesBeneficiairesViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MesBeneficiaires : Fragment() {
@@ -34,6 +37,15 @@ class MesBeneficiaires : Fragment() {
         adapterBeneficiary = MesBenefAdapter(emptyList(), mesBeneficiairesViewModel)
         binding.recyclerViewBeneficiaries.layoutManager = LinearLayoutManager(context)
         binding.recyclerViewBeneficiaries.adapter = adapterBeneficiary
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.nested.visibility = View.GONE
+            delay(3000)
+            binding.progressBar.visibility = View.GONE
+            binding.nested.visibility = View.VISIBLE
+        }
+
         return binding.root
     }
 
@@ -45,13 +57,21 @@ class MesBeneficiaires : Fragment() {
             requireActivity().onBackPressed()
         }
 
+
+
+
+
         mesBeneficiairesViewModel.combinedDataLiveData.observe(viewLifecycleOwner) { result ->
             Log.d("MesBenefViewModel", "Received result from repository: $result")
 
             result.onSuccess { combinedData ->
-                (binding.recyclerViewBeneficiaries.adapter as? MesBenefAdapter)?.updateClientDetails(
-                    combinedData
-                )
+                if(combinedData.isNullOrEmpty()){
+                    binding.emptyText.visibility = View.VISIBLE
+                }else {
+                    (binding.recyclerViewBeneficiaries.adapter as? MesBenefAdapter)?.updateClientDetails(
+                        combinedData
+                    )
+                }
             }
             result.onFailure { exception ->
                 Toast.makeText(

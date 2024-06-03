@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.ConditionsGeneralesBinding
@@ -31,7 +32,11 @@ class ConditionsGenerales : Fragment(){
         val button = binding.button
 
         button.setOnClickListener{
-            findNavController().navigate(R.id.conditions_generales_to_contrat)
+            if(!(binding.radioButton1.isChecked)){
+                Toast.makeText(requireContext(),"Veuillez accepter les termes générales",Toast.LENGTH_LONG).show()
+            }else {
+                findNavController().navigate(R.id.conditions_generales_to_contrat)
+            }
         }
         return binding.root
 

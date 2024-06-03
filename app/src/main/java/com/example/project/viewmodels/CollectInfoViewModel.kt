@@ -49,8 +49,10 @@ class CollectInfoViewModel @Inject constructor(private val authRepository: AuthR
                         try {
                             signUpRepository.storeClient(client)
                             Log.d("SignUpClient", "Client stored successfully in the database")
+
+                            // Verify stored client data
                             signUpRepository.getStockClientById(clientUid)
-                            Log.d("SignUpClient", "Client retrieved successfully from the database")
+
                             _signUpState.postValue(SignUpState.Success)
                         } catch (e: Exception) {
                             Log.e("SignUpClient", "Error storing client in the database: ${e.message}", e)
@@ -70,6 +72,7 @@ class CollectInfoViewModel @Inject constructor(private val authRepository: AuthR
             }
         }
     }
+
 
 
 

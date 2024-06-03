@@ -126,9 +126,16 @@ class PaymentStepFour : Fragment() {
                             putString("selectedAccountId", selectedAccountId)
                         }
 
-                        findNavController().navigate(R.id.paymentStepFour_to_otp, bundle)
+                        if(binding.tvTotalAmount.text.toString().toDoubleValue() > binding.tvBalance.text.toString().toDoubleValue()){
+                            Toast.makeText(requireContext(),"Votre solde est insuffisant pour effectuer l'opération",Toast.LENGTH_LONG).show()
+                        }else if(binding.tvBalance.text.toString().isEmpty()){
+                            Toast.makeText(requireContext(), "Veuillez sélectionner un compte",Toast.LENGTH_LONG).show()
+                        }else {
+                            findNavController().navigate(R.id.paymentStepFour_to_otp, bundle)
+                            fingerPrintViewModel.onNavigationCompleteOtp()
+                        }
 
-                        fingerPrintViewModel.onNavigationCompleteOtp()
+
                     }else if(binding.checkboxPayerParCarte.isChecked){
                         val bundle = Bundle().apply {
                             putBoolean("fromPayment", true)
@@ -209,6 +216,11 @@ class PaymentStepFour : Fragment() {
 
         binding.closeImageViewCarte.setOnClickListener{
             binding.popupViewCarte.visibility = View.GONE
+        }
+
+
+        binding.buttonCancel.setOnClickListener {
+            findNavController().navigate(R.id.paymentStepFour_to_dashboard)
         }
 
     }
@@ -364,4 +376,10 @@ class PaymentStepFour : Fragment() {
 
     }
 
+
+    fun String.toDoubleValue(): Double {
+        val numericString = this.filter { it.isDigit() || it == '.' || it == ',' }
+        val standardizedString = numericString.replace(",", ".")
+        return standardizedString.toDoubleOrNull() ?: 0.0
+    }
 }

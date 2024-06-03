@@ -3,16 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="@color/ivory">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
@@ -22,12 +20,10 @@
             app:title="Contact"
             app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/back"
-            android:background="@color/reddish_orange"
-            app:titleTextColor="@color/white"
-            />
+            android:background="@color/sunset_orange"
+            app:titleTextColor="@color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -42,62 +38,75 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp">
+            android:padding="16dp"
+            android:layout_marginTop="30dp">
 
             <TextView
+                android:id="@+id/contactDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
                 android:text="Pour des raisons de sécurité, nous vous prions de nous communiquer votre adresse mail. Nous vous enverrons votre identifiant et mot de passe :"
-                android:textColor="@color/black"
+                android:textColor="@color/charcoal"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/info"
+
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/info"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/ic_info"
+                app:tint="@color/vivid_orange"
+                app:layout_constraintTop_toTopOf="@+id/contactDescription" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/mailTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Adresse Email"
+                app:cursorColor="@color/amber"
+                app:endIconMode="clear_text"
+                app:boxStrokeColor="@color/tangerine"
+                android:layout_marginTop="40dp"
+                app:layout_constraintTop_toBottomOf="@id/contactDescription"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textColor="@color/charcoal" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/mailTextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Adresse Email"
-        app:cursorColor="#FFC107"
-        app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@+id/nestedScrollView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:inputType="text" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/reddish_orange"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="5dp"
+        android:backgroundTint="@color/vivid_orange"
         android:clickable="true"
         android:focusable="true"
         android:text="Suivant"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

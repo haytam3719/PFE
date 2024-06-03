@@ -46,6 +46,19 @@ class Apparence : Fragment(){
         topAppBar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
+
+
+        val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+        when (currentNightMode) {
+            android.content.res.Configuration.UI_MODE_NIGHT_NO -> {
+                binding.checkbox1.isChecked = true
+                binding.checkbox2.isChecked = false
+            }
+            android.content.res.Configuration.UI_MODE_NIGHT_YES -> {
+                binding.checkbox1.isChecked = false
+                binding.checkbox2.isChecked = true
+            }
+        }
         return binding.root
     }
 

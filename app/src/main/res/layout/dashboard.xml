@@ -26,35 +26,37 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        tools:layout_editor_absoluteY="68dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/imgMenu"
-                android:layout_width="150dp"
-                android:layout_height="100dp"
-                android:src="@drawable/attijari"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="16dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
                 android:clickable="true"
-                android:focusable="true"
                 android:contentDescription="attijari"
-                />
+                android:focusable="true"
+                android:src="@drawable/attijari"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imgUser"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rounded_icons"
                 android:clickable="true"
@@ -63,44 +65,42 @@
                 android:scaleType="centerCrop"
 
                 app:layout_constraintBottom_toBottomOf="@+id/imgMenu"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imgMenu" />
 
             <TextView
                 android:id="@+id/tvTotalBalanceLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Solde Actuel (MAD)"
-                android:textSize="15sp"
-                android:textColor="#616161"
-                app:layout_constraintTop_toBottomOf="@id/imgMenu"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginStart="24dp"/>
+                android:text="Solde Actuel (MAD)"
+                android:textColor="#616161"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgMenu" />
 
             <TextView
                 android:id="@+id/tvTotalBalance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="28sp"
                 android:textColor="#FF6D00"
+                android:textSize="28sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/tvTotalBalanceLabel"
-                app:layout_constraintStart_toStartOf="@id/tvTotalBalanceLabel"/>
-
-
+                app:layout_constraintStart_toStartOf="@id/tvTotalBalanceLabel"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalBalanceLabel" />
 
 
             <WebView
                 android:id="@+id/graphPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tvTotalBalance"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"/>
-
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalBalance" />
 
 
             <!-- Icon 1 with TextView -->
@@ -109,26 +109,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
+                android:layout_marginStart="15dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_marginStart="15dp"
-                android:onClick="@{view -> dashboard.onClickMesComptes(view)}">
+                android:onClick="@{view -> dashboard.onClickMesComptes(view)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/graphPlaceholder">
 
                 <ImageView
                     android:id="@+id/icon1"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:background="@drawable/rounded_icons"
-                    android:src="@drawable/note"
-                    app:tint="@color/colorPrimary"
-                    android:padding="8dp"
                     android:contentDescription="comptes"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:padding="8dp"
+                    android:src="@drawable/note"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/iconText1"
@@ -136,9 +136,9 @@
                     android:layout_height="wrap_content"
                     android:text="Mes comptes"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/icon1"
+                    app:layout_constraintEnd_toEndOf="@id/icon1"
                     app:layout_constraintStart_toStartOf="@id/icon1"
-                    app:layout_constraintEnd_toEndOf="@id/icon1"/>
+                    app:layout_constraintTop_toBottomOf="@id/icon1" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Icon 2 with TextView -->
@@ -149,10 +149,10 @@
                 android:layout_margin="15dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:onClick="@{view -> dashboard.onClickAttijariSecure(view)}"
                 app:layout_constraintEnd_toStartOf="@+id/layoutIcon3"
                 app:layout_constraintStart_toEndOf="@+id/layoutIcon1"
-                app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
-                android:onClick="@{view -> dashboard.onClickAttijariSecure(view)}">
+                app:layout_constraintTop_toBottomOf="@id/graphPlaceholder">
 
 
                 <ImageView
@@ -161,13 +161,13 @@
                     android:layout_height="56dp"
                     android:background="@drawable/rounded_icons"
                     android:contentDescription="attijari secure"
+                    android:padding="8dp"
                     android:src="@drawable/ic_attijari_secure"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:padding="8dp"
-                    app:tint="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/iconText2"
@@ -188,9 +188,9 @@
                 android:layout_margin="15dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:onClick="@{view -> dashboard.onClickSettings(view)}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/graphPlaceholder"
-                android:onClick="@{view -> dashboard.onClickSettings(view)}">
+                app:layout_constraintTop_toBottomOf="@id/graphPlaceholder">
 
 
                 <ImageView
@@ -199,10 +199,10 @@
                     android:layout_height="56dp"
                     android:background="@drawable/rounded_icons"
                     android:contentDescription="param"
+                    android:padding="8dp"
                     android:src="@drawable/ic_settings"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:padding="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="#FF5722" />
@@ -223,60 +223,86 @@
                 android:id="@+id/transactionTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="50dp"
                 android:text="Transactions récentes"
+                android:textColor="@color/teal"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutIcon1"
-                android:textSize="18sp"
-                android:textColor="@color/colorAccent"/>
+                app:layout_constraintTop_toBottomOf="@+id/layoutIcon1" />
 
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:padding="10dp"
+                android:paddingBottom="60dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="6dp"
-                android:paddingBottom="60dp"
-                android:padding="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/transactionTextView"
-                >
-
-                <TextView
-                    android:id="@+id/no_transactions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Aucune transaction récente n'est effectuée"
-                    android:visibility="gone"
-                    android:textSize="16sp"
-                    />
+                app:layout_constraintTop_toBottomOf="@id/transactionTextView">
 
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvRecentTransactions"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_top_recycler"
-                    android:nestedScrollingEnabled="true"
+                    android:layout_height="wrap_content">
 
-                    />
+                    <TextView
+                        android:id="@+id/voirPlus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="15dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:text="Voir plus"
+                        android:textColor="@color/green"
+                        android:textSize="17sp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
+                        android:id="@+id/no_transactions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aucune transaction récente n'est effectuée"
+                        android:textSize="16sp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvRecentTransactions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:nestedScrollingEnabled="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/voirPlus" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="70dp"
-                app:layout_constraintTop_toBottomOf="@id/cardView"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/cardView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     </androidx.core.widget.NestedScrollView>

@@ -73,6 +73,7 @@ class Cards : Fragment() {
         cardsViewModel.cartesByProprietaire.observe(viewLifecycleOwner) { cartes ->
             if(cartes.isNullOrEmpty()){
                 binding.tvCards.visibility = View.VISIBLE
+                binding.textView4.visibility = View.GONE
             }
             adapter.updateCards(cartes)
             val accountsNumbers = cartes.map { it.numeroCompte }
@@ -93,10 +94,6 @@ class Cards : Fragment() {
         val allTransactions = mutableListOf<TransactionImpl>()
 
         cardsViewModel.transactions.observe(viewLifecycleOwner, Observer { transactions ->
-            if(transactions.isNullOrEmpty()){
-                binding.recyclerView.visibility = View.GONE
-                binding.transactions.visibility = View.VISIBLE
-            }
             transactions?.let {
                 transactionAdapter.updateTransactions(it)
                 allTransactions.addAll(it)

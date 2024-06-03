@@ -172,6 +172,8 @@
                         android:visibility="gone"
                         app:cardCornerRadius="8dp"
                         app:cardElevation="4dp"
+                        android:layout_marginBottom="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -250,6 +252,8 @@
                         android:visibility="gone"
                         app:cardCornerRadius="8dp"
                         app:cardElevation="4dp"
+                        android:layout_marginBottom="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -452,7 +456,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/primary_orange"
                 android:onClick="@{view->fingerPrintViewModel.onButtonClick(view)}"
                 android:text="Payer"
@@ -461,7 +464,8 @@
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/buttonCancel" />
+                app:layout_constraintStart_toEndOf="@id/buttonCancel"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
