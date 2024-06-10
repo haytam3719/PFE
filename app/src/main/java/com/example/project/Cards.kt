@@ -1,10 +1,7 @@
 package com.example.project
 
 import android.os.Bundle
-import android.transition.Slide
-import android.transition.TransitionManager
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -144,13 +141,13 @@ class Cards : Fragment() {
         viewPager.offscreenPageLimit = 1
         viewPager.setPageTransformer(CardsPageTransformer())
         viewPager.addItemDecoration(MarginItemDecoration(20))
-        val btnShowPopup = binding.btnShowPopup
-        val popupView = binding.popupView
+        //val btnShowPopup = binding.btnShowPopup
+        //val popupView = binding.popupView
 
-        btnShowPopup.setOnClickListener {
-            TransitionManager.beginDelayedTransition(container, Slide(Gravity.BOTTOM))
-            popupView.visibility = if (popupView.visibility == View.GONE) View.VISIBLE else View.GONE
-        }
+       // btnShowPopup.setOnClickListener {
+          //  TransitionManager.beginDelayedTransition(container, Slide(Gravity.BOTTOM))
+            //popupView.visibility = if (popupView.visibility == View.GONE) View.VISIBLE else View.GONE
+        //}
 
 
 

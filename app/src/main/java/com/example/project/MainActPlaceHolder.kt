@@ -1,5 +1,7 @@
 package com.example.project
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -14,12 +16,16 @@ import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.MainActpalceholderBinding
 import com.example.project.models.AuthState
 import com.example.project.oAuthRessources.SecureManager
 import com.example.project.viewmodels.AuthViewModel
 import com.example.project.viewmodels.BiometricViewModel
+import com.example.project.viewmodels.DashboardViewModel
+import com.example.project.viewmodels.FaceIDViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,10 +35,14 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 
 
+
+
 @AndroidEntryPoint
 class MainActPlaceHolder : Fragment() {
     private val authViewModel: AuthViewModel by viewModels()
     private val fingerPrintViewModel: BiometricViewModel by viewModels()
+    private val faceIDViewModel: FaceIDViewModel by viewModels()
+    private val dashboardViewModel:DashboardViewModel by viewModels()
 
     private var _binding: MainActpalceholderBinding? = null
     private val binding get() = _binding!!
@@ -128,6 +138,18 @@ class MainActPlaceHolder : Fragment() {
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
 
 
+        binding.faceId.setOnClickListener {
+            lifecycleScope.launch {
+                val currentClient = dashboardViewModel.fetchClientDetails(FirebaseAuth.getInstance().currentUser!!.uid)
+                if (currentClient != null) {
+                    currentClient.facePhotoUrl?.let { dashboardViewModel.fetchResource(it) }
+                    faceIDViewModel.downloadAndUploadImage(requireContext(), "clients/T293993/face/1717709542312.jpg")
+
+                }
+            }
+            //faceIDViewModel.uploadReferenceImage(referenceImagePath)
+            openVideoFeed()
+        }
     }
 
 
@@ -205,6 +227,16 @@ class MainActPlaceHolder : Fragment() {
             binding.outlinedTextField0.editText?.setText(secureManager?.getEmail())
         }
 
+
+        faceIDViewModel.uploadStatus.observe(viewLifecycleOwner, Observer { status ->
+            println(status)
+        })
+
+        faceIDViewModel.finalDecision.observe(viewLifecycleOwner, Observer { decision ->
+            println(decision)
+        })
+
+
         return binding.root
 
     }
@@ -237,6 +269,14 @@ class MainActPlaceHolder : Fragment() {
             }
         }
     }
+
+
+    private fun openVideoFeed() {
+        val videoFeedUrl = "http://127.0.0.1:5000/video_feed"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(videoFeedUrl))
+        startActivity(intent)
+    }
+
 
 
 

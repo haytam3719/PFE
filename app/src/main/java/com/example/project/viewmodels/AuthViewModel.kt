@@ -11,6 +11,7 @@ import com.example.project.models.AuthState
 import com.example.project.models.LogInUserPartial
 import com.example.project.oAuthRessources.SecureManager
 import com.example.project.repositories.AuthRepository
+import com.example.project.repositories.ClientRepositoryImpl
 import com.example.project.repositories.FCMRepository
 import com.example.project.repositories.OAuthRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -31,6 +32,7 @@ class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val oAuthRepository: OAuthRepository,
     private val secureManager: SecureManager,
+    private val clientRepositoryImpl: ClientRepositoryImpl
 ) : ViewModel() {
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private var fingerPrint: String = ""
@@ -164,4 +166,12 @@ class AuthViewModel @Inject constructor(
     }
 
 
+
+    fun saveUserData(uid: String, email: String, password: String, onComplete: (Boolean, String?) -> Unit) {
+        viewModelScope.launch {
+            clientRepositoryImpl.saveUser(uid, email, password) { isSuccess, errorMessage ->
+                onComplete(isSuccess, errorMessage)
+            }
+        }
+    }
 }

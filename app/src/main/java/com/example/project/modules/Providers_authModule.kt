@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.project.models.RetrofitClient
 import com.example.project.oAuthRessources.SecureManager
 import com.example.project.repositories.AuthRepository
+import com.example.project.repositories.ClientRepositoryImpl
 import com.example.project.repositories.OAuthRepository
 import com.example.project.viewmodels.AuthViewModel
 import dagger.Module
@@ -45,8 +46,8 @@ object AuthModule {
 
     @Provides
     @ViewModelScoped
-    fun provideAuthViewModel(authRepository: AuthRepository,oAuthRepository: OAuthRepository,secureManager: SecureManager): AuthViewModel {
-        return AuthViewModel(authRepository,oAuthRepository,secureManager)
+    fun provideAuthViewModel(authRepository: AuthRepository,oAuthRepository: OAuthRepository,secureManager: SecureManager, clientRepositoryImpl: ClientRepositoryImpl): AuthViewModel {
+        return AuthViewModel(authRepository,oAuthRepository,secureManager,clientRepositoryImpl)
     }
 
 

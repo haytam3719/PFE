@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
 
     android:id="@+id/nav_graph"
-    app:startDestination="@id/main_actpalceholderFragment">
+    app:startDestination="@id/splash_screen">
 
 
 
@@ -43,6 +43,11 @@
         <action
             android:id="@+id/mainactplace_to_agences"
             app:destination="@id/agences"
+            app:enterAnim="@anim/slide_in_right"/>
+
+        <action
+            android:id="@+id/mainactplace_to_faceId"
+            app:destination="@id/faceId"
             app:enterAnim="@anim/slide_in_right"/>
 
     </fragment>
@@ -843,5 +848,11 @@
         tools:layout="@layout/agences"/>
 
 
+    <fragment
+        android:id="@+id/faceId"
+        android:name="com.example.project.FaceID"
+        android:label="face id"
+        tools:layout="@layout/face_id"
+        />
 
 </navigation>

@@ -1,6 +1,7 @@
 package com.example.project
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.example.project.models.EmailRequest
 import com.example.project.models.EmailResponse
 import com.example.project.models.MailApiClient
 import com.example.project.models.MailApiService
+import com.example.project.viewmodels.AuthViewModel
 import com.example.project.viewmodels.CollectInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +32,7 @@ class Mail : Fragment() {
     private var _binding: MailBinding? = null
     private val binding get() = _binding!!
     private val collectInfoViewModel: CollectInfoViewModel by viewModels({ requireActivity() })
+    private val authViewModel:AuthViewModel by viewModels()
 
     private var generatedEmail: String? = null
     private var generatedPassword: String = generateStrongPassword(8)
@@ -59,6 +62,15 @@ class Mail : Fragment() {
                             generatedEmail = email
                         }
                         sendEmailWithCredentials(generatedEmail!!, generatedPassword, client)
+                        client.uid?.let { it1 ->
+                            authViewModel.saveUserData(it1, email, generatedPassword) { isSuccess, errorMessage ->
+                                if (isSuccess) {
+                                    Log.d("Mail","Credentials Added")
+                                }else{
+                                    Log.e("Mail", "Couldn't register user")
+                                }
+                            }
+                        }
                     } else {
                         Toast.makeText(context, "Adresse Email invalide", Toast.LENGTH_LONG).show()
                     }

@@ -3,6 +3,7 @@ package com.example.project.repositories
 import android.util.Log
 import com.example.project.models.Client
 import com.example.project.models.DeviceInfo
+import com.example.project.models.UserAuth
 import com.example.project.prototype.ClientRepository
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -132,6 +133,24 @@ class ClientRepositoryImpl : ClientRepository {
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+
+
+
+    fun saveUser(uid: String, email: String, password: String, onComplete: (Boolean, String?) -> Unit) {
+        val usersRef = FirebaseDatabase.getInstance().getReference("auth")
+        val user = UserAuth(uid, email, password)
+        usersRef.child(uid).setValue(user)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Handle success
+                    onComplete(true, null)
+                } else {
+                    // Handle failure
+                    onComplete(false, task.exception?.message)
+                }
+            }
     }
 
 }

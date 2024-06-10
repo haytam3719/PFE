@@ -73,7 +73,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:placeholderText="Test Placeholder 1">
+                    app:placeholderText="Emetteur">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/emetteur"
-                    app:placeholderText="Test Placeholder 1">
+                    app:placeholderText="Bénéficiaire">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/beneficiare"
-                    app:placeholderText="Test Placeholder 1">
+                    app:placeholderText="Montant">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -150,7 +150,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/Montant"
-                    app:placeholderText="Test Placeholder 1">
+                    app:placeholderText="Motif">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

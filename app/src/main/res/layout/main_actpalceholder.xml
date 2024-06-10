@@ -88,6 +88,7 @@
                 android:id="@+id/outlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="65dp"
+                android:layout_marginTop="10dp"
                 android:backgroundTint="@color/golden_yellow"
                 android:onClick="@{view->viewModel.onButtonClick(view)}"
                 android:text="SE CONNECTER"
@@ -95,7 +96,6 @@
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="@id/guideline_log2"
                 app:layout_constraintHorizontal_bias="1.0"
-                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="@id/guideline_log"
                 app:layout_constraintTop_toBottomOf="@+id/text"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NoCorner" />
@@ -184,6 +184,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/faceId"
+                android:layout_width="70dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="15dp"
+                android:clickable="true"
+                android:tint="@color/usualColor"
+                android:src="@drawable/face_id"
+                app:layout_constraintBottom_toBottomOf="@+id/elevatedButton3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/elevatedButton3"
+                tools:ignore="UseAppTint" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
 </layout>

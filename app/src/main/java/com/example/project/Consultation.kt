@@ -75,6 +75,7 @@ class Consultation : Fragment() {
             if(accounts.isNullOrEmpty()){
                 binding.tvComptes.visibility = View.VISIBLE
                 binding.quotasComptes.visibility = View.GONE
+                binding.webView.visibility = View.GONE
                 binding.textDernieresOperations.visibility = View.GONE
             }
             if (accounts.isNotEmpty()) {
